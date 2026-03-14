@@ -14,7 +14,7 @@ function SignUpPage() {
         <div className="flex max-w-lg flex-col items-start justify-center space-y-9 text-center">
           <FinTrack />
 
-          <h2 className="mt-4 text-left text-6xl leading-16 font-extrabold">
+          <h2 className="mt-4 text-left text-6xl leading-18 font-extrabold">
             Domine seu dinheiro, domine sua vida
           </h2>
           <p className="text-left text-xl leading-8 font-light opacity-80">
@@ -33,7 +33,7 @@ function SignUpPage() {
       <div className="flex flex-col items-center justify-center p-4">
         <div className="space-y-8">
           <Headline>
-            <HeadlineTitle className="text-5xl">Crie sua conta</HeadlineTitle>
+            <HeadlineTitle>Crie sua conta</HeadlineTitle>
             <HeadlineDescription>
               Comece hoje mesmo sua jornada rumo à liberdade financeira.
             </HeadlineDescription>

@@ -11,13 +11,13 @@ function SignInPage() {
   return (
     <div className="grid h-screen grid-cols-2">
       <div className="bg-primary relative flex flex-col items-center justify-center p-4 text-white">
-        <div className="flex max-w-lg flex-col items-center justify-center space-y-9 text-center">
+        <div className="flex max-w-lg flex-col items-start justify-center space-y-9 text-center">
           <FinTrack />
 
-          <h2 className="text-center text-4xl leading-12 font-extrabold">
-            Domine suas finanças com a <br /> FinTrack
+          <h2 className="mt-4 text-left text-6xl leading-18 font-extrabold">
+            Domine suas finanças com a FinTrack
           </h2>
-          <p className="text-xl font-light opacity-80">
+          <p className="text-left text-xl font-light opacity-80">
             Junte-se a milhares de usuários que transformaram seu futuro
             financeiro usando nossas ferramentas intuitivas de acompanhamento e
             definição de metas
