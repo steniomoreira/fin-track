@@ -1,8 +1,7 @@
 'use client';
 
-import { Eye, EyeOff } from 'lucide-react';
+import { LockKeyhole, RotateCcwKey } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
 
 import Google from '@/components/logos/google';
 import { Button } from '@/components/ui/button';
@@ -17,48 +16,57 @@ import { Input } from '@/components/ui/input';
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group';
 import { cn } from '@/lib/utils';
 
-export function LoginForm({
+export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<'form'>) {
-  const [isShow, setIsShow] = useState(false);
-
-  function handleShowPassword() {
-    setIsShow((prev) => !prev);
-  }
-
   return (
     <form className={cn('flex flex-col gap-6', className)} {...props}>
       <FieldGroup>
+        <div className="flex items-center justify-between gap-4">
+          <Field>
+            <FieldLabel htmlFor="firstName">Nome</FieldLabel>
+            <Input id="firstName" type="firstName" required autoFocus />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="lastName">Sobre nome</FieldLabel>
+            <Input id="lastName" type="lastName" required />
+          </Field>
+        </div>
+
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
           <Input id="email" type="email" placeholder="m@example.com" required />
         </Field>
+
         <Field>
-          <div className="flex items-center">
-            <FieldLabel htmlFor="password">Password</FieldLabel>
-            <Link
-              href="#"
-              className="text-primary ml-auto text-sm font-semibold"
-            >
-              Esqueceu sua senha?
-            </Link>
-          </div>
+          <FieldLabel htmlFor="password">Senha</FieldLabel>
+          <InputGroup>
+            <InputGroupInput
+              id="password"
+              type="password"
+              placeholder="********"
+            />
+            <InputGroupAddon>
+              <LockKeyhole />
+            </InputGroupAddon>
+          </InputGroup>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="confirmPassword">Confirmar senha</FieldLabel>
 
           <InputGroup>
             <InputGroupInput
-              type={isShow ? 'text' : 'password'}
+              id="confirmPassword"
+              type="password"
               placeholder="********"
             />
-            <InputGroupAddon align="inline-end">
-              <InputGroupButton onClick={handleShowPassword}>
-                {isShow ? <EyeOff /> : <Eye />}
-              </InputGroupButton>
+            <InputGroupAddon>
+              <RotateCcwKey />
             </InputGroupAddon>
           </InputGroup>
         </Field>
@@ -67,17 +75,17 @@ export function LoginForm({
             Entrar
           </Button>
         </Field>
-        <FieldSeparator>Ou continue com</FieldSeparator>
+        <FieldSeparator>Ou cadastrar com</FieldSeparator>
         <Field>
           <Button variant="outline" type="button" className="h-12">
             <Google />
-            Entrar com Google
+            Google
           </Button>
 
           <FieldDescription className="text-center">
-            Não tem uma conta?{' '}
-            <Link href="#" className="text-primary">
-              Criar uma conta
+            Já tem uma conta?{' '}
+            <Link href="/sign-in" className="text-primary">
+              Entrar aqui
             </Link>
           </FieldDescription>
         </Field>

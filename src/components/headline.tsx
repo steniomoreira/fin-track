@@ -6,7 +6,11 @@ function Headline({
   ...props
 }: React.ComponentProps<'div'>) {
   return (
-    <div data-slot="headeline" className={className} {...props}>
+    <div
+      data-slot="headeline"
+      className={cn('space-y-2', className)}
+      {...props}
+    >
       {children}
     </div>
   );

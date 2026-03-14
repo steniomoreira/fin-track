@@ -5,7 +5,7 @@ import {
 } from '@/components/headline';
 import FinTrack from '@/components/logos/fintrack';
 
-import { LoginForm } from './_component/login-form';
+import { SignInForm } from './_component/sign-in-form';
 
 function SignInPage() {
   return (
@@ -14,10 +14,10 @@ function SignInPage() {
         <div className="flex max-w-lg flex-col items-center justify-center space-y-9 text-center">
           <FinTrack />
 
-          <h2 className="text-center text-4xl font-extrabold">
+          <h2 className="text-center text-4xl leading-12 font-extrabold">
             Domine suas finanças com a <br /> FinTrack
           </h2>
-          <p className="text-lg opacity-80">
+          <p className="text-xl font-light opacity-80">
             Junte-se a milhares de usuários que transformaram seu futuro
             financeiro usando nossas ferramentas intuitivas de acompanhamento e
             definição de metas
@@ -41,7 +41,7 @@ function SignInPage() {
             </HeadlineDescription>
           </Headline>
 
-          <LoginForm />
+          <SignInForm />
         </div>
       </div>
     </div>
