@@ -3,13 +3,17 @@ import {
   HeadlineDescription,
   HeadlineTitle,
 } from '@/components/headline';
-import Logo from '@/components/logo';
+import FinTrack from '@/components/logos/fintrack';
+
+import { LoginForm } from './_component/login-form';
 
 function SignInPage() {
   return (
     <div className="grid h-screen grid-cols-2">
       <div className="bg-primary relative flex flex-col items-center justify-center p-4 text-white">
         <div className="flex max-w-lg flex-col items-center justify-center space-y-9 text-center">
+          <FinTrack />
+
           <h2 className="text-center text-4xl font-extrabold">
             Domine suas finanças com a <br /> FinTrack
           </h2>
@@ -21,15 +25,14 @@ function SignInPage() {
         </div>
 
         <p className="absolute bottom-4 text-sm opacity-80">
-          &#64; {new Date().getFullYear()} FinTrack. Todos os direitos
-          reservados
+          &#64; {new Date().getFullYear()} <strong>FinTrack</strong>. Todos os
+          direitos reservados
         </p>
       </div>
 
-      {/* FORM GRID */}
-      <div className="flex flex-col items-center justify-center">
-        <div className="space-y-5">
-          <Logo />
+      <div className="flex flex-col items-center justify-center p-4">
+        <div className="space-y-8">
+          <FinTrack />
 
           <Headline>
             <HeadlineTitle>Bem vindo de volta</HeadlineTitle>
@@ -37,6 +40,8 @@ function SignInPage() {
               Favor, entre com suas credenciais para acessar sua conta.
             </HeadlineDescription>
           </Headline>
+
+          <LoginForm />
         </div>
       </div>
     </div>
