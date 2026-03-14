@@ -1,13 +1,16 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { LockKeyhole, RotateCcwKey } from 'lucide-react';
 import Link from 'next/link';
+import { Controller, useForm } from 'react-hook-form';
 
 import Google from '@/components/logos/google';
 import { Button } from '@/components/ui/button';
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
@@ -20,56 +23,108 @@ import {
 } from '@/components/ui/input-group';
 import { cn } from '@/lib/utils';
 
+import { FormData, formSchema } from '../schema';
+
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<'form'>) {
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      passwordConfirmation: '',
+    },
+  });
+
+  function onSubmit(data: FormData) {
+    console.log(data);
+  }
+
   return (
-    <form className={cn('flex flex-col gap-6', className)} {...props}>
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className={cn('flex flex-col gap-6', className)}
+      {...props}
+    >
       <FieldGroup>
-        <div className="flex items-center justify-between gap-4">
-          <Field>
-            <FieldLabel htmlFor="firstName">Nome</FieldLabel>
-            <Input id="firstName" type="firstName" required autoFocus />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="lastName">Sobre nome</FieldLabel>
-            <Input id="lastName" type="lastName" required />
-          </Field>
-        </div>
+        <Controller
+          name="name"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor="name">Nome</FieldLabel>
+              <Input {...field} id="name" autoFocus />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
 
-        <Field>
-          <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input id="email" type="email" placeholder="m@example.com" required />
-        </Field>
+        <Controller
+          name="email"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                {...field}
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
 
-        <Field>
-          <FieldLabel htmlFor="password">Senha</FieldLabel>
-          <InputGroup>
-            <InputGroupInput
-              id="password"
-              type="password"
-              placeholder="********"
-            />
-            <InputGroupAddon>
-              <LockKeyhole />
-            </InputGroupAddon>
-          </InputGroup>
-        </Field>
-        <Field>
-          <FieldLabel htmlFor="confirmPassword">Confirmar senha</FieldLabel>
+        <Controller
+          name="password"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor="password">Senha</FieldLabel>
+              <InputGroup>
+                <InputGroupInput
+                  {...field}
+                  id="password"
+                  type="password"
+                  placeholder="********"
+                />
+                <InputGroupAddon>
+                  <LockKeyhole />
+                </InputGroupAddon>
+              </InputGroup>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
 
-          <InputGroup>
-            <InputGroupInput
-              id="confirmPassword"
-              type="password"
-              placeholder="********"
-            />
-            <InputGroupAddon>
-              <RotateCcwKey />
-            </InputGroupAddon>
-          </InputGroup>
-        </Field>
+        <Controller
+          name="passwordConfirmation"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor="passwordConfirmation">
+                Confirmar senha
+              </FieldLabel>
+
+              <InputGroup>
+                <InputGroupInput
+                  {...field}
+                  id="passwordConfirmation"
+                  type="password"
+                  placeholder="********"
+                />
+                <InputGroupAddon>
+                  <RotateCcwKey />
+                </InputGroupAddon>
+              </InputGroup>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
         <Field>
           <Button type="submit" className="h-12">
             Entrar
