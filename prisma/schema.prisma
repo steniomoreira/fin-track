@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id    String @id @default(cuid())
+  name  String
+  email String @unique
+
+  transactions Transaction[]
+  installments Installment[]
+  payments     Payment[]
+  creditCards  CreditCard[]
+  categories   Category[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Transaction {
+  id                 String          @id @default(cuid())
+  userId             String          @map("user_id")
+  categoryId         String          @map("category_id")
+  creditCardId       String?         @map("credit_card_id")
+  description        String
+  type               TransactionType @default(EXPENSE)
+  installments       Installment[]
+  numberInstallments Int?            @map("number_installments")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category    @relation(fields: [categoryId], references: [id])
+  creditCard CreditCard? @relation(fields: [creditCardId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("transactions")
+}
+
+model Installment {
+  id               String @id @default(cuid())
+  userId           String @map("user_id")
+  transactionId    String @map("transaction_id")
+  paymentAccountId String @map("payment_account_id")
+
+  dueDate  DateTime
+  amount   Int
+  number   Int           @default(1)
+  status   PaymentStatus @default(PENDING)
+  payments Payment[]
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("installments")
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  installmentId String?  @map("installment_id")
+  date          DateTime @default(now())
+  amount        Int
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  installment Installment? @relation(fields: [installmentId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model CreditCard {
+  id           String        @id @default(cuid())
+  userId       String        @map("user_id")
+  name         String
+  cardNumber   String        @map("card_number")
+  transactions Transaction[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("credit_cards")
+}
+
+model Category {
+  id           String        @id @default(cuid())
+  userId       String        @map("user_id")
+  name         String
+  transactions Transaction[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("categories")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum PaymentStatus {
+  LATE
+  PAID
+  PARTIAL
+  PENDING
+}
