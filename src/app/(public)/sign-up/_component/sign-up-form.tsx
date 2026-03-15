@@ -5,6 +5,7 @@ import { LockKeyhole, RotateCcwKey } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import Google from '@/components/logos/google';
 import { Button } from '@/components/ui/button';
@@ -54,6 +55,14 @@ export function SignUpForm({
       {
         onSuccess: () => {
           router.push('/dashboard');
+        },
+        onError: (ctx) => {
+          if (ctx.error.code === 'USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL') {
+            toast.error('Usuário já existe. Use outro E-mail.');
+            return;
+          }
+
+          toast.error('Erro criar conta! Tente novamente.');
         },
       }
     );
