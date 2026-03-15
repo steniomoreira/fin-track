@@ -13,11 +13,11 @@ export const formSchema = z
     password: z
       .string()
       .trim()
-      .min(6, { message: 'A senha deve conter no mínimo 6 caracteres' }),
+      .min(8, { message: 'A senha deve conter no mínimo 8 caracteres' }),
     passwordConfirmation: z
       .string()
       .trim()
-      .min(6, { message: 'A senha deve conter no mínimo 6 caracteres' }),
+      .min(8, { message: 'A senha deve conter no mínimo 8 caracteres' }),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
     message: 'As senhas não correspondem',

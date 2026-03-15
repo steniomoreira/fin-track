@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LockKeyhole, RotateCcwKey } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 
 import Google from '@/components/logos/google';
@@ -21,6 +22,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group';
+import { authClient } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
 import { FormData, formSchema } from '../schema';
@@ -29,6 +31,8 @@ export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<'form'>) {
+  const router = useRouter();
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,8 +43,20 @@ export function SignUpForm({
     },
   });
 
-  function onSubmit(data: FormData) {
-    console.log(data);
+  async function onSubmit(data: FormData) {
+    const { name, email, password } = data;
+    await authClient.signUp.email(
+      {
+        name,
+        email,
+        password,
+      },
+      {
+        onSuccess: () => {
+          router.push('/dashboard');
+        },
+      }
+    );
   }
 
   return (
