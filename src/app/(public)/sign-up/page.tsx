@@ -10,7 +10,7 @@ import { SignUpForm } from './_component/sign-up-form';
 function SignUpPage() {
   return (
     <div className="grid h-screen grid-cols-2">
-      <div className="bg-primary relative flex flex-col items-center justify-center p-4 text-white">
+      <div className="bg-primary relative flex flex-col items-end justify-center p-4 pr-25 text-white">
         <div className="flex max-w-lg flex-col items-start justify-center space-y-9 text-center">
           <FinTrack />
 
@@ -30,7 +30,7 @@ function SignUpPage() {
         </p>
       </div>
 
-      <div className="flex flex-col items-center justify-center p-4">
+      <div className="flex flex-col items-start justify-center p-4 pl-25">
         <div className="space-y-8">
           <Headline>
             <HeadlineTitle>Crie sua conta</HeadlineTitle>
