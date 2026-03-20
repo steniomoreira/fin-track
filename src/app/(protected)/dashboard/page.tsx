@@ -1,23 +1,19 @@
-import { headers } from 'next/headers';
-
 import {
   Headline,
   HeadlineDescription,
   HeadlineTitle,
 } from '@/components/headline';
-import { auth } from '@/lib/auth';
+import { requireSession } from '@/utils/session';
 
 import SignOutButton from './_components/sign-out-button';
 
 async function DashboardPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const { user } = await requireSession();
 
   return (
     <div>
       <Headline>
-        <HeadlineTitle>Olá, {session?.user?.name}!</HeadlineTitle>
+        <HeadlineTitle className="capitalize">Olá, {user.name}!</HeadlineTitle>
         <HeadlineDescription>
           Veja o que está acontecendo com suas finances hoje.
         </HeadlineDescription>

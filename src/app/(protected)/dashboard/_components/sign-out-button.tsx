@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
-import { authClient } from '@/lib/auth-client';
+import { signOut } from '@/lib/auth-client';
 
 function SignOutButton() {
   const router = useRouter();
@@ -11,7 +11,7 @@ function SignOutButton() {
   return (
     <Button
       onClick={() =>
-        authClient.signOut({
+        signOut({
           fetchOptions: {
             onSuccess: () => {
               router.push('/sign-in');
