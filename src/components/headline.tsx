@@ -19,15 +19,15 @@ function HeadlineTitle({
   className,
   children,
   ...props
-}: React.ComponentProps<'h2'>) {
+}: React.ComponentProps<'h1'>) {
   return (
-    <h2
+    <h1
       data-slot="headeline-title"
       className={cn('text-3xl font-extrabold', className)}
       {...props}
     >
       {children}
-    </h2>
+    </h1>
   );
 }
 function HeadlineDescription({
