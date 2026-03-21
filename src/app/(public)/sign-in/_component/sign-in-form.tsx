@@ -100,7 +100,7 @@ export function SignInForm({
               <div className="flex items-center">
                 <FieldLabel htmlFor="password">Senha</FieldLabel>
                 <Link
-                  href="#"
+                  href="/forgot-password"
                   className="text-primary ml-auto text-sm font-semibold"
                 >
                   Esqueceu sua senha?
