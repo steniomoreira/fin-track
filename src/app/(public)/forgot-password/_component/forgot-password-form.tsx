@@ -18,11 +18,12 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group';
+import { requestPasswordReset } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
 import { FormData, formSchema } from '../schema';
 
-export function ForgoPasswordForm({
+export function ForgotPasswordForm({
   className,
   ...props
 }: React.ComponentProps<'form'>) {
@@ -34,7 +35,12 @@ export function ForgoPasswordForm({
   });
 
   async function onSubmit(data: FormData) {
-    console.log(data);
+    const { error } = await requestPasswordReset({
+      email: data.email,
+      redirectTo: '/reset-password',
+    });
+
+    console.log(error);
   }
 
   return (

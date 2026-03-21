@@ -1,3 +1,6 @@
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+
 import {
   Headline,
   HeadlineDescription,
@@ -5,9 +8,9 @@ import {
 } from '@/components/headline';
 import FinTrack from '@/components/logos/fintrack';
 
-import { ForgotPasswordForm } from './_component/forgot-password-form';
+import { ResetPasswordForm } from './_components/reset-password-form';
 
-export default function ForgotPasswordPage() {
+export default function ResetPasswordPage() {
   return (
     <div className="grid h-screen grid-cols-2">
       <div className="bg-primary relative flex flex-col items-end justify-center p-4 pr-25 text-white">
@@ -15,12 +18,11 @@ export default function ForgotPasswordPage() {
           <FinTrack />
 
           <h2 className="mt-4 text-left text-6xl leading-18 font-extrabold">
-            Recupere seu acesso com segurança
+            Proteção de dados de alto nível
           </h2>
-          <p className="text-left text-xl font-light opacity-80">
-            Nossa plataforma utiliza criptografia de ponta a ponta para garantir
-            que sua jornada financeira permaneça privada e protegida em todos os
-            momentos.
+          <p className="text-left text-xl leading-8 font-light opacity-80">
+            Utilizamos criptografia de ponta a ponta para garantir que suas
+            transações e dados pessoais permaneçam privados e seguros.
           </p>
         </div>
 
@@ -31,16 +33,22 @@ export default function ForgotPasswordPage() {
       </div>
 
       <div className="flex flex-col items-start justify-center p-4 pl-25">
-        <div className="max-w-111 space-y-8">
+        <div className="space-y-8">
+          <Link
+            href="/sign-in"
+            className="text-muted-foreground flex items-center text-sm font-semibold"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar ao sign In
+          </Link>
+
           <Headline>
-            <HeadlineTitle>Esqueceu sua senha?</HeadlineTitle>
+            <HeadlineTitle>Redefinir seu senha</HeadlineTitle>
             <HeadlineDescription>
-              Não se preocupe. Digite seu e-mail cadastrado e enviaremos as
-              instruções para você criar uma nova senha.
+              Sua segurança é nossa prioridade. Escolha uma senha forte.
             </HeadlineDescription>
           </Headline>
 
-          <ForgotPasswordForm />
+          <ResetPasswordForm />
         </div>
       </div>
     </div>
