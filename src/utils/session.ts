@@ -9,6 +9,7 @@ export async function getSession() {
 
 export async function requireSession() {
   const session = await getSession();
+
   if (!session) redirect('/sign-in');
 
   return session;
