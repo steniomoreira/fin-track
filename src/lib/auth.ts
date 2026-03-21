@@ -15,3 +15,6 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24, // refresh if older than 1 day
   },
 });
+
+export type Session = typeof auth.$Infer.Session;
+export type User = typeof auth.$Infer.Session.user;
