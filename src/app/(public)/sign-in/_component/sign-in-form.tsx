@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -125,7 +125,16 @@ export function SignInForm({
         />
 
         <Field>
-          <Button type="submit" className="h-12">
+          <Button
+            type="submit"
+            className="h-12"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-1 h-2 w-2 animate-spin" />
+            ) : (
+              <LogIn className="mr-1 h-2 w-2" />
+            )}
             Entrar
           </Button>
         </Field>

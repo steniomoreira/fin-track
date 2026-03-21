@@ -1,7 +1,12 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LockKeyhole, RotateCcwKey } from 'lucide-react';
+import {
+  CircleUserRound,
+  Loader2,
+  LockKeyhole,
+  RotateCcwKey,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
@@ -152,7 +157,12 @@ export function SignUpForm({
         />
         <Field>
           <Button type="submit" className="h-12">
-            Entrar
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-1 h-2 w-2 animate-spin" />
+            ) : (
+              <CircleUserRound className="mr-1 h-2 w-2" />
+            )}
+            Criar conta
           </Button>
         </Field>
         <FieldSeparator>Ou cadastrar com</FieldSeparator>
