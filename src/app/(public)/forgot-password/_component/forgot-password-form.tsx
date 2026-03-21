@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, ArrowRight, Loader2, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -22,7 +23,6 @@ import { requestPasswordReset } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
 import { FormData, formSchema } from '../schema';
-
 export function ForgotPasswordForm({
   className,
   ...props
@@ -34,13 +34,22 @@ export function ForgotPasswordForm({
     },
   });
 
-  async function onSubmit(data: FormData) {
-    const { error } = await requestPasswordReset({
-      email: data.email,
+  async function onSubmit({ email }: FormData) {
+    const { error, data } = await requestPasswordReset({
+      email: email,
       redirectTo: '/reset-password',
     });
 
-    console.log(error);
+    if (data?.status) {
+      toast.success(
+        'Link enviado com sucesso! Verifique sua caixa de entrada para encontrar o link de redefinição senha.'
+      );
+    }
+
+    if (error) {
+      toast.error('Ocorreu um erro. Tente novamente.');
+      console.error(error.message);
+    }
   }
 
   return (

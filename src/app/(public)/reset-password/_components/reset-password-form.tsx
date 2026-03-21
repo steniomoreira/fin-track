@@ -1,15 +1,11 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  ArrowRight,
-  CircleUserRound,
-  Eye,
-  EyeOff,
-  Loader2,
-} from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { redirect, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -24,6 +20,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group';
+import { resetPassword } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
 import { FormData, formSchema } from '../schema';
@@ -35,6 +32,9 @@ export function ResetPasswordForm({
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowPasswordConfirm, setIsShowPasswordConfirm] = useState(false);
 
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token') ?? '';
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,8 +43,25 @@ export function ResetPasswordForm({
     },
   });
 
-  async function onSubmit(data: FormData) {
-    console.log(data);
+  if (!token) {
+    redirect('/sign-in');
+  }
+
+  async function onSubmit({ password }: FormData) {
+    const { error, data } = await resetPassword({
+      newPassword: password,
+      token,
+    });
+
+    if (data?.status) {
+      toast.success('Senha atualizada com sucesso!');
+      redirect('/sign-in');
+    }
+
+    if (error) {
+      toast.error('Ocorreu um erro. Não foi possível redefinir sua senha');
+      console.error(error.message);
+    }
   }
 
   return (
@@ -110,7 +127,7 @@ export function ResetPasswordForm({
         />
         <Field>
           <Button type="submit" className="h-12">
-            Redefinir senha
+            Salvar e Acessar
             {form.formState.isSubmitting ? (
               <Loader2 className="mr-1 h-2 w-2 animate-spin" />
             ) : (

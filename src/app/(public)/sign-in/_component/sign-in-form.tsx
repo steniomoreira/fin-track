@@ -62,7 +62,7 @@ export function SignInForm({
           router.push('/dashboard');
         },
         onError: () => {
-          toast.error('Dados inválidos');
+          toast.error('Usuário não autorizado!');
         },
       }
     );
