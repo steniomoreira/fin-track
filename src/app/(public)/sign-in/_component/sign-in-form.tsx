@@ -25,7 +25,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group';
-import { authClient } from '@/lib/auth-client';
+import { authClient, signIn } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
 import { FormData, formSchema } from '../schema';
@@ -66,6 +66,13 @@ export function SignInForm({
         },
       }
     );
+  }
+
+  async function handleSignInSocial() {
+    await signIn.social({
+      provider: 'google',
+      callbackURL: '/dashboard',
+    });
   }
 
   return (
@@ -142,7 +149,12 @@ export function SignInForm({
         <FieldSeparator>Ou continue com</FieldSeparator>
 
         <Field>
-          <Button variant="outline" type="button" className="h-12">
+          <Button
+            variant="outline"
+            type="button"
+            className="h-12"
+            onClick={handleSignInSocial}
+          >
             <Google />
             Google
           </Button>
