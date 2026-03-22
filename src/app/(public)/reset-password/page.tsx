@@ -1,12 +1,12 @@
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
+import FinTrack from '@/components/logos/fintrack';
 import {
   Headline,
   HeadlineDescription,
   HeadlineTitle,
-} from '@/components/headline';
-import FinTrack from '@/components/logos/fintrack';
+} from '@/components/ui/headline';
 
 import { ResetPasswordForm } from './_components/reset-password-form';
 

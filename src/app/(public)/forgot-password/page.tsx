@@ -1,9 +1,9 @@
+import FinTrack from '@/components/logos/fintrack';
 import {
   Headline,
   HeadlineDescription,
   HeadlineTitle,
-} from '@/components/headline';
-import FinTrack from '@/components/logos/fintrack';
+} from '@/components/ui/headline';
 
 import { ForgotPasswordForm } from './_component/forgot-password-form';
 
