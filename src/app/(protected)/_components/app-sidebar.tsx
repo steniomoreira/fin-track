@@ -21,7 +21,7 @@ const items = [
     icon: LayoutDashboard,
   },
   {
-    title: 'Trasações',
+    title: 'Transações',
     url: '/transactions',
     icon: ArrowLeftRight,
   },
