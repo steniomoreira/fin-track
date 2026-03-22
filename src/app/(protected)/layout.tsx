@@ -1,7 +1,8 @@
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { SessionProvider } from '@/contexts/session-context';
 import { requireSession } from '@/lib/session';
 
-import SignOutButton from './dashboard/_components/sign-out-button';
+import { AppSidebar } from './_components/app-sidebar';
 
 export default async function AppLayout({
   children,
@@ -12,12 +13,10 @@ export default async function AppLayout({
 
   return (
     <SessionProvider session={session}>
-      <div className="grid h-screen grid-cols-[300px_1fr] gap-4">
-        <aside className="h-screen border-r-2 p-4">
-          Sidebar <SignOutButton />
-        </aside>
-        <main className="p-4">{children}</main>
-      </div>
+      <SidebarProvider>
+        <AppSidebar />
+        <main className="w-full">{children}</main>
+      </SidebarProvider>
     </SessionProvider>
   );
 }
