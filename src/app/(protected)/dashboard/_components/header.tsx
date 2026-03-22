@@ -4,7 +4,7 @@ import {
   Headline,
   HeadlineDescription,
   HeadlineTitle,
-} from '@/components/headline';
+} from '@/components/ui/headline';
 import { useAppSession } from '@/contexts/session-context';
 
 export function Header() {
