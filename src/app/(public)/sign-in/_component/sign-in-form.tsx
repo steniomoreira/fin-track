@@ -117,6 +117,7 @@ export function SignInForm({
               <InputGroup>
                 <InputGroupInput
                   {...field}
+                  id="password"
                   type={isShow ? 'text' : 'password'}
                   placeholder="********"
                 />
