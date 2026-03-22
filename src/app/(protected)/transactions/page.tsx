@@ -1,3 +1,4 @@
+import { DataTable } from '@/components/table/data-table';
 import {
   Headline,
   HeadlineDescription,
@@ -6,8 +7,12 @@ import {
 import { PageContainer } from '@/components/ui/page-container';
 
 import { AddTransactionButton } from '../_components/add-transaction-button';
+import { columns } from './constants/columns';
+import { transactions } from './data';
 
 export default function TransactionsPage() {
+  const data = transactions;
+
   return (
     <PageContainer>
       <header className="flex items-end justify-between">
@@ -21,6 +26,8 @@ export default function TransactionsPage() {
 
         <AddTransactionButton />
       </header>
+
+      <DataTable columns={columns} data={data} />
     </PageContainer>
   );
 }
