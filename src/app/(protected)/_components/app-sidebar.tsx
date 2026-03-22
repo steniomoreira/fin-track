@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/sidebar';
 
 import SignOutButton from '../dashboard/_components/sign-out-button';
-import { AppSidebarMenu } from './sidebar-menu';
+import { AppSidebarMenu } from './app-sidebar-menu';
 
 export function AppSidebar() {
   return (
