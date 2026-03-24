@@ -31,7 +31,7 @@ import { EXPENSE, transactionTypes } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
 
-import { schemaCreateTransactionForm, TransactionFormData } from '../schema';
+import { schemaCreateTransactionForm, TransactionFormData } from '../schemas';
 
 export function CreateTransactionForm({
   className,
