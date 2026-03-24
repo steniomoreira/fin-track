@@ -9,7 +9,7 @@ function PageContainer({
     <div
       data-slot="page-container"
       className={cn(
-        'bg-muted min-h-screen space-y-4 overflow-hidden p-8',
+        'bg-muted min-h-screen space-y-8 overflow-hidden p-8',
         className
       )}
       {...props}

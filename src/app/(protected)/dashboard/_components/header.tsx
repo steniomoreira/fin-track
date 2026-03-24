@@ -1,13 +1,14 @@
 'use client';
 
+import { Calendar } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import {
   Headline,
   HeadlineDescription,
   HeadlineTitle,
 } from '@/components/ui/headline';
 import { useAppSession } from '@/contexts/session-context';
-
-import { AddTransactionButton } from '../../_components/add-transaction-button';
 
 export function Header() {
   const { user } = useAppSession();
@@ -21,7 +22,9 @@ export function Header() {
         </HeadlineDescription>
       </Headline>
 
-      <AddTransactionButton />
+      <Button>
+        <Calendar /> Março 2026
+      </Button>
     </header>
   );
 }

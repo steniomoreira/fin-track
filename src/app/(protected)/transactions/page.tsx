@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 
-import { AddTransactionButton } from '../_components/add-transaction-button';
+import { AddTransactionButton } from './_components/add-transaction-button';
 import { columns } from './constants/columns';
 import { transactions } from './data';
 
