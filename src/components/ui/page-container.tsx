@@ -27,7 +27,7 @@ function HeaderContainer({
     <header
       data-slot="header-container"
       className={cn(
-        'bg-background fixed top-0 flex min-h-16 w-full items-center justify-between border-b-2 px-8 shadow-xs',
+        'bg-sidebar fixed top-0 flex min-h-16 w-full items-center justify-between border-b-2 px-8 shadow-xs',
         className
       )}
       {...props}

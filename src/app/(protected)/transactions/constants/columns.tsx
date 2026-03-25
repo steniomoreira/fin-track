@@ -56,10 +56,12 @@ export const columns: ColumnDef<Transaction>[] = [
     header: 'Status',
     cell: ({ row }) => {
       if (row.getValue('status') === 'PAID') {
-        return <Badge className="bg-green-100 text-green-600">Pago</Badge>;
+        return <Badge className="bg-green-600/10 text-green-600">Pago</Badge>;
       }
 
-      return <Badge className="bg-amber-100 text-amber-600">Pendente</Badge>;
+      return (
+        <Badge className="bg-yellow-600/10 text-yellow-600">Pendente</Badge>
+      );
     },
   },
   {
@@ -78,7 +80,7 @@ export const columns: ColumnDef<Transaction>[] = [
         <div
           className={`${isExpense ? 'text-red-500' : 'text-foreground'} text-right font-medium`}
         >
-          {isExpense && `-`}
+          {isExpense && `- `}
           {formatted}
         </div>
       );
