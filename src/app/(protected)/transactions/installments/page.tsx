@@ -1,12 +1,5 @@
-import { FileText } from 'lucide-react';
 import Link from 'next/link';
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import {
   Headline,
   HeadlineDescription,
@@ -29,27 +22,19 @@ export default function InstallmentsPage() {
         </ul>
       </HeaderContainer>
 
-      <PageContainer>
-        <header className="flex items-end justify-between">
-          <Headline>
-            <HeadlineTitle>Novo Lançamento</HeadlineTitle>
-            <HeadlineDescription>
-              Registre uma transação financeira detalhadamente.
-            </HeadlineDescription>
-          </Headline>
-        </header>
+      <PageContainer className="mt-16 flex flex-col items-center">
+        <div className="w-full max-w-207.5 space-y-8">
+          <header>
+            <Headline>
+              <HeadlineTitle>Novo Lançamento</HeadlineTitle>
+              <HeadlineDescription>
+                Registre uma transação financeira detalhadamente.
+              </HeadlineDescription>
+            </Headline>
+          </header>
 
-        <Card className="gap-0 p-0">
-          <CardHeader className="border-b p-6">
-            <CardTitle className="flex items-center gap-2 text-lg font-bold">
-              <FileText className="text-primary" />
-              Detalhes Gerais
-            </CardTitle>
-          </CardHeader>
-          <CardDescription className="p-8">
-            <CreateTransactionForm />
-          </CardDescription>
-        </Card>
+          <CreateTransactionForm />
+        </div>
       </PageContainer>
     </>
   );
