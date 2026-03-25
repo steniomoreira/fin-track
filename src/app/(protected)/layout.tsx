@@ -15,7 +15,7 @@ export default async function AppLayout({
     <SessionProvider session={session}>
       <SidebarProvider>
         <AppSidebar />
-        <main className="w-full">{children}</main>
+        <main className="relative w-full">{children}</main>
       </SidebarProvider>
     </SessionProvider>
   );
