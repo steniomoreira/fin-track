@@ -1,3 +1,4 @@
+import { getDate } from 'date-fns';
 import { Controller, useFormContext } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
 
@@ -10,6 +11,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { currencyToCents, formatCurrency } from '@/utls/currency-utils';
 
 export function InstallmentForm() {
   const form = useFormContext();
@@ -107,18 +109,27 @@ export function InstallmentForm() {
             <table className="w-full">
               <tbody>
                 <tr className="text-muted-foreground">
-                  <td>Total da compra</td>
-                  <td className="py-1 text-right font-semibold">R$ 1.200,00</td>
+                  <td>Valor total</td>
+                  <td className="py-1 text-right font-semibold">
+                    {formatCurrency(
+                      currencyToCents(
+                        form.watch('amount') * form.watch('numberInstallments')
+                      )
+                    )}
+                  </td>
                 </tr>
                 <tr className="text-muted-foreground">
                   <td>Parcelamento</td>
                   <td className="text-primary py-1 text-right font-bold">
-                    10x de R$ 120,00
+                    {form.watch('numberInstallments')}x de{' '}
+                    {formatCurrency(currencyToCents(form.watch('amount')))}
                   </td>
                 </tr>
                 <tr className="text-muted-foreground">
                   <td>Dia de vencimento</td>
-                  <td className="py-1 text-right font-semibold">10</td>
+                  <td className="py-1 text-right font-semibold">
+                    {getDate(form.watch('dueDate'))}
+                  </td>
                 </tr>
               </tbody>
             </table>
