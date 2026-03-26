@@ -25,7 +25,7 @@ export const schemaCreateTransactionForm = z
     creditCardId: z.string().nullable().optional(),
   })
   .refine((data) => data.numberInstallments > 1 || !data.installmentGroup, {
-    message: 'Deve ter no mímino 2 lançamentos',
+    message: 'Deve ter no mímino 2 parcelas de lançamento',
     path: ['installmentGroup'],
   });
 

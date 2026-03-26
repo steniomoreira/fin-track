@@ -1,0 +1,86 @@
+'use client';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowRight, Calendar, FileText, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { FormProvider, useForm } from 'react-hook-form';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EXPENSE } from '@/constants/transactions-contants';
+import { cn } from '@/lib/utils';
+
+import { GeneralDetailsForm } from './general-details-form';
+import { InstallmentForm } from './installment-form';
+import { schemaCreateTransactionForm, TransactionFormData } from './schemas';
+
+export function CreateTransactionForm({
+  className,
+  ...props
+}: React.ComponentProps<'form'>) {
+  const form = useForm<TransactionFormData>({
+    resolver: zodResolver(schemaCreateTransactionForm),
+    defaultValues: {
+      description: '',
+      dueDate: new Date(),
+      type: EXPENSE,
+      amount: 0,
+      numberInstallments: 1,
+      installmentGroup: false,
+      creditCardId: '',
+    },
+  });
+
+  async function onSubmit(data: TransactionFormData) {
+    console.log('here', data);
+  }
+
+  return (
+    <FormProvider {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={cn('flex w-full max-w-207.5 flex-col gap-6', className)}
+        {...props}
+      >
+        <Card className="gap-0 p-0">
+          <CardHeader className="border-b p-6">
+            <CardTitle className="flex items-center gap-2 text-lg font-bold">
+              <FileText className="text-primary" />
+              Detalhes Gerais
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-8">
+            <GeneralDetailsForm />
+          </CardContent>
+        </Card>
+
+        <Card className="gap-0 p-0">
+          <CardHeader className="border-b p-6">
+            <CardTitle className="flex items-center gap-2 text-lg font-bold">
+              <Calendar className="text-primary" />
+              Lançamento
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-8">
+            <InstallmentForm />
+          </CardContent>
+        </Card>
+
+        <div className="flex items-center justify-end gap-6">
+          <Button type="button" variant="ghost" asChild>
+            <Link href={'/transactions'}>Descartar</Link>
+          </Button>
+
+          <Button type="submit" className="">
+            Finalizar lançamento
+            {form.formState.isSubmitting ? (
+              <Loader2 className="mr-1 h-2 w-2 animate-spin" />
+            ) : (
+              <ArrowRight className="mr-1 h-2 w-2" />
+            )}
+          </Button>
+        </div>
+      </form>
+    </FormProvider>
+  );
+}

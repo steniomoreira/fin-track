@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/headline';
 import { HeaderContainer, PageContainer } from '@/components/ui/page-container';
 
-import { CreateTransactionForm } from '../_components/create-transaction-form';
+import { CreateTransactionForm } from '../_components/create-transactions-form';
 
 export default function InstallmentsPage() {
   return (
