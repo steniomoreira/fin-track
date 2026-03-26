@@ -98,10 +98,9 @@ model Transaction {
 }
 
 model Installment {
-  id               String @id @default(cuid())
-  userId           String @map("user_id")
-  transactionId    String @map("transaction_id")
-  paymentAccountId String @map("payment_account_id")
+  id            String @id @default(cuid())
+  userId        String @map("user_id")
+  transactionId String @map("transaction_id")
 
   dueDate  DateTime
   amount   Int
