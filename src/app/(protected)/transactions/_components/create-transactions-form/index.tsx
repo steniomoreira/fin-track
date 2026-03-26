@@ -3,12 +3,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, Calendar, FileText, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
+import { createTransaction } from '@/actions/create-transaction';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EXPENSE } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
+import { toastMessage } from '@/utls/toast-utils';
 
 import { GeneralDetailsForm } from './general-details-form';
 import { InstallmentForm } from './installment-form';
@@ -33,6 +37,19 @@ export function CreateTransactionForm({
 
   async function onSubmit(data: TransactionFormData) {
     console.log('here', data);
+    try {
+      const response = await createTransaction({
+        ...data,
+        creditCardId: data.creditCardId || null,
+      });
+
+      toastMessage({ type: response.type, message: response.message });
+    } catch (error) {
+      console.error(error);
+      toast.error('Ocorreu um erro no processo de criação!');
+    } finally {
+      redirect('/transactions');
+    }
   }
 
   return (

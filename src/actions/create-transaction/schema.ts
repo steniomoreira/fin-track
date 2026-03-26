@@ -1,0 +1,21 @@
+import z from 'zod';
+
+import { EXPENSE, INCOME } from '@/constants/transactions-contants';
+
+export const schemaCreateTransaction = z.object({
+  description: z
+    .string()
+    .trim()
+    .min(3, { message: 'A descrição deve ter no mínimo 3 caracteres' }),
+  dueDate: z.date(),
+  type: z.enum([INCOME, EXPENSE], { message: 'Tipo de transação inválido' }),
+  amount: z.number().min(1, { message: 'Informe um valor' }),
+  numberInstallments: z
+    .number()
+    .positive({ message: 'Deve ter 1 parcela ou mais' }),
+  installmentGroup: z.boolean(),
+  categoryId: z.string({ message: 'Categoria inválida' }),
+  creditCardId: z.string().nullable().optional(),
+});
+
+export type CreateTransactionSchema = z.infer<typeof schemaCreateTransaction>;

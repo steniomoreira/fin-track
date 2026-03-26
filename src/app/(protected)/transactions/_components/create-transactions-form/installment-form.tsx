@@ -119,7 +119,7 @@ export function InstallmentForm() {
                   </td>
                 </tr>
                 <tr className="text-muted-foreground">
-                  <td>Parcelamento</td>
+                  <td>Plano de contas</td>
                   <td className="text-primary py-1 text-right font-bold">
                     {form.watch('numberInstallments')}x de{' '}
                     {formatCurrency(currencyToCents(form.watch('amount')))}
