@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { createTransaction } from '@/actions/create-transaction';
+import { createTransaction } from '@/actions/transactions/create-transaction';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EXPENSE } from '@/constants/transactions-contants';
