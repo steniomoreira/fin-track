@@ -1,3 +1,4 @@
+import { getInstallmentsTransactions } from '@/actions/transactions/get-installments-transactions';
 import { DataTable } from '@/components/table/data-table';
 import {
   Headline,
@@ -8,10 +9,9 @@ import { PageContainer } from '@/components/ui/page-container';
 
 import { AddTransactionButton } from './_components/add-transaction-button';
 import { columns } from './constants/columns';
-import { transactions } from './data';
 
-export default function TransactionsPage() {
-  const data = transactions;
+export default async function TransactionsPage() {
+  const { installments } = await getInstallmentsTransactions();
 
   return (
     <PageContainer>
@@ -27,7 +27,7 @@ export default function TransactionsPage() {
         <AddTransactionButton />
       </header>
 
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={installments} />
     </PageContainer>
   );
 }

@@ -5,22 +5,15 @@ import { BanknoteArrowUp, Home, Pencil, Trash2 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { EXPENSE, status } from '@/constants/transactions-contants';
+import { InstallmentTransaction } from '@/types/installment-transaction-types';
+import { date_dd_MMM_yyyy } from '@/utls/date-utils';
 
-type Transaction = {
-  id: string;
-  data: string;
-  description: string;
-  category: string;
-  creditCard?: string;
-  status: 'LATE' | 'PAID' | 'PARTIAL' | 'PENDING';
-  amount: number;
-  type: 'INCOME' | 'EXPENSE';
-};
-
-export const columns: ColumnDef<Transaction>[] = [
+export const columns: ColumnDef<InstallmentTransaction>[] = [
   {
-    accessorKey: 'data',
+    accessorKey: 'dueDate',
     header: 'Data',
+    cell: ({ row }) => date_dd_MMM_yyyy(row.getValue('dueDate')),
   },
   {
     accessorKey: 'description',
@@ -31,7 +24,7 @@ export const columns: ColumnDef<Transaction>[] = [
           <span className="text-primary bg-muted rounded-full p-2">
             <Home className="h-4 w-4" />
           </span>
-          {row.getValue('description')}
+          {row.original.transaction.description}
         </div>
       );
     },
@@ -42,7 +35,7 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       return (
         <Badge className="bg-muted text-muted-foreground">
-          {row.getValue('category')}
+          {row.original.transaction.category.name}
         </Badge>
       );
     },
@@ -50,12 +43,19 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: 'creditCard',
     header: 'Cartão de crédito',
+    cell: ({ row }) => {
+      const creditCard = row.original.transaction.creditCard;
+
+      if (creditCard) {
+        return `${creditCard.name}*****${creditCard.cardNumber.slice(-4)}`;
+      }
+    },
   },
   {
     accessorKey: 'status',
     header: 'Status',
     cell: ({ row }) => {
-      if (row.getValue('status') === 'PAID') {
+      if (row.getValue('status') === status.PAID) {
         return <Badge className="bg-green-600/10 text-green-600">Pago</Badge>;
       }
 
@@ -68,7 +68,7 @@ export const columns: ColumnDef<Transaction>[] = [
     accessorKey: 'amount',
     header: () => <div className="text-right">Valor</div>,
     cell: ({ row }) => {
-      const isExpense = row.original.type === 'EXPENSE';
+      const isExpense = row.original.transaction.type === EXPENSE;
 
       const amount = parseFloat(row.getValue('amount'));
       const formatted = new Intl.NumberFormat('pt-Br', {
@@ -89,7 +89,8 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const transactionId = row.original.id;
+      const transactionId = row.original.transactionId;
+
       return (
         <div className="text-center">
           <Button
