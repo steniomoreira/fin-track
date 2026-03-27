@@ -1,6 +1,6 @@
 import { Prisma } from '@/generated/prisma/client';
 
-export type Installment = Prisma.InstallmentGetPayload<{
+export type InstallmentTransaction = Prisma.InstallmentGetPayload<{
   select: {
     id: true;
     transactionId: true;
@@ -23,6 +23,7 @@ export type Installment = Prisma.InstallmentGetPayload<{
           select: {
             id: true;
             name: true;
+            cardNumber: true;
           };
         };
       };
