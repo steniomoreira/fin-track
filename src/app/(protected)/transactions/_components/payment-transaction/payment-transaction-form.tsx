@@ -119,7 +119,7 @@ export function PaymentTransactionForm({
                     <Button
                       variant={'outline'}
                       className={cn(
-                        'pl-3 text-left font-normal',
+                        'h-12 pl-3 text-left font-normal',
                         !field.value && 'text-muted-foreground'
                       )}
                       disabled={isSubmitting}

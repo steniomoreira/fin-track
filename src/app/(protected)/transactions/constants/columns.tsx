@@ -2,6 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { Home, Pencil } from 'lucide-react';
+import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -119,8 +120,10 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
         <div className="text-center">
           <PaymentTransactionButton installment={installment} />
 
-          <Button variant="ghost" size="icon">
-            <Pencil />
+          <Button variant="ghost" size="icon" asChild>
+            <Link href={`/transactions/transaction-details/${installment.id}`}>
+              <Pencil />
+            </Link>
           </Button>
 
           <DeleteTransactionButton installment={installment} />

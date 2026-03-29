@@ -27,8 +27,6 @@ export default async function TransactionsPage({
 
   const { firstDay: date } = getMonthByDate(month);
 
-  console.log(installments);
-
   return (
     <PageContainer>
       <header className="flex items-end justify-between">
