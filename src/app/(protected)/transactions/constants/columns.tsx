@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Home, Pencil, Trash2 } from 'lucide-react';
+import { Home, Pencil } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { InstallmentTransaction } from '@/types/installment-transaction-types';
 import { formatCurrency } from '@/utls/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
 
+import { DeleteTransactionButton } from '../_components/delete-transaction/delete-transaction-button';
 import { PaymentTransactionButton } from '../_components/payment-transaction/payment-transaction-button';
 import { getTotalPaid } from '../_components/payment-transaction/utils/payments-utils';
 
@@ -121,9 +122,8 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
           <Button variant="ghost" size="icon">
             <Pencil />
           </Button>
-          <Button variant="ghost" size="icon">
-            <Trash2 />
-          </Button>
+
+          <DeleteTransactionButton installment={installment} />
         </div>
       );
     },

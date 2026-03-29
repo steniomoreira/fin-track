@@ -65,7 +65,10 @@ export function PaymentTransactionForm({
   });
 
   useEffect(() => {
-    form.setValue('paymentAmount', currentyAmount);
+    form.reset({
+      date: new Date(),
+      paymentAmount: currentyAmount,
+    });
   }, [currentyAmount, form]);
 
   async function onSubmit(data: PaymentTransactionFormData) {
