@@ -1,8 +1,6 @@
 'use client';
 
-import { Calendar } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
+import { SelectMonthByDate } from '@/components/select-month-by-date';
 import {
   Headline,
   HeadlineDescription,
@@ -22,9 +20,7 @@ export function Header() {
         </HeadlineDescription>
       </Headline>
 
-      <Button>
-        <Calendar /> Março 2026
-      </Button>
+      <SelectMonthByDate date={new Date()} />
     </header>
   );
 }

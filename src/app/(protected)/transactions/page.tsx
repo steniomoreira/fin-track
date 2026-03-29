@@ -1,4 +1,5 @@
 import { getInstallmentsTransactions } from '@/actions/transactions/get-installments-transactions';
+import { SelectMonthByDate } from '@/components/select-month-by-date';
 import { DataTable } from '@/components/table/data-table';
 import {
   Headline,
@@ -26,6 +27,8 @@ export default async function TransactionsPage() {
 
         <AddTransactionButton />
       </header>
+
+      <SelectMonthByDate date={new Date()} variant="outline" />
 
       <DataTable columns={columns} data={installments} />
     </PageContainer>
