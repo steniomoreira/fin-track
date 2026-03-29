@@ -1,5 +1,5 @@
-import { ptBR } from 'date-fns/locale';
 import { CalendarIcon, Trash2 } from 'lucide-react';
+import { ptBR } from 'react-day-picker/locale';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';

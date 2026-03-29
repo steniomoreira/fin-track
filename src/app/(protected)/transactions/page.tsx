@@ -7,12 +7,25 @@ import {
   HeadlineTitle,
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
+import { getMonthByDate } from '@/utls/date-utils';
 
 import { AddTransactionButton } from './_components/add-transaction-button';
 import { columns } from './constants/columns';
 
-export default async function TransactionsPage() {
-  const { installments } = await getInstallmentsTransactions();
+type Params = {
+  month: Date;
+};
+
+export default async function TransactionsPage({
+  searchParams,
+}: {
+  searchParams: Params;
+}) {
+  const { month } = await searchParams;
+
+  const { installments } = await getInstallmentsTransactions(month);
+
+  const { firstDay: date } = getMonthByDate(month);
 
   return (
     <PageContainer>
@@ -28,7 +41,7 @@ export default async function TransactionsPage() {
         <AddTransactionButton />
       </header>
 
-      <SelectMonthByDate date={new Date()} variant="outline" />
+      <SelectMonthByDate date={date} variant="outline" />
 
       <DataTable columns={columns} data={installments} />
     </PageContainer>

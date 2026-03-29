@@ -19,12 +19,16 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
     accessorKey: 'description',
     header: 'Descrição',
     cell: ({ row }) => {
+      const installment = row.original;
+
       return (
         <div className="text-foreground flex items-center gap-2">
           <span className="text-primary bg-muted rounded-full p-2">
             <Home className="h-4 w-4" />
           </span>
-          {row.original.transaction.description}
+          {installment.transaction.description}{' '}
+          {installment.transaction.numberInstallments &&
+            `(${installment.number}/${installment.transaction.numberInstallments})`}
         </div>
       );
     },
