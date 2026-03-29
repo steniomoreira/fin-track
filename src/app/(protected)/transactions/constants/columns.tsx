@@ -1,13 +1,17 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { BanknoteArrowUp, Home, Pencil, Trash2 } from 'lucide-react';
+import { Home, Pencil, Trash2 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EXPENSE, status } from '@/constants/transactions-contants';
 import { InstallmentTransaction } from '@/types/installment-transaction-types';
+import { formatCurrency } from '@/utls/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
+
+import { PaymentTransactionButton } from '../_components/payment-transaction/payment-transaction-button';
+import { getTotalPaid } from '../_components/payment-transaction/utils/payments-utils';
 
 export const columns: ColumnDef<InstallmentTransaction>[] = [
   {
@@ -63,6 +67,10 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
         return <Badge className="bg-green-600/10 text-green-600">Pago</Badge>;
       }
 
+      if (row.getValue('status') === status.PARTIAL) {
+        return <Badge className="bg-blue-600/10 text-blue-600">Parcial</Badge>;
+      }
+
       return (
         <Badge className="bg-yellow-600/10 text-yellow-600">Pendente</Badge>
       );
@@ -72,20 +80,31 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
     accessorKey: 'amount',
     header: () => <div className="text-right">Valor</div>,
     cell: ({ row }) => {
-      const isExpense = row.original.transaction.type === EXPENSE;
-
-      const amount = parseFloat(row.getValue('amount'));
-      const formatted = new Intl.NumberFormat('pt-Br', {
-        style: 'currency',
-        currency: 'BRL',
-      }).format(amount / 100);
+      const installment = row.original;
+      const isExpense = installment.transaction.type === EXPENSE;
 
       return (
         <div
-          className={`${isExpense ? 'text-red-500' : 'text-foreground'} text-right font-medium`}
+          className={`flex flex-col ${isExpense ? 'text-red-500' : 'text-foreground'} text-right font-medium`}
         >
           {isExpense && `- `}
-          {formatted}
+
+          {installment.status === status.PARTIAL ? (
+            <>
+              {formatCurrency(
+                installment.amount - getTotalPaid(installment.payments)
+              )}
+
+              <span className="text-muted-foreground text-[10px]">
+                Pago{' '}
+                <span className="font-semibold">
+                  {formatCurrency(getTotalPaid(installment.payments))}
+                </span>
+              </span>
+            </>
+          ) : (
+            formatCurrency(row.getValue('amount'))
+          )}
         </div>
       );
     },
@@ -93,22 +112,16 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const transactionId = row.original.transactionId;
+      const installment = row.original;
 
       return (
         <div className="text-center">
-          <Button
-            id={transactionId}
-            variant="ghost"
-            size="icon"
-            className="text-primary hover:text-primary"
-          >
-            <BanknoteArrowUp />
-          </Button>
-          <Button id={transactionId} variant="ghost" size="icon">
+          <PaymentTransactionButton installment={installment} />
+
+          <Button variant="ghost" size="icon">
             <Pencil />
           </Button>
-          <Button id={transactionId} variant="ghost" size="icon">
+          <Button variant="ghost" size="icon">
             <Trash2 />
           </Button>
         </div>

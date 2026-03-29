@@ -1,0 +1,12 @@
+import z from 'zod';
+
+import { status } from '@/constants/transactions-contants';
+
+export const schemaPaymentTransaction = z.object({
+  installmentId: z.string(),
+  date: z.date(),
+  amount: z.number().min(1, { message: 'Informe um valor' }),
+  status: z.enum([status.PAID, status.PARTIAL]),
+});
+
+export type PaymentTransactionSchema = z.infer<typeof schemaPaymentTransaction>;

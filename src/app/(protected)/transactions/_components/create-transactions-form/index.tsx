@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, Calendar, FileText, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -22,6 +22,12 @@ export function CreateTransactionForm({
   className,
   ...props
 }: React.ComponentProps<'form'>) {
+  const router = useRouter();
+
+  const routerBack = () => {
+    router.back();
+  };
+
   const form = useForm<TransactionFormData>({
     resolver: zodResolver(schemaCreateTransactionForm),
     defaultValues: {
@@ -36,7 +42,6 @@ export function CreateTransactionForm({
   });
 
   async function onSubmit(data: TransactionFormData) {
-    console.log('here', data);
     try {
       const response = await createTransaction({
         ...data,
@@ -48,7 +53,7 @@ export function CreateTransactionForm({
       console.error(error);
       toast.error('Ocorreu um erro no processo de criação!');
     } finally {
-      redirect('/transactions');
+      routerBack();
     }
   }
 
