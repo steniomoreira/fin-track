@@ -70,7 +70,7 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
       }
 
       if (row.getValue('status') === status.PARTIAL) {
-        return <Badge className="bg-blue-600/10 text-blue-600">Parcial</Badge>;
+        return <Badge className="bg-blue-500/10 text-blue-500">Parcial</Badge>;
       }
 
       return (
