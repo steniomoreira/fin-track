@@ -9,8 +9,8 @@ import {
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 
-import { Breadcrumbs } from './_components/breadcrumbs';
-import { BackButton } from './_components/button';
+import { BackButton } from './_components/back-button';
+import { TransactionDetailsBreadcrumbs } from './_components/transaction-details-breadcrumbs';
 
 interface TransactionDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -24,7 +24,7 @@ export default async function TransactionDetailsPage({
 
   return (
     <PageContainer>
-      <Breadcrumbs />
+      <TransactionDetailsBreadcrumbs />
 
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-4">

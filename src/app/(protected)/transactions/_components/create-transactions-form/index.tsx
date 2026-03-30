@@ -89,8 +89,8 @@ export function CreateTransactionForm({
         </Card>
 
         <div className="flex items-center justify-end gap-6">
-          <Button type="button" variant="ghost" asChild>
-            <Link href={'/transactions'}>Descartar</Link>
+          <Button type="button" variant="ghost" onClick={routerBack}>
+            Descartar
           </Button>
 
           <Button type="submit" className="">
