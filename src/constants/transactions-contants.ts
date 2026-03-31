@@ -7,6 +7,7 @@ export const transactionTypes = [
 ] as const;
 
 export const status = {
+  LATE: 'LATE',
   PAID: 'PAID',
   PENDING: 'PENDING',
   PARTIAL: 'PARTIAL',

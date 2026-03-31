@@ -1,8 +1,8 @@
-import { Home, Pencil, RefreshCcwDot } from 'lucide-react';
+import { Pencil, RefreshCcwDot, TrendingDown, TrendingUp } from 'lucide-react';
 import { notFound } from 'next/navigation';
 
 import { getInstallmentTransactionById } from '@/actions/transactions/get-installmet-transaction-by-id';
-import { Badge } from '@/components/ui/badge';
+import { BadgeStatusTransactions } from '@/app/(protected)/_components/badge-status-transactions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -12,8 +12,9 @@ import {
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 import { Separator } from '@/components/ui/separator';
+import { INCOME } from '@/constants/transactions-contants';
 import { formatCurrency } from '@/utls/currency-utils';
-import { date_dd_MMM_yyyy } from '@/utls/date-utils';
+import { date_dd_MMMM_yyyy } from '@/utls/date-utils';
 
 import { BackButton } from './_components/back-button';
 import { TransactionDetailsBreadcrumbs } from './_components/transaction-details-breadcrumbs';
@@ -63,16 +64,29 @@ export default async function TransactionDetailsPage({
       <Card>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-primary bg-muted rounded-full p-3">
-              <Home className="h-6 w-6" />
-            </span>
+            {installment.transaction.type === INCOME ? (
+              <span className={`rounded-md bg-green-600/10 p-3 text-green-600`}>
+                <TrendingUp className="h-6 w-6" />
+              </span>
+            ) : (
+              <span
+                className={`bg-destructive/10 text-destructive rounded-md p-3`}
+              >
+                <TrendingDown className="h-6 w-6" />
+              </span>
+            )}
 
-            <div className="flex flex-col gap-3">
-              <Badge className="bg-blue-500/10 text-blue-500">
-                Pagamento parcial
-              </Badge>
-              <span className="text-muted-foreground self-end text-xs">
-                10 de março de 2026
+            <div className="flex flex-col items-end gap-3">
+              <BadgeStatusTransactions
+                status={installment.status}
+                fullDescription
+                dueDate={installment.dueDate}
+              />
+              <span className="text-muted-foreground text-xs">
+                {installment.payments.length > 0 &&
+                  date_dd_MMMM_yyyy(
+                    installment.payments[installment.payments.length - 1].date
+                  )}
               </span>
             </div>
           </div>
@@ -81,8 +95,8 @@ export default async function TransactionDetailsPage({
             <span className="text-3xl font-bold">
               {formatCurrency(installment.amount || 0)}
             </span>
-            <span className="text-muted-foreground text-sm font-semibold">
-              {date_dd_MMM_yyyy(installment.dueDate)}
+            <span className="text-muted-foreground text-sm">
+              para {date_dd_MMMM_yyyy(installment.dueDate)}
             </span>
           </div>
 

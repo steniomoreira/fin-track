@@ -11,6 +11,7 @@ import { InstallmentTransaction } from '@/types/installment-transaction-types';
 import { formatCurrency } from '@/utls/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
 
+import { BadgeStatusTransactions } from '../../_components/badge-status-transactions';
 import { DeleteTransactionButton } from '../_components/delete-transaction/delete-transaction-button';
 import { PaymentTransactionButton } from '../_components/payment-transaction/payment-transaction-button';
 import { getTotalPaid } from '../_components/payment-transaction/utils/payments-utils';
@@ -64,19 +65,12 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
   {
     accessorKey: 'status',
     header: 'Status',
-    cell: ({ row }) => {
-      if (row.getValue('status') === status.PAID) {
-        return <Badge className="bg-green-600/10 text-green-600">Pago</Badge>;
-      }
-
-      if (row.getValue('status') === status.PARTIAL) {
-        return <Badge className="bg-blue-500/10 text-blue-500">Parcial</Badge>;
-      }
-
-      return (
-        <Badge className="bg-yellow-600/10 text-yellow-600">Pendente</Badge>
-      );
-    },
+    cell: ({ row }) => (
+      <BadgeStatusTransactions
+        status={row.getValue('status')}
+        dueDate={row.original.dueDate}
+      />
+    ),
   },
   {
     accessorKey: 'amount',
@@ -87,7 +81,7 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
 
       return (
         <div
-          className={`flex flex-col ${isExpense ? 'text-red-500' : 'text-foreground'} text-right font-medium`}
+          className={`flex flex-col ${isExpense ? 'text-destructive' : 'text-foreground'} text-right font-medium`}
         >
           {isExpense && `- `}
 

@@ -5,6 +5,10 @@ export function date_dd_MMM_yyyy(date: Date) {
   return format(date, 'dd MMM, yyyy', { locale: ptBR });
 }
 
+export function date_dd_MMMM_yyyy(date: Date) {
+  return format(date, "dd 'de' MMMM, yyyy", { locale: ptBR });
+}
+
 export function date_MMMM_yyyy(date: Date) {
   return format(date, 'MMMM, yyyy', { locale: ptBR });
 }

@@ -45,6 +45,9 @@ export async function getInstallmentTransactionById(id: string) {
             date: true,
             amount: true,
           },
+          orderBy: {
+            date: 'asc',
+          },
         },
       },
     });
