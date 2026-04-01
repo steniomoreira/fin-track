@@ -45,7 +45,7 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
     header: 'Categoria',
     cell: ({ row }) => {
       return (
-        <Badge className="bg-muted text-muted-foreground">
+        <Badge className="bg-muted text-muted-foreground capitalize">
           {row.original.transaction.category.name}
         </Badge>
       );
