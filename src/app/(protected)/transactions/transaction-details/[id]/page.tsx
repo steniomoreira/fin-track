@@ -1,4 +1,13 @@
-import { Pencil, RefreshCcwDot, TrendingDown, TrendingUp } from 'lucide-react';
+import {
+  Calculator,
+  CreditCard,
+  Home,
+  Pencil,
+  RefreshCcwDot,
+  TrendingDown,
+  TrendingUp,
+  Wallet,
+} from 'lucide-react';
 import { notFound } from 'next/navigation';
 
 import { getInstallmentTransactionById } from '@/actions/transactions/get-installmet-transaction-by-id';
@@ -16,6 +25,7 @@ import { INCOME } from '@/constants/transactions-contants';
 import { formatCurrency } from '@/utls/currency-utils';
 import { date_dd_MMMM_yyyy } from '@/utls/date-utils';
 
+import { getTotalPaid } from '../../_components/payment-transaction/utils/payments-utils';
 import { BackButton } from './_components/back-button';
 import { TransactionDetailsBreadcrumbs } from './_components/transaction-details-breadcrumbs';
 
@@ -91,9 +101,13 @@ export default async function TransactionDetailsPage({
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="mb-10 flex flex-col gap-2">
             <span className="text-3xl font-bold">
               {formatCurrency(installment.amount || 0)}
+              <span className="text-muted-foreground ml-2 text-sm font-semibold">
+                {installment.transaction.numberInstallments &&
+                  `(${installment.number}/${installment.transaction.numberInstallments})`}
+              </span>
             </span>
             <span className="text-muted-foreground text-sm">
               para {date_dd_MMMM_yyyy(installment.dueDate)}
@@ -101,6 +115,62 @@ export default async function TransactionDetailsPage({
           </div>
 
           <Separator />
+
+          <div className="grid grid-cols-4 gap-4">
+            <div className="space-y-4">
+              <h2 className="text-muted-foreground uppercase">Categoria</h2>
+              <div className="flex items-center gap-2 capitalize">
+                <Home className="text-primary" />
+                {installment.transaction.category.name}
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-muted-foreground uppercase">
+                Método de pagamento
+              </h2>
+              <div className="flex items-center gap-2">
+                {installment.transaction.creditCard?.name ? (
+                  <>
+                    <CreditCard className="text-primary" />
+                    {installment.transaction.creditCard.name} *****{' '}
+                    {installment.transaction.creditCard?.cardNumber.slice(-4)}
+                  </>
+                ) : (
+                  <>
+                    <Wallet className="text-primary" />
+                    Carteira
+                  </>
+                )}
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-muted-foreground uppercase">Tipo de conta</h2>
+              <div className="flex items-center gap-2">
+                {installment.transaction.type === INCOME ? (
+                  <>
+                    <TrendingUp className="text-green-600" />
+                    Receita
+                  </>
+                ) : (
+                  <>
+                    <TrendingDown className="text-destructive" />
+                    Despesa
+                  </>
+                )}
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-muted-foreground uppercase">
+                Valores pendentes
+              </h2>
+              <div className="flex items-center gap-2">
+                <Calculator className="text-primary" />
+                {formatCurrency(
+                  installment.amount - getTotalPaid(installment.payments)
+                )}
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </PageContainer>

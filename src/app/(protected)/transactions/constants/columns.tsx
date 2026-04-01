@@ -58,7 +58,7 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
       const creditCard = row.original.transaction.creditCard;
 
       if (creditCard) {
-        return `${creditCard.name}*****${creditCard.cardNumber.slice(-4)}`;
+        return `${creditCard.name} ***** ${creditCard.cardNumber.slice(-4)}`;
       }
     },
   },
