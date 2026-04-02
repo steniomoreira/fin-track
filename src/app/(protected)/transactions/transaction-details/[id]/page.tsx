@@ -1,4 +1,6 @@
 import {
+  BanknoteArrowDown,
+  BanknoteArrowUp,
   Calculator,
   CreditCard,
   Home,
@@ -13,7 +15,7 @@ import { notFound } from 'next/navigation';
 import { getInstallmentTransactionById } from '@/actions/transactions/get-installmet-transaction-by-id';
 import { BadgeStatusTransactions } from '@/app/(protected)/_components/badge-status-transactions';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Headline,
   HeadlineDescription,
@@ -21,11 +23,19 @@ import {
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 import { Separator } from '@/components/ui/separator';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { INCOME } from '@/constants/transactions-contants';
 import { formatCurrency } from '@/utls/currency-utils';
-import { date_dd_MMMM_yyyy } from '@/utls/date-utils';
+import { date_dd_MMM_yyyy, date_dd_MMMM_yyyy } from '@/utls/date-utils';
 
-import { getTotalPaid } from '../../_components/payment-transaction/utils/payments-utils';
+import { getTotalPaid } from '../../utils/payments-utils';
 import { BackButton } from './_components/back-button';
 import { TransactionDetailsBreadcrumbs } from './_components/transaction-details-breadcrumbs';
 
@@ -161,16 +171,58 @@ export default async function TransactionDetailsPage({
             </div>
             <div className="space-y-4">
               <h2 className="text-muted-foreground uppercase">
-                Valores pendentes
+                {`Saldo ${installment.transaction.type === INCOME ? 'a receber' : 'devedor'}`}
               </h2>
               <div className="flex items-center gap-2">
-                <Calculator className="text-primary" />
+                {installment.transaction.type === INCOME ? (
+                  <BanknoteArrowUp className="text-green-600" />
+                ) : (
+                  <BanknoteArrowDown className="text-destructive" />
+                )}
+
                 {formatCurrency(
                   installment.amount - getTotalPaid(installment.payments)
                 )}
               </div>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Histórico de Pagamentos</CardTitle>
+        </CardHeader>
+        <CardContent className="px-0">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-25">Data</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Valor</TableHead>
+                <TableHead className="text-right">Cálculo de saldo</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {installment.payments.map(({ id, date, amount }) => (
+                <TableRow key={id} className="hover:bg-transparent">
+                  <TableCell className="font-medium">
+                    {date_dd_MMM_yyyy(date)}
+                  </TableCell>
+                  <TableCell className="text-foreground flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-green-600" />
+                    Pago
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {formatCurrency(amount)}
+                  </TableCell>
+                  <TableCell className="text-foreground text-right">
+                    {formatCurrency((installment.amount -= amount))}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </PageContainer>
