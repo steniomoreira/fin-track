@@ -141,13 +141,13 @@ export default async function TransactionDetailsPage({
               <div className="flex items-center gap-2">
                 {installment.transaction.creditCard?.name ? (
                   <>
-                    <CreditCard className="text-primary" />
+                    <CreditCard className="text-muted-foreground/80" />
                     {installment.transaction.creditCard.name} *****{' '}
                     {installment.transaction.creditCard?.cardNumber.slice(-4)}
                   </>
                 ) : (
                   <>
-                    <Wallet className="text-primary" />
+                    <Wallet className="text-muted-foreground/80" />
                     Carteira
                   </>
                 )}
