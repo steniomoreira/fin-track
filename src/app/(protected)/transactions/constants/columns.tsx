@@ -14,7 +14,7 @@ import { date_dd_MMM_yyyy } from '@/utls/date-utils';
 import { BadgeStatusTransactions } from '../../_components/badge-status-transactions';
 import { DeleteTransactionButton } from '../_components/delete-transaction/delete-transaction-button';
 import { PaymentTransactionButton } from '../_components/payment-transaction/payment-transaction-button';
-import { getTotalPaid } from '../_components/payment-transaction/utils/payments-utils';
+import { getTotalPaid } from '../utils/payments-utils';
 
 export const columns: ColumnDef<InstallmentTransaction>[] = [
   {

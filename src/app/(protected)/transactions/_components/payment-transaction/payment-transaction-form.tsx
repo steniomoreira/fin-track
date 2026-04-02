@@ -36,11 +36,11 @@ import { centsToCurrency } from '@/utls/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
 import { toastMessage } from '@/utls/toast-utils';
 
+import { getTotalPaid } from '../../utils/payments-utils';
 import {
   PaymentTransactionFormData,
   schemaPaymentTransactionForm,
 } from './schema';
-import { getTotalPaid } from './utils/payments-utils';
 
 interface PaymentTransactionProps {
   installment: InstallmentTransaction;
