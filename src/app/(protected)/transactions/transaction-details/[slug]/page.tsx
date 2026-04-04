@@ -1,4 +1,4 @@
-import { Pencil, RefreshCcwDot } from 'lucide-react';
+import { RefreshCcwDot } from 'lucide-react';
 import { notFound } from 'next/navigation';
 
 import { getInstallmentTransactionBySlug } from '@/actions/transactions/get-installmet-transaction-by-slug';
@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 
+import { UpdateTransactionButton } from '../../_components/update-transaction/update-transaction-button';
 import { BackButton } from './_components/back-button';
 import { PaymentHistoryTransactions } from './_components/payment-history-transactions';
 import { TransactionDetailsBreadcrumbs } from './_components/transaction-details-breadcrumbs';
@@ -48,10 +49,8 @@ export default async function TransactionDetailsPage({
         </div>
 
         <div className="space-x-4">
-          <Button variant="outline">
-            <Pencil />
-            Editar
-          </Button>
+          <UpdateTransactionButton installment={installment} />
+
           <Button variant="destructive">
             <RefreshCcwDot />
             Estornar

@@ -167,13 +167,13 @@ export function GeneralDetailsForm() {
                   </SelectContent>
                 </Select>
                 <Button
+                  className="h-12 w-12"
                   type="button"
-                  variant="ghost"
-                  size="icon"
+                  variant="destructive"
                   onClick={resetCreditCard}
                   disabled={!field.value}
                 >
-                  <Trash2 className="text-red-900" />
+                  <Trash2 />
                 </Button>
               </div>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
