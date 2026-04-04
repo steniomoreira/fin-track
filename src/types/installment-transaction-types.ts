@@ -3,13 +3,13 @@ import { Prisma } from '@/generated/prisma/client';
 export type InstallmentTransaction = Prisma.InstallmentGetPayload<{
   select: {
     id: true;
-    transactionId: true;
     dueDate: true;
     amount: true;
     status: true;
     number: true;
     transaction: {
       select: {
+        id: true;
         description: true;
         type: true;
         numberInstallments: true;

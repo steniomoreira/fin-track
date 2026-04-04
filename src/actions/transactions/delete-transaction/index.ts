@@ -12,7 +12,7 @@ export async function deleteTransaction(installment: InstallmentTransaction) {
 
   const userId = session.user.id;
 
-  const { id, transactionId, transaction } = installment;
+  const { id, transaction } = installment;
 
   try {
     if (transaction.numberInstallments) {
@@ -25,7 +25,7 @@ export async function deleteTransaction(installment: InstallmentTransaction) {
     } else {
       await db.transaction.delete({
         where: {
-          id: transactionId,
+          id: transaction.id,
           userId,
         },
       });
