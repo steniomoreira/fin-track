@@ -3,17 +3,19 @@
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 
-export async function getInstallmentTransactionById(id: string) {
+export async function getInstallmentTransactionBySlug(slug: string) {
   const session = await requireSession();
 
   try {
     const installment = await db.installment.findUnique({
       where: {
-        id,
+        slug,
         userId: session.user.id,
       },
       select: {
         id: true,
+        hashCode: true,
+        slug: true,
         dueDate: true,
         amount: true,
         status: true,

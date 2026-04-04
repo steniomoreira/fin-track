@@ -115,7 +115,9 @@ export const columns: ColumnDef<InstallmentTransaction>[] = [
           <PaymentTransactionButton installment={installment} />
 
           <Button variant="ghost" size="icon" asChild>
-            <Link href={`/transactions/transaction-details/${installment.id}`}>
+            <Link
+              href={`/transactions/transaction-details/${installment.slug}`}
+            >
               <Pencil />
             </Link>
           </Button>

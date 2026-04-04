@@ -4,6 +4,8 @@ export type InstallmentTransaction = Prisma.InstallmentGetPayload<{
   select: {
     id: true;
     dueDate: true;
+    hashCode: true;
+    slug: true;
     amount: true;
     status: true;
     number: true;

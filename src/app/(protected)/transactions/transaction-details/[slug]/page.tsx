@@ -1,7 +1,7 @@
 import { Pencil, RefreshCcwDot } from 'lucide-react';
 import { notFound } from 'next/navigation';
 
-import { getInstallmentTransactionById } from '@/actions/transactions/get-installmet-transaction-by-id';
+import { getInstallmentTransactionBySlug } from '@/actions/transactions/get-installmet-transaction-by-slug';
 import { Button } from '@/components/ui/button';
 import {
   Headline,
@@ -16,14 +16,14 @@ import { TransactionDetailsBreadcrumbs } from './_components/transaction-details
 import { TransactionsDetails } from './_components/transactions-details';
 
 interface TransactionDetailsPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export default async function TransactionDetailsPage({
   params,
 }: TransactionDetailsPageProps) {
-  const { id } = await params;
-  const { installment } = await getInstallmentTransactionById(id);
+  const { slug } = await params;
+  const { installment } = await getInstallmentTransactionBySlug(slug);
 
   if (!installment) {
     notFound();
@@ -41,7 +41,9 @@ export default async function TransactionDetailsPage({
             <HeadlineTitle className="capitalize">
               {installment.transaction?.description}
             </HeadlineTitle>
-            <HeadlineDescription>ID: {installment.id}</HeadlineDescription>
+            <HeadlineDescription>
+              ID: {installment.hashCode}
+            </HeadlineDescription>
           </Headline>
         </div>
 

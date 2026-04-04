@@ -20,6 +20,8 @@ export async function getInstallmentsTransactions(date?: Date) {
       },
       select: {
         id: true,
+        hashCode: true,
+        slug: true,
         dueDate: true,
         amount: true,
         status: true,

@@ -5,9 +5,12 @@ import { revalidatePath } from 'next/cache';
 
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
+import { date_MMMM_yyyy } from '@/utls/date-utils';
+import { generateHash } from '@/utls/hash-utils';
 import { toastTypes } from '@/utls/toast-utils';
 
 import { CreateTransactionSchema, schemaCreateTransaction } from './schema';
+import { createInstallmentSlug } from './slug';
 
 export async function createTransaction(data: CreateTransactionSchema) {
   const session = await requireSession();
@@ -20,39 +23,52 @@ export async function createTransaction(data: CreateTransactionSchema) {
 
   const userId = session.user.id;
 
-  const transactionsMapped = Array(data.numberInstallments)
-    .fill(null)
-    .map((_, index) => {
-      const dueDate = addMonths(new Date(endOfDay(data.dueDate)), index);
+  const transactionsMapped = await Promise.all(
+    Array(data.numberInstallments)
+      .fill(null)
+      .map(async (_, index) => {
+        const dueDate = addMonths(new Date(endOfDay(data.dueDate)), index);
 
-      return {
-        userId,
-        description: data.description,
-        type: data.type,
-        categoryId: data.categoryId,
-        numberInstallments: data.numberInstallments,
-        creditCardId: data.creditCardId,
-        installments: {
+        return {
+          userId,
+          description: data.description,
+          type: data.type,
+          categoryId: data.categoryId,
+          numberInstallments: data.numberInstallments,
+          creditCardId: data.creditCardId,
+          installments: {
+            userId,
+            dueDate,
+            amount: data.amount,
+            number: 1,
+            hashCode: generateHash(),
+            slug: await createInstallmentSlug(
+              `${data.description}-${date_MMMM_yyyy(dueDate)}`
+            ),
+          },
+        };
+      })
+  );
+
+  const installments = await Promise.all(
+    Array(data.numberInstallments)
+      .fill(null)
+      .map(async (_, index) => {
+        const dueDate = addMonths(new Date(endOfDay(data.dueDate)), index);
+        const slug = await createInstallmentSlug(
+          `${data.description}-${date_MMMM_yyyy(dueDate)}`
+        );
+
+        return {
           userId,
           dueDate,
+          slug,
+          hashCode: generateHash(),
           amount: data.amount,
-          number: 1,
-        },
-      };
-    });
-
-  const installments = Array(data.numberInstallments)
-    .fill(null)
-    .map((_, index) => {
-      const dueDate = addMonths(new Date(endOfDay(data.dueDate)), index);
-
-      return {
-        userId,
-        dueDate,
-        amount: data.amount,
-        number: index + 1,
-      };
-    });
+          number: index + 1,
+        };
+      })
+  );
 
   try {
     const {
@@ -94,6 +110,8 @@ export async function createTransaction(data: CreateTransactionSchema) {
                 installments: {
                   create: {
                     userId,
+                    hashCode: installments.hashCode,
+                    slug: installments.slug,
                     dueDate: installments.dueDate,
                     amount: installments.amount,
                     number: installments.number,
