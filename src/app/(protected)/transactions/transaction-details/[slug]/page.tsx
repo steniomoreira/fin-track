@@ -61,7 +61,9 @@ export default async function TransactionDetailsPage({
 
       <TransactionsDetails installment={installment} />
 
-      <PaymentHistoryTransactions installment={installment} />
+      {installment.payments.length > 0 && (
+        <PaymentHistoryTransactions installment={installment} />
+      )}
     </PageContainer>
   );
 }

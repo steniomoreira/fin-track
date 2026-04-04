@@ -49,10 +49,15 @@ export function DeleteTransaction({
       </DialogHeader>
 
       <div className="flex flex-col items-center justify-center gap-4">
-        <Siren className="h-14 w-14" />
+        <Siren className="text-destructive h-14 w-14" />
         <p className="px-2 text-center">
           Tem certeza que deseja apagar o lançamento{' '}
-          <strong>{installment.transaction.description}</strong> ?
+          <span className="block">
+            <strong className="text-lg">
+              {installment.transaction.description}
+            </strong>{' '}
+            ?
+          </span>
         </p>
       </div>
 
