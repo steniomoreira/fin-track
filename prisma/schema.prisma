@@ -101,6 +101,8 @@ model Installment {
   id            String @id @default(cuid())
   userId        String @map("user_id")
   transactionId String @map("transaction_id")
+  hashCode      String @map("hash_code")
+  slug          String @unique
 
   dueDate  DateTime
   amount   Int
