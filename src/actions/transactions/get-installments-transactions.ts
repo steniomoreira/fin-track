@@ -2,6 +2,7 @@
 
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
+import { installmentSelect } from '@/types/transactions/installment';
 import { getMonthByDate } from '@/utls/date-utils';
 
 export async function getInstallmentsTransactions(date?: Date) {
@@ -18,43 +19,7 @@ export async function getInstallmentsTransactions(date?: Date) {
           lte: lastDay,
         },
       },
-      select: {
-        id: true,
-        hashCode: true,
-        slug: true,
-        dueDate: true,
-        amount: true,
-        status: true,
-        number: true,
-        transaction: {
-          select: {
-            id: true,
-            description: true,
-            type: true,
-            numberInstallments: true,
-            category: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            creditCard: {
-              select: {
-                id: true,
-                name: true,
-                cardNumber: true,
-              },
-            },
-          },
-        },
-        payments: {
-          select: {
-            id: true,
-            date: true,
-            amount: true,
-          },
-        },
-      },
+      select: installmentSelect,
       orderBy: {
         dueDate: 'asc',
       },

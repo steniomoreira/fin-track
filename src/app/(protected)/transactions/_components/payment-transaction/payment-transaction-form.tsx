@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/popover';
 import { INCOME, status } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
-import { InstallmentTransaction } from '@/types/installment-transaction-types';
+import { Installment } from '@/types/transactions/installment';
 import { centsToCurrency } from '@/utls/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
 import { toastMessage } from '@/utls/toast-utils';
@@ -43,7 +43,7 @@ import {
 } from './schema';
 
 interface PaymentTransactionProps {
-  installment: InstallmentTransaction;
+  installment: Installment;
   onClose: () => void;
 }
 

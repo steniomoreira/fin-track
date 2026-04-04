@@ -6,12 +6,12 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { status } from '@/constants/transactions-contants';
-import { InstallmentTransaction } from '@/types/installment-transaction-types';
+import { Installment } from '@/types/transactions/installment';
 
 import { DeleteTransaction } from './delete-transaction';
 
 interface DeleteInstallmentsButtonProps {
-  installment: InstallmentTransaction;
+  installment: Installment;
 }
 
 export function DeleteTransactionButton({

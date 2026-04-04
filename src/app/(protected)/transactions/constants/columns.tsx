@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EXPENSE, status } from '@/constants/transactions-contants';
-import { InstallmentTransaction } from '@/types/installment-transaction-types';
+import { Installment } from '@/types/transactions/installment';
 import { formatCurrency } from '@/utls/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
 
@@ -16,7 +16,7 @@ import { DeleteTransactionButton } from '../_components/delete-transaction/delet
 import { PaymentTransactionButton } from '../_components/payment-transaction/payment-transaction-button';
 import { getTotalPaid } from '../utils/payments-utils';
 
-export const columns: ColumnDef<InstallmentTransaction>[] = [
+export const columns: ColumnDef<Installment>[] = [
   {
     accessorKey: 'dueDate',
     header: 'Data',

@@ -13,14 +13,14 @@ import { BadgeStatusTransactions } from '@/app/(protected)/_components/badge-sta
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { INCOME } from '@/constants/transactions-contants';
-import { InstallmentTransaction } from '@/types/installment-transaction-types';
+import { Installment } from '@/types/transactions/installment';
 import { formatCurrency } from '@/utls/currency-utils';
 import { date_dd_MMMM_yyyy } from '@/utls/date-utils';
 
 import { getTotalPaid } from '../../../utils/payments-utils';
 
 interface TransactionsDetailsProps {
-  installment: InstallmentTransaction;
+  installment: Installment;
 }
 
 export function TransactionsDetails({ installment }: TransactionsDetailsProps) {

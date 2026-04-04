@@ -2,6 +2,7 @@
 
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
+import { installmentSelect } from '@/types/transactions/installment';
 
 export async function getInstallmentTransactionBySlug(slug: string) {
   const session = await requireSession();
@@ -12,46 +13,7 @@ export async function getInstallmentTransactionBySlug(slug: string) {
         slug,
         userId: session.user.id,
       },
-      select: {
-        id: true,
-        hashCode: true,
-        slug: true,
-        dueDate: true,
-        amount: true,
-        status: true,
-        number: true,
-        transaction: {
-          select: {
-            id: true,
-            description: true,
-            type: true,
-            numberInstallments: true,
-            category: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            creditCard: {
-              select: {
-                id: true,
-                name: true,
-                cardNumber: true,
-              },
-            },
-          },
-        },
-        payments: {
-          select: {
-            id: true,
-            date: true,
-            amount: true,
-          },
-          orderBy: {
-            date: 'asc',
-          },
-        },
-      },
+      select: installmentSelect,
     });
 
     return { installment };
