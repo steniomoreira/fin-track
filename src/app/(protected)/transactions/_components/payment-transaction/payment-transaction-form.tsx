@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ptBR } from 'date-fns/locale';
 import { BanknoteArrowUp, CalendarIcon, Loader } from 'lucide-react';
-import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
 import { toast } from 'sonner';
