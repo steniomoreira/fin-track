@@ -1,0 +1,32 @@
+import { Plus } from 'lucide-react';
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+
+export function AddCreditCardButton() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button className="border-muted-foreground/30 hover:border-muted-foreground/50 flex h-[180px] w-[300px] cursor-pointer flex-col items-center justify-center rounded-sm border-2 border-dashed p-6 transition-colors">
+          <Plus className="text-muted-foreground h-10 w-10" />
+          <span className="text-muted-foreground">Adicionar novo cartão</span>
+        </button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Adicionar novo cartão</DialogTitle>
+          <DialogDescription>
+            Preencha os campos abaixo para adicionar um novo cartão de crédito.
+          </DialogDescription>
+        </DialogHeader>
+        form
+      </DialogContent>
+    </Dialog>
+  );
+}
