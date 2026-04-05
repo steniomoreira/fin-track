@@ -4,7 +4,7 @@ import { Pencil } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Installment } from '@/types/transactions/installment';
 
 import { UpdateTransactionForm } from './update-transaction-form';
@@ -30,11 +30,12 @@ export function UpdateTransactionButton({
           Editar
         </Button>
       </DialogTrigger>
-
-      <UpdateTransactionForm
-        installment={installment}
-        onClose={handleOnClose}
-      />
+      <DialogContent>
+        <UpdateTransactionForm
+          installment={installment}
+          onClose={handleOnClose}
+        />
+      </DialogContent>
     </Dialog>
   );
 }

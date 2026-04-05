@@ -11,7 +11,6 @@ import { updateInstallments } from '@/actions/transactions/update-transaction';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
-  DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
@@ -41,7 +40,7 @@ import { cn } from '@/lib/utils';
 import { Installment } from '@/types/transactions/installment';
 import { centsToCurrency } from '@/utls/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
-import { toastMessage } from '@/utls/toast-utils';
+import { toastMessage, toastTypes } from '@/utls/toast-utils';
 
 import {
   schemaUpdateTransactionForm,
@@ -59,7 +58,6 @@ export function UpdateTransactionForm({
 }: UpdateTransactionFormProps) {
   const form = useForm<UpdateTransactionFormData>({
     resolver: zodResolver(schemaUpdateTransactionForm),
-    shouldUnregister: true,
     defaultValues: {
       description: installment.transaction.description,
       amount: centsToCurrency(installment.amount),
@@ -79,27 +77,29 @@ export function UpdateTransactionForm({
         creditCardId: data.creditCardId || null,
       });
 
-      const { type, message } = response;
-      toastMessage({ type, message });
+      toastMessage({ type: response.type, message: response.message });
+
+      if (response.type === toastTypes.SUCCESS) {
+        onClose();
+      }
     } catch (error) {
       console.error(error);
       toast.error('Ocorreu um erro no processo de atualização!');
-    } finally {
-      onClose();
     }
   }
-
-  const isSubmitting = form.formState.isSubmitting;
 
   function resetCreditCard() {
     form.setValue('creditCardId', '');
   }
 
+  const isLoading =
+    form.formState.isSubmitting || form.formState.isSubmitSuccessful;
+
   const hasPaid =
     installment.status === status.PAID || installment.status === status.PARTIAL;
 
   return (
-    <DialogContent>
+    <>
       <DialogHeader>
         <DialogTitle>Atualizar lançamento</DialogTitle>
         <DialogDescription>
@@ -144,7 +144,7 @@ export function UpdateTransactionForm({
                         'h-12 pl-3 text-left font-normal',
                         !field.value && 'text-muted-foreground'
                       )}
-                      disabled={isSubmitting || hasPaid}
+                      disabled={isLoading || hasPaid}
                     >
                       {date_dd_MMM_yyyy(field.value || new Date())}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -186,7 +186,7 @@ export function UpdateTransactionForm({
                   allowNegative={false}
                   allowLeadingZeros={false}
                   customInput={Input}
-                  disabled={isSubmitting || hasPaid}
+                  disabled={isLoading || hasPaid}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -205,7 +205,7 @@ export function UpdateTransactionForm({
                   <Select
                     defaultValue={field.value}
                     onValueChange={field.onChange}
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Tipo" />
@@ -234,7 +234,7 @@ export function UpdateTransactionForm({
                   <Select
                     defaultValue={field.value}
                     onValueChange={field.onChange}
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Qual categoria?" />
@@ -264,7 +264,7 @@ export function UpdateTransactionForm({
                   <Select
                     value={field.value ?? undefined}
                     onValueChange={field.onChange}
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Qual cartão de crédito?" />
@@ -299,8 +299,8 @@ export function UpdateTransactionForm({
               Descartar
             </Button>
 
-            <Button className="md:w-40" type="submit">
-              {isSubmitting ? (
+            <Button className="md:w-40" type="submit" disabled={isLoading}>
+              {isLoading ? (
                 <>
                   <Loader className="animate-spin" />
                   atualizando...
@@ -315,6 +315,6 @@ export function UpdateTransactionForm({
           </div>
         </FieldGroup>
       </form>
-    </DialogContent>
+    </>
   );
 }
