@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Home, Pencil } from 'lucide-react';
+import { Home, SquareArrowOutUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
@@ -118,7 +118,7 @@ export const columns: ColumnDef<Installment>[] = [
             <Link
               href={`/transactions/transaction-details/${installment.slug}`}
             >
-              <Pencil />
+              <SquareArrowOutUpRight />
             </Link>
           </Button>
 

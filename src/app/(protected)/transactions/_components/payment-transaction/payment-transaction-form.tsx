@@ -99,14 +99,14 @@ export function PaymentTransactionForm({
 
   return (
     <DialogContent className="sm:max-w-106.25">
-      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-        <DialogHeader>
-          <DialogTitle>Efetuar baixa</DialogTitle>
-          <DialogDescription>
-            Informe a data e o valor que deseja efetuar a baixa
-          </DialogDescription>
-        </DialogHeader>
+      <DialogHeader>
+        <DialogTitle>Efetuar baixa</DialogTitle>
+        <DialogDescription>
+          Informe a data e o valor que deseja efetuar a baixa
+        </DialogDescription>
+      </DialogHeader>
 
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
           <Controller
             control={form.control}
