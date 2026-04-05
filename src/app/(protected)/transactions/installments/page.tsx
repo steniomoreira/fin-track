@@ -5,7 +5,7 @@ import {
 } from '@/components/ui/headline';
 import { HeaderContainer, PageContainer } from '@/components/ui/page-container';
 
-import { CreateTransactionForm } from '../_components/create-transactions-form';
+import { CreateTransaction } from '../_components/create-transactions';
 import { InstallmentsTransactionBreadcrumbs } from '../_components/installments-transaction-breadcrumbs';
 
 export default function InstallmentsPage() {
@@ -26,7 +26,7 @@ export default function InstallmentsPage() {
             </Headline>
           </header>
 
-          <CreateTransactionForm />
+          <CreateTransaction />
         </div>
       </PageContainer>
     </>

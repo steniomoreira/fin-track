@@ -17,7 +17,7 @@ import { GeneralDetailsForm } from './general-details-form';
 import { InstallmentForm } from './installment-form';
 import { schemaCreateTransactionForm, TransactionFormData } from './schemas';
 
-export function CreateTransactionForm({
+export function CreateTransaction({
   className,
   ...props
 }: React.ComponentProps<'form'>) {
@@ -92,7 +92,7 @@ export function CreateTransactionForm({
             Descartar
           </Button>
 
-          <Button type="submit" className="">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
             Finalizar lançamento
             {form.formState.isSubmitting ? (
               <Loader2 className="mr-1 h-2 w-2 animate-spin" />
