@@ -122,6 +122,7 @@ export function UpdateTransactionForm({
                   id="description"
                   autoFocus
                   placeholder="Ex: Assinatura Streaming Mensal"
+                  disabled={isLoading}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -295,7 +296,12 @@ export function UpdateTransactionForm({
           <Separator />
 
           <div className="flex items-center justify-end gap-6">
-            <Button type="button" variant="ghost" onClick={onClose}>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={onClose}
+              disabled={isLoading}
+            >
               Descartar
             </Button>
 

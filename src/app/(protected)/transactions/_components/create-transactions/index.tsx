@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight, Calendar, FileText, Loader2 } from 'lucide-react';
+import { ArrowRight, Calendar, FileText, Loader } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -56,6 +56,9 @@ export function CreateTransaction({
     }
   }
 
+  const isLoading =
+    form.formState.isSubmitting || form.formState.isSubmitSuccessful;
+
   return (
     <FormProvider {...form}>
       <form
@@ -88,14 +91,19 @@ export function CreateTransaction({
         </Card>
 
         <div className="flex items-center justify-end gap-6">
-          <Button type="button" variant="ghost" onClick={routerBack}>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={routerBack}
+            disabled={isLoading}
+          >
             Descartar
           </Button>
 
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" disabled={isLoading}>
             Finalizar lançamento
-            {form.formState.isSubmitting ? (
-              <Loader2 className="mr-1 h-2 w-2 animate-spin" />
+            {isLoading ? (
+              <Loader className="mr-1 h-2 w-2 animate-spin" />
             ) : (
               <ArrowRight className="mr-1 h-2 w-2" />
             )}

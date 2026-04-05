@@ -30,7 +30,8 @@ import { date_dd_MMM_yyyy } from '@/utls/date-utils';
 export function GeneralDetailsForm() {
   const form = useFormContext();
 
-  const isSubmitting = form.formState.isSubmitting;
+  const isLoading =
+    form.formState.isSubmitting || form.formState.isSubmitSuccessful;
 
   function resetCreditCard() {
     form.setValue('creditCardId', '');
@@ -64,7 +65,7 @@ export function GeneralDetailsForm() {
               <Select
                 defaultValue={field.value}
                 onValueChange={field.onChange}
-                disabled={isSubmitting}
+                disabled={isLoading}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Tipo" />
@@ -91,7 +92,7 @@ export function GeneralDetailsForm() {
               <Select
                 defaultValue={field.value}
                 onValueChange={field.onChange}
-                disabled={isSubmitting}
+                disabled={isLoading}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Qual categoria?" />
@@ -123,7 +124,7 @@ export function GeneralDetailsForm() {
                       'h-12 pl-3 text-left font-normal',
                       !field.value && 'text-muted-foreground'
                     )}
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                   >
                     {date_dd_MMM_yyyy(field.value)}
                     <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -155,7 +156,7 @@ export function GeneralDetailsForm() {
                 <Select
                   value={field.value ?? undefined}
                   onValueChange={field.onChange}
-                  disabled={isSubmitting}
+                  disabled={isLoading}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Qual cartão de crédito?" />

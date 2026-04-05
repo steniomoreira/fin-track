@@ -62,13 +62,6 @@ export function PaymentTransactionForm({
     },
   });
 
-  useEffect(() => {
-    form.reset({
-      date: new Date(),
-      paymentAmount: currentyAmount,
-    });
-  }, [currentyAmount, form]);
-
   async function onSubmit(data: PaymentTransactionFormData) {
     try {
       const response = await paymentTransaction({
@@ -123,67 +116,68 @@ export function PaymentTransactionForm({
                         'h-12 pl-3 text-left font-normal',
                         !field.value && 'text-muted-foreground'
                       )}
-                  >
-                    {date_dd_MMM_yyyy(field.value)}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    locale={ptBR}
-                    defaultMonth={installment.dueDate}
-                    showOutsideDays={false}
-                    required
-                  />
-                </PopoverContent>
-              </Popover>
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
-            </Field>
-          )}
-        />
-        <div className="flex items-end gap-2">
-          <Controller
-            control={form.control}
-            name="paymentAmount"
-            render={({ field, fieldState }) => (
-              <Field className="flex-1">
-                <FieldLabel>{`Valor a ${isIncome ? 'receber' : 'pagar'}`}</FieldLabel>
-                <NumericFormat
-                  value={field.value}
-                  onValueChange={(value) => field.onChange(value.floatValue)}
-                  thousandSeparator="."
-                  decimalSeparator=","
-                  decimalScale={2}
-                  fixedDecimalScale
-                  prefix="R$ "
-                  allowNegative={false}
-                  allowLeadingZeros={false}
-                  customInput={Input}
-                  disabled={isLoading}
-                />
+                      disabled={isLoading}
+                    >
+                      {date_dd_MMM_yyyy(field.value)}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      locale={ptBR}
+                      defaultMonth={installment.dueDate}
+                      showOutsideDays={false}
+                      required
+                    />
+                  </PopoverContent>
+                </Popover>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
               </Field>
             )}
           />
+          <div className="flex items-end gap-2">
+            <Controller
+              control={form.control}
+              name="paymentAmount"
+              render={({ field, fieldState }) => (
+                <Field className="flex-1">
+                  <FieldLabel>{`Valor a ${isIncome ? 'receber' : 'pagar'}`}</FieldLabel>
+                  <NumericFormat
+                    value={field.value}
+                    onValueChange={(value) => field.onChange(value.floatValue)}
+                    thousandSeparator="."
+                    decimalSeparator=","
+                    decimalScale={2}
+                    fixedDecimalScale
+                    prefix="R$ "
+                    allowNegative={false}
+                    allowLeadingZeros={false}
+                    customInput={Input}
+                    disabled={isLoading}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
 
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? (
-              <Loader className="animate-spin" />
-            ) : (
-              <BanknoteArrowUp />
-            )}
-            {isIncome ? 'Receber' : 'Pagar'}
-          </Button>
-        </div>
-      </FieldGroup>
-    </form>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                <BanknoteArrowUp />
+              )}
+              {isIncome ? 'Receber' : 'Pagar'}
+            </Button>
+          </div>
+        </FieldGroup>
+      </form>
     </>
   );
 }

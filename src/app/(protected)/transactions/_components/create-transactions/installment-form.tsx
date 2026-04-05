@@ -16,7 +16,8 @@ import { currencyToCents, formatCurrency } from '@/utls/currency-utils';
 export function InstallmentForm() {
   const form = useFormContext();
 
-  const isSubmitting = form.formState.isSubmitting;
+  const isLoading =
+    form.formState.isSubmitting || form.formState.isSubmitSuccessful;
 
   return (
     <div className="grid grid-cols-2 gap-6">
@@ -40,7 +41,7 @@ export function InstallmentForm() {
                   allowNegative={false}
                   allowLeadingZeros={false}
                   customInput={Input}
-                  disabled={isSubmitting}
+                  disabled={isLoading}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -68,7 +69,7 @@ export function InstallmentForm() {
                       field.onChange(raw);
                     }
                   }}
-                  disabled={isSubmitting}
+                  disabled={isLoading}
                   className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
                 {fieldState.invalid && (
@@ -88,7 +89,7 @@ export function InstallmentForm() {
                   id="installmentGroup"
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  disabled={isSubmitting}
+                  disabled={isLoading}
                 />
                 <FieldLabel htmlFor="installmentGroup">
                   Exibir o contador das parcelas. &#40;ex: 1/10&#41;
