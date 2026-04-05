@@ -1,7 +1,5 @@
-import { RefreshCcwDot } from 'lucide-react';
 import { useMemo } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
@@ -34,16 +32,7 @@ export function PaymentHistoryTransactions({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          Histórico de Pagamentos
-          <Button
-            variant="ghost"
-            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-          >
-            <RefreshCcwDot />
-            Estornar
-          </Button>
-        </CardTitle>
+        <CardTitle>Histórico de Pagamentos</CardTitle>
       </CardHeader>
       <CardContent className="px-0">
         <Table>

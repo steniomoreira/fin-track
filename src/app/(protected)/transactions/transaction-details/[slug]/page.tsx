@@ -1,8 +1,6 @@
-import { RefreshCcwDot } from 'lucide-react';
 import { notFound } from 'next/navigation';
 
 import { getInstallmentTransactionBySlug } from '@/actions/transactions/get-installmet-transaction-by-slug';
-import { Button } from '@/components/ui/button';
 import {
   Headline,
   HeadlineDescription,
@@ -10,6 +8,7 @@ import {
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 
+import { PaymentReversalTransactionButton } from '../../_components/payment-reversal-transaction/payment-reversal-transaction-button';
 import { UpdateTransactionButton } from '../../_components/update-transaction/update-transaction-button';
 import { BackButton } from './_components/back-button';
 import { PaymentHistoryTransactions } from './_components/payment-history-transactions';
@@ -29,6 +28,8 @@ export default async function TransactionDetailsPage({
   if (!installment) {
     notFound();
   }
+
+  const hasPayment = installment.payments.length > 0;
 
   return (
     <PageContainer>
@@ -50,19 +51,13 @@ export default async function TransactionDetailsPage({
 
         <div className="space-x-4">
           <UpdateTransactionButton installment={installment} />
-
-          <Button variant="destructive">
-            <RefreshCcwDot />
-            Estornar
-          </Button>
+          <PaymentReversalTransactionButton installment={installment} />
         </div>
       </header>
 
       <TransactionsDetails installment={installment} />
 
-      {installment.payments.length > 0 && (
-        <PaymentHistoryTransactions installment={installment} />
-      )}
+      {hasPayment && <PaymentHistoryTransactions installment={installment} />}
     </PageContainer>
   );
 }

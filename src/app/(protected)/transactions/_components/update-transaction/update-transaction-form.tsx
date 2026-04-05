@@ -104,7 +104,9 @@ export function UpdateTransactionForm({
         <DialogTitle>Atualizar lançamento</DialogTitle>
         <DialogDescription>
           Atualize os campos que deseja modificar de{' '}
-          {installment.transaction.description}
+          <span className="font-bold capitalize">
+            {installment.transaction.description}
+          </span>
         </DialogDescription>
       </DialogHeader>
       <form onSubmit={form.handleSubmit(onSubmit)}>
