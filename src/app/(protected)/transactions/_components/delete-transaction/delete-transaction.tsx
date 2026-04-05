@@ -2,6 +2,7 @@
 
 import { Loader, Siren } from 'lucide-react';
 import { useTransition } from 'react';
+import { toast } from 'sonner';
 
 import { deleteTransaction } from '@/actions/transactions/delete-transaction';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { status } from '@/constants/transactions-contants';
 import { Installment } from '@/types/transactions/installment';
-import { toastMessage } from '@/utls/toast-utils';
+import { toastMessage, toastTypes } from '@/utls/toast-utils';
 
 interface DeleteTransactionProps {
   installment: Installment;
@@ -29,11 +30,19 @@ export function DeleteTransaction({
 
   function onSubmit() {
     startTransition(async () => {
-      const response = await deleteTransaction(installment);
-      toastMessage({ type: response.type, message: response.message });
-    });
+      try {
+        const response = await deleteTransaction(installment);
 
-    onClose();
+        toastMessage({ type: response.type, message: response.message });
+
+        if (response.type === toastTypes.SUCCESS) {
+          onClose();
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Ocorreu um erro ao deletar a transação!');
+      }
+    });
   }
 
   return (

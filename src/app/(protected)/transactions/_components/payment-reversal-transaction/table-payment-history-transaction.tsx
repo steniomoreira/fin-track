@@ -17,7 +17,7 @@ import {
 import { Installment } from '@/types/transactions/installment';
 import { formatCurrency } from '@/utls/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
-import { toastMessage } from '@/utls/toast-utils';
+import { toastMessage, toastTypes } from '@/utls/toast-utils';
 
 interface TablePaymentHistoryTransactionProps {
   installment: Installment;
@@ -33,21 +33,24 @@ export function TablePaymentHistoryTransaction({
   const payments = installment.payments;
   const hasPayment = payments.length - 1 > 0;
 
-  const handlePaymentReversal = async (paymentId: string) => {
-    try {
-      startTransition(async () => {
+  const handlePaymentReversal = (paymentId: string) => {
+    startTransition(async () => {
+      try {
         const response = await paymentReversalTransaction(
           installment.id,
           paymentId
         );
+        
         toastMessage({ type: response.type, message: response.message });
-      });
-    } catch (error) {
-      console.error(error);
-      toast.error('Ocorreu um erro no processo de estorno!');
-    } finally {
-      if (!hasPayment) onClose();
-    }
+
+        if (response.type === toastTypes.SUCCESS && !hasPayment) {
+          onClose();
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Ocorreu um erro no processo de estorno!');
+      }
+    });
   };
 
   return (

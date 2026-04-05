@@ -12,7 +12,6 @@ import { paymentTransaction } from '@/actions/transactions/payment-transaction';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
-  DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
@@ -34,7 +33,7 @@ import { cn } from '@/lib/utils';
 import { Installment } from '@/types/transactions/installment';
 import { centsToCurrency } from '@/utls/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utls/date-utils';
-import { toastMessage } from '@/utls/toast-utils';
+import { toastMessage, toastTypes } from '@/utls/toast-utils';
 
 import { getTotalPaid } from '../../utils/payments-utils';
 import {
@@ -57,7 +56,6 @@ export function PaymentTransactionForm({
 
   const form = useForm<PaymentTransactionFormData>({
     resolver: zodResolver(schemaPaymentTransactionForm(currentyAmount)),
-    shouldUnregister: true,
     defaultValues: {
       date: new Date(),
       paymentAmount: currentyAmount,
@@ -85,20 +83,23 @@ export function PaymentTransactionForm({
       });
 
       toastMessage({ type: response.type, message: response.message });
+
+      if (response.type === toastTypes.SUCCESS) {
+        onClose();
+      }
     } catch (error) {
       console.error(error);
       toast.error('Ocorreu um erro no processo de pagamento!');
-    } finally {
-      onClose();
     }
   }
 
-  const isSubmitting = form.formState.isSubmitting;
+  const isLoading =
+    form.formState.isSubmitting || form.formState.isSubmitSuccessful;
 
   const isIncome = installment.transaction.type === INCOME;
 
   return (
-    <DialogContent className="sm:max-w-106.25">
+    <>
       <DialogHeader>
         <DialogTitle>Efetuar baixa</DialogTitle>
         <DialogDescription>
@@ -122,68 +123,67 @@ export function PaymentTransactionForm({
                         'h-12 pl-3 text-left font-normal',
                         !field.value && 'text-muted-foreground'
                       )}
-                      disabled={isSubmitting}
-                    >
-                      {date_dd_MMM_yyyy(field.value)}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      locale={ptBR}
-                      defaultMonth={installment.dueDate}
-                      showOutsideDays={false}
-                      required
-                    />
-                  </PopoverContent>
-                </Popover>
+                  >
+                    {date_dd_MMM_yyyy(field.value)}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    locale={ptBR}
+                    defaultMonth={installment.dueDate}
+                    showOutsideDays={false}
+                    required
+                  />
+                </PopoverContent>
+              </Popover>
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
+          )}
+        />
+        <div className="flex items-end gap-2">
+          <Controller
+            control={form.control}
+            name="paymentAmount"
+            render={({ field, fieldState }) => (
+              <Field className="flex-1">
+                <FieldLabel>{`Valor a ${isIncome ? 'receber' : 'pagar'}`}</FieldLabel>
+                <NumericFormat
+                  value={field.value}
+                  onValueChange={(value) => field.onChange(value.floatValue)}
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  decimalScale={2}
+                  fixedDecimalScale
+                  prefix="R$ "
+                  allowNegative={false}
+                  allowLeadingZeros={false}
+                  customInput={Input}
+                  disabled={isLoading}
+                />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
               </Field>
             )}
           />
-          <div className="flex items-end gap-2">
-            <Controller
-              control={form.control}
-              name="paymentAmount"
-              render={({ field, fieldState }) => (
-                <Field className="flex-1">
-                  <FieldLabel>{`Valor a ${isIncome ? 'receber' : 'pagar'}`}</FieldLabel>
-                  <NumericFormat
-                    value={field.value}
-                    onValueChange={(value) => field.onChange(value.floatValue)}
-                    thousandSeparator="."
-                    decimalSeparator=","
-                    decimalScale={2}
-                    fixedDecimalScale
-                    prefix="R$ "
-                    allowNegative={false}
-                    allowLeadingZeros={false}
-                    customInput={Input}
-                    disabled={isSubmitting}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
 
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <Loader className="animate-spin" />
-              ) : (
-                <BanknoteArrowUp />
-              )}
-              {isIncome ? 'Receber' : 'Pagar'}
-            </Button>
-          </div>
-        </FieldGroup>
-      </form>
-    </DialogContent>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <Loader className="animate-spin" />
+            ) : (
+              <BanknoteArrowUp />
+            )}
+            {isIncome ? 'Receber' : 'Pagar'}
+          </Button>
+        </div>
+      </FieldGroup>
+    </form>
+    </>
   );
 }

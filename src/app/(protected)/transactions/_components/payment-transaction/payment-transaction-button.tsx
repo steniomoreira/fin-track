@@ -4,7 +4,7 @@ import { BanknoteArrowUp } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { status } from '@/constants/transactions-contants';
 import { Installment } from '@/types/transactions/installment';
 
@@ -38,10 +38,12 @@ export function PaymentTransactionButton({
         </Button>
       </DialogTrigger>
 
-      <PaymentTransactionForm
-        installment={installment}
-        onClose={handleOnClose}
-      />
+      <DialogContent>
+        <PaymentTransactionForm
+          installment={installment}
+          onClose={handleOnClose}
+        />
+      </DialogContent>
     </Dialog>
   );
 }
