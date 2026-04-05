@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { Installment } from '@/types/transactions/installment';
-import { toastTypes } from '@/utls/toast-utils';
+import { toastTypes } from '@/utils/toast-utils';
 
 export async function deleteTransaction(installment: Installment) {
   const session = await requireSession();

@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/select';
 import { transactionTypes } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
-import { date_dd_MMM_yyyy } from '@/utls/date-utils';
+import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
 export function GeneralDetailsForm() {
   const form = useFormContext();

@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { status } from '@/constants/transactions-contants';
 import { Installment } from '@/types/transactions/installment';
-import { toastMessage, toastTypes } from '@/utls/toast-utils';
+import { toastMessage, toastTypes } from '@/utils/toast-utils';
 
 interface DeleteTransactionProps {
   installment: Installment;

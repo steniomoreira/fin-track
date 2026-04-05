@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
-import { toastTypes } from '@/utls/toast-utils';
+import { toastTypes } from '@/utils/toast-utils';
 
 import { PaymentTransactionSchema, schemaPaymentTransaction } from './schema';
 

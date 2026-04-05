@@ -11,7 +11,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { currencyToCents, formatCurrency } from '@/utls/currency-utils';
+import { currencyToCents, formatCurrency } from '@/utils/currency-utils';
 
 export function InstallmentForm() {
   const form = useFormContext();

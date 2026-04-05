@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { status } from '@/constants/transactions-contants';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
-import { toastTypes } from '@/utls/toast-utils';
+import { toastTypes } from '@/utils/toast-utils';
 
 export async function paymentReversalTransaction(
   installmentId: string,

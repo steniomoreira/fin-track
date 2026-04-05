@@ -30,9 +30,9 @@ import {
 import { INCOME, status } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
 import { Installment } from '@/types/transactions/installment';
-import { centsToCurrency } from '@/utls/currency-utils';
-import { date_dd_MMM_yyyy } from '@/utls/date-utils';
-import { toastMessage, toastTypes } from '@/utls/toast-utils';
+import { centsToCurrency } from '@/utils/currency-utils';
+import { date_dd_MMM_yyyy } from '@/utils/date-utils';
+import { toastMessage, toastTypes } from '@/utils/toast-utils';
 
 import { getTotalPaid } from '../../utils/payments-utils';
 import {

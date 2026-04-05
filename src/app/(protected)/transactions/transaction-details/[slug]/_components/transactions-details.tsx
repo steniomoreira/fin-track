@@ -14,8 +14,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { INCOME } from '@/constants/transactions-contants';
 import { Installment } from '@/types/transactions/installment';
-import { formatCurrency } from '@/utls/currency-utils';
-import { date_dd_MMMM_yyyy } from '@/utls/date-utils';
+import { formatCurrency } from '@/utils/currency-utils';
+import { date_dd_MMMM_yyyy } from '@/utils/date-utils';
 
 import { getTotalPaid } from '../../../utils/payments-utils';
 

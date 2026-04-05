@@ -7,7 +7,7 @@ import {
   HeadlineTitle,
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
-import { getMonthByDate } from '@/utls/date-utils';
+import { getMonthByDate } from '@/utils/date-utils';
 
 import { AddTransactionButton } from './_components/add-transaction-button';
 import { columns } from './constants/columns';

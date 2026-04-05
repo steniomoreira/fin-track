@@ -8,8 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EXPENSE, status } from '@/constants/transactions-contants';
 import { Installment } from '@/types/transactions/installment';
-import { formatCurrency } from '@/utls/currency-utils';
-import { date_dd_MMM_yyyy } from '@/utls/date-utils';
+import { formatCurrency } from '@/utils/currency-utils';
+import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
 import { BadgeStatusTransactions } from '../../_components/badge-status-transactions';
 import { DeleteTransactionButton } from '../_components/delete-transaction/delete-transaction-button';

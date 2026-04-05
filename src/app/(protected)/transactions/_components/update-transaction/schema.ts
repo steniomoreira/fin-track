@@ -1,7 +1,7 @@
 import z from 'zod';
 
 import { EXPENSE, INCOME } from '@/constants/transactions-contants';
-import { currencyToCents } from '@/utls/currency-utils';
+import { currencyToCents } from '@/utils/currency-utils';
 
 export const schemaUpdateTransactionForm = z.object({
   description: z

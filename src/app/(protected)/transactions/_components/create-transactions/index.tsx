@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EXPENSE } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
-import { toastMessage } from '@/utls/toast-utils';
+import { toastMessage } from '@/utils/toast-utils';
 
 import { GeneralDetailsForm } from './general-details-form';
 import { InstallmentForm } from './installment-form';

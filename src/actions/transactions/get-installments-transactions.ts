@@ -3,7 +3,7 @@
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { installmentSelect } from '@/types/transactions/installment';
-import { getMonthByDate } from '@/utls/date-utils';
+import { getMonthByDate } from '@/utils/date-utils';
 
 export async function getInstallmentsTransactions(date?: Date) {
   const session = await requireSession();

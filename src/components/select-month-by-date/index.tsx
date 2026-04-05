@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { date_MMMM_yyyy } from '@/utls/date-utils';
+import { date_MMMM_yyyy } from '@/utils/date-utils';
 
 import { MonthPicker } from './month-picker';
 

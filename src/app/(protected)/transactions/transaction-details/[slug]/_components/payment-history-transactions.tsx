@@ -10,8 +10,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Installment } from '@/types/transactions/installment';
-import { formatCurrency } from '@/utls/currency-utils';
-import { date_dd_MMM_yyyy } from '@/utls/date-utils';
+import { formatCurrency } from '@/utils/currency-utils';
+import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
 interface PaymentHistoryTransactionsProps {
   installment: Installment;

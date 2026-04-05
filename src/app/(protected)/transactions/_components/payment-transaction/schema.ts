@@ -1,6 +1,6 @@
 import z from 'zod';
 
-import { currencyToCents, formatCurrency } from '@/utls/currency-utils';
+import { currencyToCents, formatCurrency } from '@/utils/currency-utils';
 
 export const schemaPaymentTransactionForm = (payAmount: number) =>
   z
