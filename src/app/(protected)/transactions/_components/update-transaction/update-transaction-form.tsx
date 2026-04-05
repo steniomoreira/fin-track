@@ -59,6 +59,7 @@ export function UpdateTransactionForm({
 }: UpdateTransactionFormProps) {
   const form = useForm<UpdateTransactionFormData>({
     resolver: zodResolver(schemaUpdateTransactionForm),
+    shouldUnregister: true,
     defaultValues: {
       description: installment.transaction.description,
       amount: centsToCurrency(installment.amount),
@@ -68,12 +69,6 @@ export function UpdateTransactionForm({
       categoryId: installment.transaction.category.id,
     },
   });
-
-  const isSubmitting = form.formState.isSubmitting;
-
-  function resetCreditCard() {
-    form.setValue('creditCardId', '');
-  }
 
   async function onSubmit(data: UpdateTransactionFormData) {
     try {
@@ -92,6 +87,12 @@ export function UpdateTransactionForm({
     } finally {
       onClose();
     }
+  }
+
+  const isSubmitting = form.formState.isSubmitting;
+
+  function resetCreditCard() {
+    form.setValue('creditCardId', '');
   }
 
   const hasPaid =
