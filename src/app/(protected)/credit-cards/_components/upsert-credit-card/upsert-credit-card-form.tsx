@@ -40,7 +40,7 @@ export function UpsertCreditCardForm({
 
   async function onSubmit(data: UpsertCreditCardFormData) {
     try {
-      const response = await upsertCreditCard(data);
+      const response = await upsertCreditCard({ ...data, id: creditCard?.id });
 
       toastMessage({ type: response.type, message: response.message });
 

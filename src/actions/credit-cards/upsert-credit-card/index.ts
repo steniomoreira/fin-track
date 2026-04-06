@@ -26,9 +26,9 @@ export async function upsertCreditCard(data: UpsertCreditCardSchema) {
         cardNumber: data.cardNumber,
       },
       create: {
+        userId: session.user.id,
         name: data.name,
         cardNumber: data.cardNumber,
-        userId: session.user.id,
       },
       select: creditCardSelect,
     });
