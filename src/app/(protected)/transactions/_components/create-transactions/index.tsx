@@ -11,16 +11,22 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EXPENSE } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
+import { CreditCard } from '@/types/credit-cards/credit-card';
 import { toastMessage } from '@/utils/toast-utils';
 
 import { GeneralDetailsForm } from './general-details-form';
 import { InstallmentForm } from './installment-form';
 import { schemaCreateTransactionForm, TransactionFormData } from './schemas';
 
+interface CreateTransactionProps extends React.ComponentProps<'form'> {
+  creditCards: CreditCard[];
+}
+
 export function CreateTransaction({
   className,
+  creditCards,
   ...props
-}: React.ComponentProps<'form'>) {
+}: CreateTransactionProps) {
   const router = useRouter();
 
   const routerBack = () => {
@@ -74,7 +80,7 @@ export function CreateTransaction({
             </CardTitle>
           </CardHeader>
           <CardContent className="p-8">
-            <GeneralDetailsForm />
+            <GeneralDetailsForm creditCards={creditCards} />
           </CardContent>
         </Card>
 

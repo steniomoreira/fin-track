@@ -1,3 +1,4 @@
+import { getCreditCards } from '@/actions/credit-cards/get-cardit-cards';
 import {
   Headline,
   HeadlineDescription,
@@ -8,7 +9,9 @@ import { HeaderContainer, PageContainer } from '@/components/ui/page-container';
 import { CreateTransaction } from '../_components/create-transactions';
 import { InstallmentsTransactionBreadcrumbs } from '../_components/installments-transaction-breadcrumbs';
 
-export default function InstallmentsPage() {
+export default async function InstallmentsPage() {
+  const { creditCards } = await getCreditCards();
+
   return (
     <>
       <HeaderContainer>
@@ -26,7 +29,7 @@ export default function InstallmentsPage() {
             </Headline>
           </header>
 
-          <CreateTransaction />
+          <CreateTransaction creditCards={creditCards} />
         </div>
       </PageContainer>
     </>

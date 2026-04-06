@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { CreditCard as CreditCardType } from '@/types/credit-cards/credit-card';

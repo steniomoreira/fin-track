@@ -25,9 +25,14 @@ import {
 } from '@/components/ui/select';
 import { transactionTypes } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
+import { CreditCard } from '@/types/credit-cards/credit-card';
 import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
-export function GeneralDetailsForm() {
+interface GeneralDetailsFormProps {
+  creditCards: CreditCard[];
+}
+
+export function GeneralDetailsForm({ creditCards }: GeneralDetailsFormProps) {
   const form = useFormContext();
 
   const isLoading =
@@ -162,9 +167,11 @@ export function GeneralDetailsForm() {
                     <SelectValue placeholder="Qual cartão de crédito?" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="cmhih550u0001fgqcfxz2b6sv">
-                      Nubank
-                    </SelectItem>
+                    {creditCards.map((card) => (
+                      <SelectItem key={card.id} value={card.id}>
+                        {card.name} (**** {card.cardNumber.slice(-4)})
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <Button
