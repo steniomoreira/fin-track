@@ -169,7 +169,7 @@ export function GeneralDetailsForm({ creditCards }: GeneralDetailsFormProps) {
                   <SelectContent>
                     {creditCards.map((card) => (
                       <SelectItem key={card.id} value={card.id}>
-                        {card.name} (**** {card.cardNumber.slice(-4)})
+                        {card.name} ***** {card.cardNumber.slice(-4)}
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -37,6 +37,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { status, transactionTypes } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
+import { CreditCard } from '@/types/credit-cards/credit-card';
 import { Installment } from '@/types/transactions/installment';
 import { centsToCurrency } from '@/utils/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utils/date-utils';
@@ -49,11 +50,13 @@ import {
 
 interface UpdateTransactionFormProps {
   installment: Installment;
+  creditCards: CreditCard[];
   onClose: () => void;
 }
 
 export function UpdateTransactionForm({
   installment,
+  creditCards,
   onClose,
 }: UpdateTransactionFormProps) {
   const form = useForm<UpdateTransactionFormData>({
@@ -271,9 +274,11 @@ export function UpdateTransactionForm({
                       <SelectValue placeholder="Qual cartão de crédito?" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="cmhih550u0001fgqcfxz2b6sv">
-                        Nubank
-                      </SelectItem>
+                      {creditCards.map((card) => (
+                        <SelectItem key={card.id} value={card.id}>
+                          {card.name} ***** {card.cardNumber.slice(-4)}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <Button

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 
+import { getCreditCards } from '@/actions/credit-cards/get-cardit-cards';
 import { getInstallmentTransactionBySlug } from '@/actions/transactions/get-installmet-transaction-by-slug';
 import {
   Headline,
@@ -24,6 +25,7 @@ export default async function TransactionDetailsPage({
 }: TransactionDetailsPageProps) {
   const { slug } = await params;
   const { installment } = await getInstallmentTransactionBySlug(slug);
+  const { creditCards } = await getCreditCards();
 
   if (!installment) {
     notFound();
@@ -50,7 +52,10 @@ export default async function TransactionDetailsPage({
         </div>
 
         <div className="space-x-4">
-          <UpdateTransactionButton installment={installment} />
+          <UpdateTransactionButton
+            installment={installment}
+            creditCards={creditCards}
+          />
           <PaymentReversalTransactionButton installment={installment} />
         </div>
       </header>
