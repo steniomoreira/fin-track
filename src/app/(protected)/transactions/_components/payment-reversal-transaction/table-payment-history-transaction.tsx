@@ -1,7 +1,7 @@
 'use client';
 
 import { Loader, RefreshCcwDot } from 'lucide-react';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { paymentReversalTransaction } from '@/actions/transactions/payment-reversal-transaction';
@@ -29,11 +29,13 @@ export function TablePaymentHistoryTransaction({
   onClose,
 }: TablePaymentHistoryTransactionProps) {
   const [isPending, startTransition] = useTransition();
+  const [pendingPaymentId, setPendingPaymentId] = useState<string | null>(null);
 
   const payments = installment.payments;
   const hasPayment = payments.length - 1 > 0;
 
   const handlePaymentReversal = (paymentId: string) => {
+    setPendingPaymentId(paymentId);
     startTransition(async () => {
       try {
         const response = await paymentReversalTransaction({
@@ -49,6 +51,8 @@ export function TablePaymentHistoryTransaction({
       } catch (error) {
         console.error(error);
         toast.error('Ocorreu um erro no processo de estorno!');
+      } finally {
+        setPendingPaymentId(null);
       }
     });
   };
@@ -83,7 +87,7 @@ export function TablePaymentHistoryTransaction({
                 onClick={() => handlePaymentReversal(id)}
                 disabled={isPending}
               >
-                {isPending ? (
+                {isPending && pendingPaymentId === id ? (
                   <>
                     <Loader className="animate-spin" />
                     Estornando...
