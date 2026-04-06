@@ -6,9 +6,9 @@ import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { toastTypes } from '@/utils/toast-utils';
 
-import { schemaUpdateTransaction, UpdateTransactionSchema } from './schema';
+import { schemaUpdateTransaction, UpdateTransactionParams } from './schema';
 
-export async function updateInstallments(data: UpdateTransactionSchema) {
+export async function updateInstallments(data: UpdateTransactionParams) {
   const session = await requireSession();
 
   const result = schemaUpdateTransaction.safeParse(data);

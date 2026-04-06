@@ -9,4 +9,4 @@ export const schemaPaymentTransaction = z.object({
   status: z.enum([status.PAID, status.PARTIAL]),
 });
 
-export type PaymentTransactionSchema = z.infer<typeof schemaPaymentTransaction>;
+export type PaymentTransactionParams = z.infer<typeof schemaPaymentTransaction>;

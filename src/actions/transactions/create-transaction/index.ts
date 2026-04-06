@@ -9,10 +9,10 @@ import { date_MMMM_yyyy } from '@/utils/date-utils';
 import { generateHash } from '@/utils/hash-utils';
 import { toastTypes } from '@/utils/toast-utils';
 
-import { CreateTransactionSchema, schemaCreateTransaction } from './schema';
+import { CreateTransactionParams, schemaCreateTransaction } from './schema';
 import { createInstallmentSlug } from './slug';
 
-export async function createTransaction(data: CreateTransactionSchema) {
+export async function createTransaction(data: CreateTransactionParams) {
   const session = await requireSession();
 
   const result = schemaCreateTransaction.safeParse(data);

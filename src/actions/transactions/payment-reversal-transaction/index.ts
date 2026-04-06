@@ -7,15 +7,23 @@ import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { toastTypes } from '@/utils/toast-utils';
 
+import {
+  PaymentReversalTransactionParams,
+  schemaPaymentReversalTransaction,
+} from './schema';
+
 export async function paymentReversalTransaction(
-  installmentId: string,
-  paymentId: string
+  data: PaymentReversalTransactionParams
 ) {
   const session = await requireSession();
 
-  if (!session?.user?.id) {
-    throw new Error('Unauthorized');
+  const result = schemaPaymentReversalTransaction.safeParse(data);
+
+  if (!result.success) {
+    throw new Error('Erro de validação');
   }
+
+  const { installmentId, paymentId } = result.data;
 
   const userId = session.user.id;
 

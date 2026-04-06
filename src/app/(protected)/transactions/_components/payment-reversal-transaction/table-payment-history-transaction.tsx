@@ -36,10 +36,10 @@ export function TablePaymentHistoryTransaction({
   const handlePaymentReversal = (paymentId: string) => {
     startTransition(async () => {
       try {
-        const response = await paymentReversalTransaction(
-          installment.id,
-          paymentId
-        );
+        const response = await paymentReversalTransaction({
+          installmentId: installment.id,
+          paymentId,
+        });
 
         toastMessage({ type: response.type, message: response.message });
 

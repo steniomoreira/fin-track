@@ -18,4 +18,4 @@ export const schemaCreateTransaction = z.object({
   creditCardId: z.string().nullable().optional(),
 });
 
-export type CreateTransactionSchema = z.infer<typeof schemaCreateTransaction>;
+export type CreateTransactionParams = z.infer<typeof schemaCreateTransaction>;

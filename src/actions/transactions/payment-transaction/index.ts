@@ -6,9 +6,9 @@ import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { toastTypes } from '@/utils/toast-utils';
 
-import { PaymentTransactionSchema, schemaPaymentTransaction } from './schema';
+import { PaymentTransactionParams, schemaPaymentTransaction } from './schema';
 
-export async function paymentTransaction(data: PaymentTransactionSchema) {
+export async function paymentTransaction(data: PaymentTransactionParams) {
   const session = await requireSession();
 
   const result = schemaPaymentTransaction.safeParse(data);
