@@ -31,7 +31,10 @@ export function DeleteTransaction({
   function onSubmit() {
     startTransition(async () => {
       try {
-        const response = await deleteTransaction(installment);
+        const response = await deleteTransaction({
+          installmentId: installment.id,
+          transactionId: installment.transaction.id,
+        });
 
         toastMessage({ type: response.type, message: response.message });
 
