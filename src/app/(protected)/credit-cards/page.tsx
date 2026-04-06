@@ -1,4 +1,4 @@
-import { getCreditCards } from '@/actions/credit-cards/get.cardit-cards';
+import { getCreditCards } from '@/actions/credit-cards/get-cardit-cards';
 import {
   Headline,
   HeadlineDescription,
