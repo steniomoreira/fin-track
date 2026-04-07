@@ -23,7 +23,7 @@ export const deleteCreditCard = async (data: DeleteCreditCardParams) => {
       return {
         type: toastTypes.WARNING,
         message:
-          'Não é possível deletar, pois existem contas vinculadas a este cartão.',
+          'Ops! Não é possível deletar este cartão, pois existem contas vinculadas a ele.',
       };
     }
 

@@ -1,9 +1,7 @@
-import { Trash2 } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
 import { CreditCard as CreditCardType } from '@/types/credit-cards/credit-card';
 import { formatCreditCardNumber } from '@/utils/credit-card-utils';
 
+import { DeleteCreditCardButton } from './delete-credit-card-button';
 import { UpdateCreditCardButton } from './update-credit-card-button';
 
 interface CreditCardProps {
@@ -19,14 +17,8 @@ export function CreditCard({ creditCard }: CreditCardProps) {
       </p>
 
       <div className="absolute right-2.5 bottom-2.5 flex items-center">
-        <div>
-          <UpdateCreditCardButton creditCard={creditCard} />
-        </div>
-        <div>
-          <Button size="icon" variant="ghost">
-            <Trash2 className="text-destructive" />
-          </Button>
-        </div>
+        <UpdateCreditCardButton creditCard={creditCard} />
+        <DeleteCreditCardButton creditCard={creditCard} />
       </div>
     </div>
   );
