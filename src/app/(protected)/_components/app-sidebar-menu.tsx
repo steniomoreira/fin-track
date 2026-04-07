@@ -1,6 +1,11 @@
 'use client';
 
-import { ArrowLeftRight, CreditCard, LayoutDashboard } from 'lucide-react';
+import {
+  ArrowLeftRight,
+  CreditCard,
+  LayoutDashboard,
+  Shapes,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -25,6 +30,11 @@ const items = [
     title: 'Cartões de crédito',
     url: '/credit-cards',
     icon: CreditCard,
+  },
+  {
+    title: 'Categorias',
+    url: '/categories',
+    icon: Shapes,
   },
 ];
 
