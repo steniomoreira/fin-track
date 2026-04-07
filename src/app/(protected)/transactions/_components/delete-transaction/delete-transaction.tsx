@@ -7,7 +7,6 @@ import { toast } from 'sonner';
 import { deleteTransaction } from '@/actions/transactions/delete-transaction';
 import { Button } from '@/components/ui/button';
 import {
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -49,7 +48,7 @@ export function DeleteTransaction({
   }
 
   return (
-    <DialogContent className="sm:max-w-106.25">
+    <>
       <DialogHeader>
         <DialogTitle>Apagar lançamento</DialogTitle>
         <DialogDescription>
@@ -91,6 +90,6 @@ export function DeleteTransaction({
           )}
         </Button>
       </DialogFooter>
-    </DialogContent>
+    </>
   );
 }
