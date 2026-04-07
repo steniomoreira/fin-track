@@ -10,4 +10,4 @@ export const schemaUpsertCreditCard = z.object({
     .max(16, { message: 'Número do cartão deve ter 16 dígitos' }),
 });
 
-export type UpsertCreditCardSchema = z.infer<typeof schemaUpsertCreditCard>;
+export type UpsertCreditCardParams = z.infer<typeof schemaUpsertCreditCard>;

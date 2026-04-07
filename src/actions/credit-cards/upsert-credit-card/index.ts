@@ -7,9 +7,9 @@ import { requireSession } from '@/lib/session';
 import { creditCardSelect } from '@/types/credit-cards/credit-card';
 import { toastTypes } from '@/utils/toast-utils';
 
-import { schemaUpsertCreditCard, UpsertCreditCardSchema } from './schema';
+import { schemaUpsertCreditCard, UpsertCreditCardParams } from './schema';
 
-export async function upsertCreditCard(data: UpsertCreditCardSchema) {
+export async function upsertCreditCard(data: UpsertCreditCardParams) {
   const session = await requireSession();
 
   const result = schemaUpsertCreditCard.safeParse(data);
