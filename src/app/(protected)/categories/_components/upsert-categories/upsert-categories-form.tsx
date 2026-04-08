@@ -26,20 +26,22 @@ import { schemaUpsertCategoryForm, UpsertCategoryFormData } from './schema';
 
 interface UpsertCategoriesFormProps {
   category?: Category;
+  onEdit: (category?: Category) => void;
 }
 
-export function UpsertCategoriesForm({ category }: UpsertCategoriesFormProps) {
+export function UpsertCategoriesForm({
+  category,
+  onEdit,
+}: UpsertCategoriesFormProps) {
   const form = useForm<UpsertCategoryFormData>({
     resolver: zodResolver(schemaUpsertCategoryForm),
     defaultValues: {
       name: category?.name ?? '',
       description: category?.description ?? '',
-      icon: category?.icon ?? '',
-      color: category?.color ?? '',
+      icon: category?.icon,
+      color: category?.color,
     },
   });
-
-  console.log(category);
 
   const isLoading = form.formState.isSubmitting;
 
@@ -54,6 +56,7 @@ export function UpsertCategoriesForm({ category }: UpsertCategoriesFormProps) {
 
       if (response.type === toastTypes.SUCCESS) {
         form.reset();
+        onEdit();
       }
     } catch (error) {
       console.error(error);
@@ -117,34 +120,32 @@ export function UpsertCategoriesForm({ category }: UpsertCategoriesFormProps) {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field>
-                <div className="flex flex-col gap-2">
-                  <FieldLabel>Selecione um ícone</FieldLabel>
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    {ICON_NAMES.map((name) => {
-                      const Icon = ICON_MAP[name];
-                      const isSelected = field.value === name;
-                      return (
-                        <Button
-                          key={name}
-                          type="button"
-                          variant={isSelected ? 'default' : 'outline'}
-                          className={`h-12 w-12 cursor-pointer transition-all ${
-                            isSelected
-                              ? 'ring-primary ring-offset-background ring-2 ring-offset-2'
-                              : ''
-                          }`}
-                          onClick={() => field.onChange(name)}
-                          disabled={isLoading}
-                        >
-                          <Icon />
-                        </Button>
-                      );
-                    })}
-                  </div>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
+                <FieldLabel>Selecione um ícone</FieldLabel>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  {ICON_NAMES.map((name) => {
+                    const Icon = ICON_MAP[name];
+                    const isSelected = field.value === name;
+                    return (
+                      <Button
+                        key={name}
+                        type="button"
+                        variant={isSelected ? 'default' : 'outline'}
+                        className={`h-12 w-12 cursor-pointer transition-all ${
+                          isSelected
+                            ? 'ring-primary ring-offset-background ring-2 ring-offset-2'
+                            : ''
+                        }`}
+                        onClick={() => field.onChange(name)}
+                        disabled={isLoading}
+                      >
+                        <Icon />
+                      </Button>
+                    );
+                  })}
                 </div>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -154,31 +155,29 @@ export function UpsertCategoriesForm({ category }: UpsertCategoriesFormProps) {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field>
-                <div className="flex flex-col gap-2">
-                  <FieldLabel>Selecione uma cor</FieldLabel>
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    {COLOR_NAMES.map((name) => {
-                      const { bgColor } = COLOR_MAP[name];
-                      const isSelected = field.value === name;
-                      return (
-                        <Button
-                          key={name}
-                          type="button"
-                          className={`h-9 w-9 cursor-pointer rounded-full transition-all hover:${bgColor} hover:opacity-80 ${bgColor} ${
-                            isSelected
-                              ? 'ring-primary ring-offset-background ring-2 ring-offset-2'
-                              : ''
-                          }`}
-                          onClick={() => field.onChange(name)}
-                          disabled={isLoading}
-                        />
-                      );
-                    })}
-                  </div>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
+                <FieldLabel>Selecione uma cor</FieldLabel>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  {COLOR_NAMES.map((name) => {
+                    const { bgColor } = COLOR_MAP[name];
+                    const isSelected = field.value === name;
+                    return (
+                      <Button
+                        key={name}
+                        type="button"
+                        className={`h-9 w-9 cursor-pointer rounded-full transition-all hover:${bgColor} hover:opacity-80 ${bgColor} ${
+                          isSelected
+                            ? 'ring-primary ring-offset-background ring-2 ring-offset-2'
+                            : ''
+                        }`}
+                        onClick={() => field.onChange(name)}
+                        disabled={isLoading}
+                      />
+                    );
+                  })}
                 </div>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -198,6 +197,18 @@ export function UpsertCategoriesForm({ category }: UpsertCategoriesFormProps) {
               </>
             )}
           </Button>
+
+          {category && (
+            <Button
+              className="w-full"
+              type="button"
+              variant="ghost"
+              disabled={isLoading}
+              onClick={() => onEdit()}
+            >
+              Descartar
+            </Button>
+          )}
         </form>
       </CardContent>
     </Card>

@@ -14,7 +14,7 @@ interface WrapperCategoriesProps {
 export function WrapperCategories({ categories }: WrapperCategoriesProps) {
   const [categoryToEdit, setCategoryToEdit] = useState<Category>();
 
-  function handleEditCategory(category: Category) {
+  function handleEditCategory(category?: Category) {
     setCategoryToEdit(category);
   }
 
@@ -31,10 +31,13 @@ export function WrapperCategories({ categories }: WrapperCategoriesProps) {
           );
         })}
       </div>
-      <UpsertCategoriesForm
-        key={categoryToEdit?.id ?? 'new'}
-        category={categoryToEdit}
-      />
+      <div>
+        <UpsertCategoriesForm
+          key={categoryToEdit?.id ?? 'new'}
+          category={categoryToEdit}
+          onEdit={handleEditCategory}
+        />
+      </div>
     </div>
   );
 }
