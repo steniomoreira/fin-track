@@ -1,19 +1,11 @@
-import { Shapes } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import {
   Headline,
   HeadlineDescription,
   HeadlineTitle,
 } from '@/components/ui/headline';
-import { Input } from '@/components/ui/input';
 import { PageContainer } from '@/components/ui/page-container';
-import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
-import { COLOR_MAP, COLOR_NAMES } from '@/constants/colors-constants';
-import { ICON_MAP, ICON_NAMES } from '@/constants/icons-constants';
+
+import { UpsertCategoriesForm } from './_components/upsert-categories/upsert-categories-form';
 
 export default async function CategoriesPage() {
   return (
@@ -30,74 +22,7 @@ export default async function CategoriesPage() {
       <div className="grid grid-cols-[1fr_350px] gap-6">
         <div>list categories</div>
         <div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Adicionar nova categoria</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <form>
-                <FieldGroup>
-                  <Field>
-                    <FieldLabel htmlFor="name">Nome da categoria</FieldLabel>
-                    <Input id="name" autoFocus placeholder="Ex: Eletrônicos" />
-                  </Field>
-
-                  <Field>
-                    <FieldLabel htmlFor="description">
-                      Descrição (opcional)
-                    </FieldLabel>
-                    <Textarea
-                      id="description"
-                      placeholder="Ex: Smartphones, notebooks, acessórios..."
-                      className="min-h-[100px] resize-none"
-                    />
-                  </Field>
-                </FieldGroup>
-              </form>
-
-              <h3 className="text-muted-foreground text-sm font-medium">
-                Selecione um ícone
-              </h3>
-
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                {ICON_NAMES.map((name) => {
-                  const Icon = ICON_MAP[name];
-                  return (
-                    <Button
-                      key={name}
-                      variant="outline"
-                      className={`h-12 w-12 cursor-pointer`}
-                    >
-                      <Icon />
-                    </Button>
-                  );
-                })}
-              </div>
-
-              <h3 className="text-muted-foreground text-sm font-medium">
-                Selecione uma cor
-              </h3>
-
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                {COLOR_NAMES.map((name) => {
-                  const { bgColor } = COLOR_MAP[name];
-                  return (
-                    <Button
-                      key={name}
-                      className={`h-9 w-9 cursor-pointer rounded-full ${bgColor} hover:${bgColor} hover:opacity-80`}
-                    />
-                  );
-                })}
-              </div>
-
-              <Separator />
-
-              <Button className="w-full">
-                <Shapes />
-                Criar categoria
-              </Button>
-            </CardContent>
-          </Card>
+          <UpsertCategoriesForm />
         </div>
       </div>
     </PageContainer>
