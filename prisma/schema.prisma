@@ -147,9 +147,13 @@ model CreditCard {
 }
 
 model Category {
-  id           String        @id @default(cuid())
-  userId       String        @map("user_id")
-  name         String
+  id          String  @id @default(cuid())
+  userId      String  @map("user_id")
+  name        String
+  description String?
+  icon        String
+  color       String
+
   transactions Transaction[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
