@@ -12,9 +12,8 @@ import { Input } from '@/components/ui/input';
 import { PageContainer } from '@/components/ui/page-container';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-
-import { COLORS_CATEGORIES } from './constants/colors-categories-constants';
-import { ICONS_CATEGORIES } from './constants/icons-categories-constants';
+import { COLOR_MAP, COLOR_NAMES } from '@/constants/colors-constants';
+import { ICON_MAP, ICON_NAMES } from '@/constants/icons-constants';
 
 export default async function CategoriesPage() {
   return (
@@ -61,15 +60,18 @@ export default async function CategoriesPage() {
               </h3>
 
               <div className="flex flex-wrap items-center justify-between gap-3">
-                {ICONS_CATEGORIES.map((icon) => (
-                  <Button
-                    key={icon.key}
-                    variant="outline"
-                    className="h-12 w-12 cursor-pointer"
-                  >
-                    <icon.icon />
-                  </Button>
-                ))}
+                {ICON_NAMES.map((name) => {
+                  const Icon = ICON_MAP[name];
+                  return (
+                    <Button
+                      key={name}
+                      variant="outline"
+                      className={`h-12 w-12 cursor-pointer`}
+                    >
+                      <Icon />
+                    </Button>
+                  );
+                })}
               </div>
 
               <h3 className="text-muted-foreground text-sm font-medium">
@@ -77,12 +79,15 @@ export default async function CategoriesPage() {
               </h3>
 
               <div className="flex flex-wrap items-center justify-between gap-3">
-                {COLORS_CATEGORIES.map(({ color }) => (
-                  <Button
-                    key={color}
-                    className={`h-9 w-9 cursor-pointer rounded-full ${color} hover:${color} hover:opacity-80`}
-                  />
-                ))}
+                {COLOR_NAMES.map((name) => {
+                  const { bgColor } = COLOR_MAP[name];
+                  return (
+                    <Button
+                      key={name}
+                      className={`h-9 w-9 cursor-pointer rounded-full ${bgColor} hover:${bgColor} hover:opacity-80`}
+                    />
+                  );
+                })}
               </div>
 
               <Separator />
