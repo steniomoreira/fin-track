@@ -1,3 +1,4 @@
+import { getCategories } from '@/actions/categories/get-categories';
 import {
   Headline,
   HeadlineDescription,
@@ -5,9 +6,10 @@ import {
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 
-import { UpsertCategoriesForm } from './_components/upsert-categories/upsert-categories-form';
+import { WrapperCategories } from './_components/wrapper-categories';
 
 export default async function CategoriesPage() {
+  const { categories } = await getCategories();
   return (
     <PageContainer>
       <header className="flex items-end justify-between">
@@ -19,12 +21,7 @@ export default async function CategoriesPage() {
         </Headline>
       </header>
 
-      <div className="grid grid-cols-[1fr_350px] gap-6">
-        <div>list categories</div>
-        <div>
-          <UpsertCategoriesForm />
-        </div>
-      </div>
+      <WrapperCategories categories={categories} />
     </PageContainer>
   );
 }

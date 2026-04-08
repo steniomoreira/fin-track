@@ -5,7 +5,7 @@ import { Loader, Shapes } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { upsertCategory } from '@/actions/categories';
+import { upsertCategory } from '@/actions/categories/upsett-categories';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -38,6 +38,8 @@ export function UpsertCategoriesForm({ category }: UpsertCategoriesFormProps) {
       color: category?.color ?? '',
     },
   });
+
+  console.log(category);
 
   const isLoading = form.formState.isSubmitting;
 
