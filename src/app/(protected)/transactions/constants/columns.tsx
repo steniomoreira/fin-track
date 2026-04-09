@@ -1,11 +1,13 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Home, SquareArrowOutUpRight } from 'lucide-react';
+import { SquareArrowOutUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
+import { ICON_MAP } from '@/constants/icons-constants';
 import { EXPENSE, status } from '@/constants/transactions-contants';
 import { Installment } from '@/types/transactions/installment';
 import { formatCurrency } from '@/utils/currency-utils';
@@ -27,11 +29,15 @@ export const columns: ColumnDef<Installment>[] = [
     header: 'Descrição',
     cell: ({ row }) => {
       const installment = row.original;
+      const category = installment.transaction.category;
+
+      const Icon = ICON_MAP[category.icon];
+      const { contentColor } = COLOR_MAP[category.color as ColorName];
 
       return (
         <div className="text-foreground flex items-center gap-2">
-          <span className="text-primary bg-muted rounded-full p-2">
-            <Home className="h-4 w-4" />
+          <span className={`${contentColor} rounded-full p-2`}>
+            <Icon className="h-4 w-4" />
           </span>
           {installment.transaction.description}{' '}
           {installment.transaction.numberInstallments &&

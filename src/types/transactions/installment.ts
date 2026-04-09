@@ -18,6 +18,8 @@ export const installmentSelect = {
         select: {
           id: true,
           name: true,
+          icon: true,
+          color: true,
         },
       },
       creditCard: {

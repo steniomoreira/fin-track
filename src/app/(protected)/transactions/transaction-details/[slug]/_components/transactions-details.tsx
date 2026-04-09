@@ -3,7 +3,6 @@ import {
   BanknoteArrowDown,
   BanknoteArrowUp,
   CreditCard,
-  Home,
   TrendingDown,
   TrendingUp,
   Wallet,
@@ -12,7 +11,10 @@ import {
 import { BadgeStatusTransactions } from '@/app/(protected)/_components/badge-status-transactions';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
+import { ICON_MAP } from '@/constants/icons-constants';
 import { INCOME } from '@/constants/transactions-contants';
+import { cn } from '@/lib/utils';
 import { Installment } from '@/types/transactions/installment';
 import { formatCurrency } from '@/utils/currency-utils';
 import { date_dd_MMMM_yyyy } from '@/utils/date-utils';
@@ -24,6 +26,10 @@ interface TransactionsDetailsProps {
 }
 
 export function TransactionsDetails({ installment }: TransactionsDetailsProps) {
+  const Icon = ICON_MAP[installment.transaction.category.icon];
+  const { contentColor } =
+    COLOR_MAP[installment.transaction.category.color as ColorName];
+
   return (
     <Card>
       <CardContent className="space-y-4">
@@ -74,7 +80,8 @@ export function TransactionsDetails({ installment }: TransactionsDetailsProps) {
           <div className="space-y-4">
             <h2 className="text-muted-foreground uppercase">Categoria</h2>
             <div className="flex items-center gap-2 capitalize">
-              <Home className="text-primary" />
+              <Icon className={cn(contentColor, 'bg-transparent')} />
+
               {installment.transaction.category.name}
             </div>
           </div>
