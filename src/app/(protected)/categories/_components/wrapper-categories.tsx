@@ -19,14 +19,15 @@ export function WrapperCategories({ categories }: WrapperCategoriesProps) {
   }
 
   return (
-    <div className="grid grid-cols-[1fr_350px] gap-6">
-      <div>
+    <div className="m-auto grid w-full max-w-[1600px] grid-cols-[1fr_350px] gap-6">
+      <div className="flex flex-wrap content-start gap-4">
         {categories.map((category) => {
           return (
             <CategoryCard
               key={category.id}
               category={category}
               onEdit={handleEditCategory}
+              categoryToEdit={categoryToEdit}
             />
           );
         })}

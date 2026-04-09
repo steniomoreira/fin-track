@@ -11,6 +11,7 @@ export async function getCategories() {
     const categories = await db.category.findMany({
       where: { userId: session.user.id },
       select: categorySelect,
+      orderBy: { createdAt: 'asc' },
     });
 
     return { categories };

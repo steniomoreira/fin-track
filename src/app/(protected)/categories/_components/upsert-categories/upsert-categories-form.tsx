@@ -65,7 +65,7 @@ export function UpsertCategoriesForm({
   }
 
   return (
-    <Card>
+    <Card className={`${category && 'ring-primary'}`}>
       <CardHeader>
         <CardTitle>Adicionar nova categoria</CardTitle>
       </CardHeader>
