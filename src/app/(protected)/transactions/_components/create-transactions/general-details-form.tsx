@@ -25,14 +25,19 @@ import {
 } from '@/components/ui/select';
 import { transactionTypes } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
+import { Category } from '@/types/categories/category';
 import { CreditCard } from '@/types/credit-cards/credit-card';
 import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
 interface GeneralDetailsFormProps {
   creditCards: CreditCard[];
+  categories: Category[];
 }
 
-export function GeneralDetailsForm({ creditCards }: GeneralDetailsFormProps) {
+export function GeneralDetailsForm({
+  creditCards,
+  categories,
+}: GeneralDetailsFormProps) {
   const form = useFormContext();
 
   const isLoading =
@@ -103,9 +108,11 @@ export function GeneralDetailsForm({ creditCards }: GeneralDetailsFormProps) {
                   <SelectValue placeholder="Qual categoria?" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cmhih36gs0000fgqcb19a6i4o">
-                    Habitação
-                  </SelectItem>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

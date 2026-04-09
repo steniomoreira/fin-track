@@ -37,6 +37,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { status, transactionTypes } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
+import { Category } from '@/types/categories/category';
 import { CreditCard } from '@/types/credit-cards/credit-card';
 import { Installment } from '@/types/transactions/installment';
 import { centsToCurrency } from '@/utils/currency-utils';
@@ -51,12 +52,14 @@ import {
 interface UpdateTransactionFormProps {
   installment: Installment;
   creditCards: CreditCard[];
+  categories: Category[];
   onClose: () => void;
 }
 
 export function UpdateTransactionForm({
   installment,
   creditCards,
+  categories,
   onClose,
 }: UpdateTransactionFormProps) {
   const form = useForm<UpdateTransactionFormData>({
@@ -244,9 +247,11 @@ export function UpdateTransactionForm({
                       <SelectValue placeholder="Qual categoria?" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="cmhih36gs0000fgqcb19a6i4o">
-                        Habitação
-                      </SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   {fieldState.invalid && (

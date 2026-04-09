@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EXPENSE } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
+import { Category } from '@/types/categories/category';
 import { CreditCard } from '@/types/credit-cards/credit-card';
 import { toastMessage } from '@/utils/toast-utils';
 
@@ -20,11 +21,13 @@ import { schemaCreateTransactionForm, TransactionFormData } from './schemas';
 
 interface CreateTransactionProps extends React.ComponentProps<'form'> {
   creditCards: CreditCard[];
+  categories: Category[];
 }
 
 export function CreateTransaction({
   className,
   creditCards,
+  categories,
   ...props
 }: CreateTransactionProps) {
   const router = useRouter();
@@ -80,7 +83,10 @@ export function CreateTransaction({
             </CardTitle>
           </CardHeader>
           <CardContent className="p-8">
-            <GeneralDetailsForm creditCards={creditCards} />
+            <GeneralDetailsForm
+              creditCards={creditCards}
+              categories={categories}
+            />
           </CardContent>
         </Card>
 
