@@ -45,6 +45,8 @@ export function UpsertCategoriesForm({
 
   const isLoading = form.formState.isSubmitting;
 
+  const action = category ? () => onEdit() : () => form.reset();
+
   async function onSubmit(data: UpsertCategoryFormData) {
     try {
       const response = await upsertCategory({
@@ -55,8 +57,7 @@ export function UpsertCategoriesForm({
       toastMessage({ type: response.type, message: response.message });
 
       if (response.type === toastTypes.SUCCESS) {
-        form.reset();
-        onEdit();
+        action();
       }
     } catch (error) {
       console.error(error);
@@ -198,17 +199,15 @@ export function UpsertCategoriesForm({
             )}
           </Button>
 
-          {category && (
-            <Button
-              className="w-full"
-              type="button"
-              variant="ghost"
-              disabled={isLoading}
-              onClick={() => onEdit()}
-            >
-              Descartar
-            </Button>
-          )}
+          <Button
+            className="w-full"
+            type="button"
+            variant="ghost"
+            disabled={isLoading}
+            onClick={action}
+          >
+            Descartar
+          </Button>
         </form>
       </CardContent>
     </Card>

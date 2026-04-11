@@ -10,6 +10,7 @@ import { WrapperCategories } from './_components/wrapper-categories';
 
 export default async function CategoriesPage() {
   const { categories } = await getCategories();
+
   return (
     <PageContainer>
       <header className="flex items-end justify-between">

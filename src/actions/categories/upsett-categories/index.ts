@@ -18,17 +18,28 @@ export async function upsertCategory(data: UpsertCategoryParams) {
   }
 
   try {
+    const existCategory = await db.category.findFirst({
+      where: { name: data.name.toLowerCase() },
+    });
+
+    if (existCategory) {
+      return {
+        type: toastTypes.WARNING,
+        message: 'Esta categoria já foi cadastrada!',
+      };
+    }
+
     await db.category.upsert({
       where: { id: data.id ?? '' },
       update: {
-        name: data.name,
+        name: data.name.toLowerCase(),
         description: data.description,
         icon: data.icon,
         color: data.color,
       },
       create: {
         userId: session.user.id,
-        name: data.name,
+        name: data.name.toLowerCase(),
         description: data.description,
         icon: data.icon,
         color: data.color,
