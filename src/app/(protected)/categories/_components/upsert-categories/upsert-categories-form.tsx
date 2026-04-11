@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader, Shapes } from 'lucide-react';
+import { Loader, Shapes, X } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -57,7 +57,16 @@ export function UpsertCategoriesForm({
   }
 
   return (
-    <Card className={`${category && 'ring-primary'}`}>
+    <Card className={`relative ${category && 'ring-primary'}`}>
+      <Button
+        className={`absolute top-2.5 right-2.5 ${!category && 'hidden'}`}
+        variant="ghost"
+        size="icon"
+        onClick={() => onEdit()}
+      >
+        <X className="h-4 w-4" />
+      </Button>
+
       <CardHeader>
         <CardTitle>Adicionar nova categoria</CardTitle>
       </CardHeader>

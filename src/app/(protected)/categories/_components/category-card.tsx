@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader, Pencil, Trash2 } from 'lucide-react';
+import { Loader, Pencil, Trash2, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
@@ -12,7 +12,7 @@ import { useCategories } from '../hooks/useCategories';
 interface CategoryCardProps {
   category: Category;
   categoryToEdit?: Category;
-  onEdit: (category: Category) => void;
+  onEdit: (category?: Category) => void;
 }
 
 export function CategoryCard({
@@ -37,6 +37,15 @@ export function CategoryCard({
       >
         <Icon className="h-4 w-4" />
       </span>
+
+      <Button
+        className={`absolute top-2.5 right-2.5 ${!isActiveCard && 'hidden'}`}
+        variant="ghost"
+        size="icon"
+        onClick={() => onEdit()}
+      >
+        <X className="h-4 w-4" />
+      </Button>
 
       <div className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold capitalize">{category.name}</h2>
