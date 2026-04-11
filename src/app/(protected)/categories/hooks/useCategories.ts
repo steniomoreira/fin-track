@@ -1,8 +1,11 @@
 import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
 
 import { deleteCategory } from '@/actions/categories/delete-categories';
+import { upsertCategory } from '@/actions/categories/upsett-categories';
+import { UpsertCategoryParams } from '@/actions/categories/upsett-categories/schema';
 import { Category } from '@/types/categories/category';
-import { toastMessage } from '@/utils/toast-utils';
+import { toastMessage, toastTypes } from '@/utils/toast-utils';
 
 export function useCategories() {
   const [selectedCategory, setSelectedCategory] = useState<Category>();
@@ -12,6 +15,24 @@ export function useCategories() {
 
   function handleSelectedCategory(category?: Category) {
     setSelectedCategory(category);
+  }
+
+  async function handleUpsertCategory(
+    category: UpsertCategoryParams,
+    action: () => void
+  ) {
+    try {
+      const response = await upsertCategory(category);
+
+      toastMessage({ type: response.type, message: response.message });
+
+      if (response.type === toastTypes.SUCCESS) {
+        action();
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Ocorreu um erro no processo de criação da categoria!');
+    }
   }
 
   function deleteCategoryById(id: string) {
@@ -32,6 +53,7 @@ export function useCategories() {
 
   return {
     isLoading,
+    handleUpsertCategory,
     deleteCategoryById,
     selectedCategory,
     handleSelectedCategory,

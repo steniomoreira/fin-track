@@ -3,9 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader, Shapes } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 
-import { upsertCategory } from '@/actions/categories/upsett-categories';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -20,8 +18,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { COLOR_MAP, COLOR_NAMES } from '@/constants/colors-constants';
 import { ICON_MAP, ICON_NAMES } from '@/constants/icons-constants';
 import { Category } from '@/types/categories/category';
-import { toastMessage, toastTypes } from '@/utils/toast-utils';
 
+import { useCategories } from '../../hooks/useCategories';
 import { schemaUpsertCategoryForm, UpsertCategoryFormData } from './schema';
 
 interface UpsertCategoriesFormProps {
@@ -33,13 +31,15 @@ export function UpsertCategoriesForm({
   category,
   onEdit,
 }: UpsertCategoriesFormProps) {
+  const { handleUpsertCategory } = useCategories();
+
   const form = useForm<UpsertCategoryFormData>({
     resolver: zodResolver(schemaUpsertCategoryForm),
     defaultValues: {
       name: category?.name ?? '',
       description: category?.description ?? '',
-      icon: category?.icon,
-      color: category?.color,
+      icon: category?.icon ?? 'Home',
+      color: category?.color ?? 'blue',
     },
   });
 
@@ -48,21 +48,12 @@ export function UpsertCategoriesForm({
   const action = category ? () => onEdit() : () => form.reset();
 
   async function onSubmit(data: UpsertCategoryFormData) {
-    try {
-      const response = await upsertCategory({
-        ...data,
-        id: category?.id,
-      });
+    const categoryData = {
+      ...data,
+      id: category?.id,
+    };
 
-      toastMessage({ type: response.type, message: response.message });
-
-      if (response.type === toastTypes.SUCCESS) {
-        action();
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('Ocorreu um erro no processo de criação da categoria!');
-    }
+    await handleUpsertCategory(categoryData, action);
   }
 
   return (
@@ -203,7 +194,7 @@ export function UpsertCategoriesForm({
             className="w-full"
             type="button"
             variant="ghost"
-            disabled={isLoading}
+            disabled={isLoading || !form.formState.isDirty}
             onClick={action}
           >
             Descartar

@@ -17,9 +17,14 @@ export async function upsertCategory(data: UpsertCategoryParams) {
     throw new Error('Erro de validação');
   }
 
+  const isEditing = !!data.id;
+
   try {
     const existCategory = await db.category.findFirst({
-      where: { name: data.name.toLowerCase() },
+      where: {
+        name: data.name.toLowerCase(),
+        ...(isEditing && { id: { not: data.id } }),
+      },
     });
 
     if (existCategory) {
