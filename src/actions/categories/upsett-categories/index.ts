@@ -55,13 +55,13 @@ export async function upsertCategory(data: UpsertCategoryParams) {
 
     return {
       type: toastTypes.SUCCESS,
-      message: 'Categoria criada com sucesso!',
+      message: `Categoria ${isEditing ? 'atualizada' : 'criada'} com sucesso!`,
     };
   } catch (error) {
     console.error(error);
     return {
       type: toastTypes.ERROR,
-      message: 'Ocorreu um erro no processo da criação da categoria!',
+      message: `Ocorreu um erro no processo da ${isEditing ? 'atualização' : 'criação'} da categoria!`,
     };
   }
 }
