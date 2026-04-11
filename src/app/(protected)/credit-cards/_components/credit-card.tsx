@@ -1,6 +1,6 @@
 import { CreditCard as CreditCardType } from '@/types/credit-cards/credit-card';
-import { formatCreditCardNumber } from '@/utils/credit-card-utils';
 
+import { formatCreditCardNumber } from '../utils/credit-card-utils';
 import { DeleteCreditCardButton } from './delete-credit-card-button';
 import { UpdateCreditCardButton } from './update-credit-card-button';
 
