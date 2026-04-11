@@ -1,27 +1,32 @@
 'use client';
 
-import { Pencil } from 'lucide-react';
+import { Loader, Pencil, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
 import { ICON_MAP } from '@/constants/icons-constants';
 import { Category } from '@/types/categories/category';
 
+import { useCategories } from '../hooks/useCategories';
+
 interface CategoryCardProps {
   category: Category;
-  onEdit: (category: Category) => void;
   categoryToEdit?: Category;
+  onEdit: (category: Category) => void;
 }
 
 export function CategoryCard({
   category,
-  onEdit,
   categoryToEdit,
+  onEdit,
 }: CategoryCardProps) {
+  const { isLoading, deleteCategoryById } = useCategories();
+
   const Icon = ICON_MAP[category.icon];
   const { contentColor } = COLOR_MAP[category.color as ColorName];
 
   const isActiveCard = categoryToEdit?.id === category.id;
+  const isDisabled = isLoading || isActiveCard;
 
   return (
     <div
@@ -39,8 +44,26 @@ export function CategoryCard({
       </div>
 
       <div className="absolute right-2.5 bottom-2.5 flex items-center">
-        <Button variant="ghost" size="icon" onClick={() => onEdit(category)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => onEdit(category)}
+          disabled={isDisabled}
+        >
           <Pencil className="h-4 w-4" />
+        </Button>
+
+        <Button
+          size="icon"
+          variant="ghost"
+          disabled={isDisabled}
+          onClick={() => deleteCategoryById(category.id)}
+        >
+          {isLoading ? (
+            <Loader className="text-destructive animate-spin" />
+          ) : (
+            <Trash2 className="text-destructive" />
+          )}
         </Button>
       </div>
     </div>

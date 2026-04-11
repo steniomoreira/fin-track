@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-
 import { Category } from '@/types/categories/category';
 
+import { useCategories } from '../hooks/useCategories';
 import { CategoryCard } from './category-card';
 import { UpsertCategoriesForm } from './upsert-categories/upsert-categories-form';
 
@@ -12,11 +11,7 @@ interface WrapperCategoriesProps {
 }
 
 export function WrapperCategories({ categories }: WrapperCategoriesProps) {
-  const [categoryToEdit, setCategoryToEdit] = useState<Category>();
-
-  function handleEditCategory(category?: Category) {
-    setCategoryToEdit(category);
-  }
+  const { selectedCategory, handleSelectedCategory } = useCategories();
 
   return (
     <div className="m-auto grid w-full max-w-[1600px] grid-cols-[1fr_350px] gap-6">
@@ -26,17 +21,17 @@ export function WrapperCategories({ categories }: WrapperCategoriesProps) {
             <CategoryCard
               key={category.id}
               category={category}
-              onEdit={handleEditCategory}
-              categoryToEdit={categoryToEdit}
+              categoryToEdit={selectedCategory}
+              onEdit={handleSelectedCategory}
             />
           );
         })}
       </div>
       <div>
         <UpsertCategoriesForm
-          key={categoryToEdit?.id ?? 'new'}
-          category={categoryToEdit}
-          onEdit={handleEditCategory}
+          key={selectedCategory?.id ?? 'new'}
+          category={selectedCategory}
+          onEdit={handleSelectedCategory}
         />
       </div>
     </div>
