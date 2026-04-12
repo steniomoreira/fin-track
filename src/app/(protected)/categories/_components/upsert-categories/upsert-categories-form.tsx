@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader, Shapes, X } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 
+import { ColorPicker } from '@/app/(protected)/_components/color-picker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -15,7 +16,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-import { COLOR_MAP, COLOR_NAMES } from '@/constants/colors-constants';
 import { ICON_MAP, ICON_NAMES } from '@/constants/icons-constants';
 import { Category } from '@/types/categories/category';
 
@@ -158,25 +158,11 @@ export function UpsertCategoriesForm({
             render={({ field, fieldState }) => (
               <Field>
                 <FieldLabel>Selecione uma cor</FieldLabel>
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  {COLOR_NAMES.map((name) => {
-                    const { bgColor } = COLOR_MAP[name];
-                    const isSelected = field.value === name;
-                    return (
-                      <Button
-                        key={name}
-                        type="button"
-                        className={`h-9 w-9 cursor-pointer rounded-full transition-all hover:${bgColor} hover:opacity-80 ${bgColor} ${
-                          isSelected
-                            ? 'ring-primary ring-offset-background ring-2 ring-offset-2'
-                            : ''
-                        }`}
-                        onClick={() => field.onChange(name)}
-                        disabled={isLoading}
-                      />
-                    );
-                  })}
-                </div>
+                <ColorPicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={isLoading}
+                />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
