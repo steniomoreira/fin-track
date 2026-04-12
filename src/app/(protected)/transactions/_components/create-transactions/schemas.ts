@@ -21,8 +21,11 @@ export const schemaCreateTransactionForm = z
         message: 'Permitido apenas valores positivos. ex: 1,2,3...',
       }),
     installmentGroup: z.boolean(),
-    categoryId: z.string({ message: 'Selecione um categoria' }),
-    creditCardId: z.string().nullable().optional(),
+    categoryId: z.cuid('Selecione uma categoria'),
+    creditCardId: z
+      .cuid('Selecione um cartão de crédito')
+      .nullable()
+      .optional(),
   })
   .refine((data) => data.numberInstallments > 1 || !data.installmentGroup, {
     message: 'Deve ter no mímino 2 parcelas de lançamento',
