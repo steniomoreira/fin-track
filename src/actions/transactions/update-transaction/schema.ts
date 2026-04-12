@@ -3,8 +3,8 @@ import z from 'zod';
 import { EXPENSE, INCOME } from '@/constants/transactions-contants';
 
 export const schemaUpdateTransaction = z.object({
-  id: z.string(),
-  transactionId: z.string(),
+  id: z.cuid('ID inválido'),
+  transactionId: z.cuid('ID da transação é obrigatório'),
   description: z
     .string()
     .trim()
@@ -13,7 +13,7 @@ export const schemaUpdateTransaction = z.object({
   type: z.enum([INCOME, EXPENSE], { message: 'Tipo de transação inválido' }),
   dueDate: z.date(),
   amount: z.number().min(1, { message: 'Informe um valor' }),
-  creditCardId: z.string().nullable().optional(),
+  creditCardId: z.cuid('ID inválido').nullable().optional(),
 });
 
 export type UpdateTransactionParams = z.infer<typeof schemaUpdateTransaction>;

@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const schemaUpsertCategory = z.object({
-  id: z.string().optional(),
+  id: z.cuid('ID inválido').optional(),
   name: z.string().trim().min(3, { message: 'Nome inválido' }),
   description: z.string().trim().optional(),
   icon: z.string({ message: 'Nenhum ícone foi selecionado' }),
