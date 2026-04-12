@@ -85,6 +85,7 @@ export function UpsertCategoriesForm({
                     autoFocus
                     placeholder="Ex: Entretenimento"
                     disabled={isLoading}
+                    className="capitalize"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -185,7 +186,11 @@ export function UpsertCategoriesForm({
 
           <Separator />
 
-          <Button className="w-full" type="submit" disabled={isLoading}>
+          <Button
+            className="w-full"
+            type="submit"
+            disabled={isLoading || !form.formState.isDirty}
+          >
             {isLoading ? (
               <>
                 <Loader className="animate-spin" />

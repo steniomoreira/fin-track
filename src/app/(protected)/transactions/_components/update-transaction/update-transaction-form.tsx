@@ -243,12 +243,16 @@ export function UpdateTransactionForm({
                     onValueChange={field.onChange}
                     disabled={isLoading}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full capitalize">
                       <SelectValue placeholder="Qual categoria?" />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
+                        <SelectItem
+                          key={category.id}
+                          value={category.id}
+                          className="capitalize"
+                        >
                           {category.name}
                         </SelectItem>
                       ))}
