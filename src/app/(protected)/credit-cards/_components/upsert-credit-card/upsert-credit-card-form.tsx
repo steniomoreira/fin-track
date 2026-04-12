@@ -7,6 +7,7 @@ import { PatternFormat } from 'react-number-format';
 import { toast } from 'sonner';
 
 import { upsertCreditCard } from '@/actions/credit-cards/upsert-credit-card';
+import { ColorPicker } from '@/app/(protected)/_components/color-picker';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -35,6 +36,7 @@ export function UpsertCreditCardForm({
     defaultValues: {
       name: creditCard?.name ?? '',
       cardNumber: creditCard?.cardNumber ?? '',
+      color: creditCard?.color ?? 'black',
     },
   });
 
@@ -95,6 +97,22 @@ export function UpsertCreditCardForm({
                 }}
                 onBlur={field.onBlur}
                 name={field.name}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          name="color"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel>Selecione uma cor</FieldLabel>
+              <ColorPicker
+                value={field.value}
+                onChange={field.onChange}
+                disabled={isLoading}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

@@ -25,7 +25,7 @@ export function AddCreditCardButton() {
           <span className="text-muted-foreground">Adicionar novo cartão</span>
         </button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[350px]">
         <DialogHeader>
           <DialogTitle>Adicionar novo cartão</DialogTitle>
           <DialogDescription>

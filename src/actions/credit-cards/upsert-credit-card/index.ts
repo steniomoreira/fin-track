@@ -23,11 +23,13 @@ export async function upsertCreditCard(data: UpsertCreditCardParams) {
       update: {
         name: data.name,
         cardNumber: data.cardNumber,
+        color: data.color,
       },
       create: {
         userId: session.user.id,
         name: data.name,
         cardNumber: data.cardNumber,
+        color: data.color,
       },
     });
 

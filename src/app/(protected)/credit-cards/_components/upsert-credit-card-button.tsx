@@ -16,13 +16,13 @@ import { CreditCard } from '@/types/credit-cards/credit-card';
 
 import { UpsertCreditCardForm } from './upsert-credit-card/upsert-credit-card-form';
 
-interface UpdateCreditCardButtonProps {
+interface UpsertCreditCardButtonProps {
   creditCard: CreditCard;
 }
 
-export function UpdateCreditCardButton({
+export function UpsertCreditCardButton({
   creditCard,
-}: UpdateCreditCardButtonProps) {
+}: UpsertCreditCardButtonProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -32,7 +32,7 @@ export function UpdateCreditCardButton({
           <Pencil />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[350px]">
         <DialogHeader>
           <DialogTitle>Atualizar cartão</DialogTitle>
           <DialogDescription>

@@ -132,10 +132,12 @@ model Payment {
 }
 
 model CreditCard {
-  id           String        @id @default(cuid())
-  userId       String        @map("user_id")
-  name         String
-  cardNumber   String        @map("card_number")
+  id         String @id @default(cuid())
+  userId     String @map("user_id")
+  name       String
+  cardNumber String @map("card_number")
+  color      String
+
   transactions Transaction[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
