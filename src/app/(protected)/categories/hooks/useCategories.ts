@@ -41,7 +41,9 @@ export function useCategories() {
       }
     } catch (error) {
       console.error(error);
-      toast.error('Ocorreu um erro no processo de criação da categoria!');
+      toast.error(
+        `Ocorreu um erro no processo de ${category ? 'atualização' : 'criação'} da categoria!`
+      );
     }
   }
 

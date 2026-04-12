@@ -174,12 +174,16 @@ export function GeneralDetailsForm({
                   onValueChange={field.onChange}
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full capitalize">
                     <SelectValue placeholder="Qual cartão de crédito?" />
                   </SelectTrigger>
                   <SelectContent>
                     {creditCards.map((card) => (
-                      <SelectItem key={card.id} value={card.id}>
+                      <SelectItem
+                        key={card.id}
+                        value={card.id}
+                        className="capitalize"
+                      >
                         {card.name} ***** {card.cardNumber.slice(-4)}
                       </SelectItem>
                     ))}

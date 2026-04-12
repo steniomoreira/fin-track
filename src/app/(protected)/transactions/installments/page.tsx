@@ -1,5 +1,5 @@
 import { getCategories } from '@/actions/categories/get-categories';
-import { getCreditCards } from '@/actions/credit-cards/get-cardit-cards';
+import { getCreditCards } from '@/actions/credit-cards/get-credit-cards';
 import {
   Headline,
   HeadlineDescription,

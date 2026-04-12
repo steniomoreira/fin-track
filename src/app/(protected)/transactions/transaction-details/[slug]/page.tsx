@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { getCategories } from '@/actions/categories/get-categories';
-import { getCreditCards } from '@/actions/credit-cards/get-cardit-cards';
+import { getCreditCards } from '@/actions/credit-cards/get-credit-cards';
 import { getInstallmentTransactionBySlug } from '@/actions/transactions/get-installmet-transaction-by-slug';
 import {
   Headline,
