@@ -21,8 +21,8 @@ export const COLOR_MAP = {
   },
   red: { bgColor: 'bg-red-600', contentColor: 'bg-red-600/10 text-red-600' },
   yellow: {
-    bgColor: 'bg-yellow-600',
-    contentColor: 'bg-yellow-600/10 text-yellow-600',
+    bgColor: 'bg-yellow-500',
+    contentColor: 'bg-yellow-500/10 text-yellow-500',
   },
   black: {
     bgColor: 'bg-black',

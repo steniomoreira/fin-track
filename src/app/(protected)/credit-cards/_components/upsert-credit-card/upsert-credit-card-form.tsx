@@ -57,8 +57,7 @@ export function UpsertCreditCardForm({
     }
   }
 
-  const isLoading =
-    form.formState.isSubmitting || form.formState.isSubmitSuccessful;
+  const isLoading = form.formState.isSubmitting;
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
