@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { SquareArrowOutUpRight } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
@@ -51,7 +51,7 @@ export const columns: ColumnDef<Installment>[] = [
     header: 'Categoria',
     cell: ({ row }) => {
       return (
-        <Badge className="bg-muted text-muted-foreground capitalize">
+        <Badge className="bg-muted text-muted-foreground">
           {row.original.transaction.category.name}
         </Badge>
       );
@@ -65,9 +65,9 @@ export const columns: ColumnDef<Installment>[] = [
 
       if (creditCard) {
         return (
-          <span className="capitalize">
+          <>
             {creditCard.name} ***** {creditCard.cardNumber.slice(-4)}
-          </span>
+          </>
         );
       }
     },
@@ -128,7 +128,7 @@ export const columns: ColumnDef<Installment>[] = [
             <Link
               href={`/transactions/transaction-details/${installment.slug}`}
             >
-              <SquareArrowOutUpRight />
+              <Pencil />
             </Link>
           </Button>
 

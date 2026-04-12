@@ -28,7 +28,12 @@ export function DeleteTransactionButton({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" disabled={isPaid}>
+        <Button
+          variant="ghost"
+          size="icon"
+          disabled={isPaid}
+          className="hover:text-destructive"
+        >
           <Trash2 />
         </Button>
       </DialogTrigger>

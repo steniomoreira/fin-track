@@ -29,7 +29,7 @@ export function PaymentTransactionButton({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="text-primary hover:text-primary"
+          className="text-primary hover:text-primary/80"
           variant={'ghost'}
           size="icon"
           disabled={isPaid}

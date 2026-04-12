@@ -46,7 +46,7 @@ export function CategoryCard({
       </Button>
 
       <div className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold capitalize">{category.name}</h2>
+        <h2 className="text-lg font-semibold">{category.name}</h2>
         <p className="mb-4 text-xs text-white/70">{category.description}</p>
       </div>
 

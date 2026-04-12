@@ -27,7 +27,7 @@ export function DeleteCategory({ category, onClose }: DeleteCategoryProps) {
         <p className="px-2 text-center">
           Tem certeza que deseja deletar a categoria{' '}
           <span className="block">
-            <strong className="text-lg capitalize">{category.name}</strong> ?
+            <strong className="text-lg">{category.name}</strong> ?
           </span>
         </p>
       </div>

@@ -93,10 +93,8 @@ export function TransactionsDetails({ installment }: TransactionsDetailsProps) {
               {installment.transaction.creditCard?.name ? (
                 <>
                   <CreditCard className="text-muted-foreground/80" />
-                  <span className="capitalize">
-                    {installment.transaction.creditCard.name} *****{' '}
-                    {installment.transaction.creditCard?.cardNumber.slice(-4)}
-                  </span>
+                  {installment.transaction.creditCard.name} *****{' '}
+                  {installment.transaction.creditCard?.cardNumber.slice(-4)}
                 </>
               ) : (
                 <>

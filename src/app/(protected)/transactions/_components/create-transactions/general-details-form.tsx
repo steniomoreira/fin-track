@@ -104,16 +104,12 @@ export function GeneralDetailsForm({
                 onValueChange={field.onChange}
                 disabled={isLoading}
               >
-                <SelectTrigger className="w-full capitalize">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Qual categoria?" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
-                    <SelectItem
-                      key={category.id}
-                      value={category.id}
-                      className="capitalize"
-                    >
+                    <SelectItem key={category.id} value={category.id}>
                       {category.name}
                     </SelectItem>
                   ))}
@@ -174,16 +170,12 @@ export function GeneralDetailsForm({
                   onValueChange={field.onChange}
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="w-full capitalize">
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Qual cartão de crédito?" />
                   </SelectTrigger>
                   <SelectContent>
                     {creditCards.map((card) => (
-                      <SelectItem
-                        key={card.id}
-                        value={card.id}
-                        className="capitalize"
-                      >
+                      <SelectItem key={card.id} value={card.id}>
                         {card.name} ***** {card.cardNumber.slice(-4)}
                       </SelectItem>
                     ))}

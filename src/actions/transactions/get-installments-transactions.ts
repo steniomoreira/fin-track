@@ -19,10 +19,8 @@ export async function getInstallmentsTransactions(date?: Date) {
           lte: lastDay,
         },
       },
+      orderBy: [{ dueDate: 'asc' }, { id: 'asc' }],
       select: installmentSelect,
-      orderBy: {
-        dueDate: 'asc',
-      },
     });
 
     return { installments };
