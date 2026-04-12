@@ -85,7 +85,6 @@ export function UpsertCategoriesForm({
                     autoFocus
                     placeholder="Ex: Entretenimento"
                     disabled={isLoading}
-                    className="capitalize"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

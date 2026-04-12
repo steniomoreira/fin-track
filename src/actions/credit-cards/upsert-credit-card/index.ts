@@ -22,7 +22,7 @@ export async function upsertCreditCard(data: UpsertCreditCardParams) {
   try {
     const existCreditCard = await db.creditCard.findFirst({
       where: {
-        name: data.name.toLowerCase(),
+        name: { equals: data.name, mode: 'insensitive' },
         ...(isEditing && { id: { not: data.id } }),
       },
     });
@@ -37,13 +37,13 @@ export async function upsertCreditCard(data: UpsertCreditCardParams) {
     await db.creditCard.upsert({
       where: { id: data.id ?? '' },
       update: {
-        name: data.name.toLowerCase(),
+        name: data.name,
         cardNumber: data.cardNumber,
         color: data.color,
       },
       create: {
         userId: session.user.id,
-        name: data.name.toLowerCase(),
+        name: data.name,
         cardNumber: data.cardNumber,
         color: data.color,
       },

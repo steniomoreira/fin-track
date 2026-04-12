@@ -74,7 +74,6 @@ export function UpsertCreditCardForm({
                 autoFocus
                 placeholder="Ex: Nubank"
                 disabled={isLoading}
-                className="capitalize"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

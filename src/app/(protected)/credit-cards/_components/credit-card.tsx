@@ -16,7 +16,7 @@ export function CreditCard({ creditCard }: CreditCardProps) {
         COLOR_MAP[creditCard.color as ColorName].bgColor
       } relative flex h-[180px] w-[300px] flex-col justify-between rounded-sm p-6`}
     >
-      <h2 className="text-lg font-semibold capitalize">{creditCard.name}</h2>
+      <h2 className="text-lg font-semibold">{creditCard.name}</h2>
       <p className="mb-4 text-xs font-semibold tracking-widest text-white/70">
         {formatCreditCardNumber(creditCard.cardNumber)}
       </p>

@@ -22,7 +22,7 @@ export async function upsertCategory(data: UpsertCategoryParams) {
   try {
     const existCategory = await db.category.findFirst({
       where: {
-        name: data.name.toLowerCase(),
+        name: { equals: data.name, mode: 'insensitive' },
         ...(isEditing && { id: { not: data.id } }),
       },
     });
@@ -37,14 +37,14 @@ export async function upsertCategory(data: UpsertCategoryParams) {
     await db.category.upsert({
       where: { id: data.id ?? '' },
       update: {
-        name: data.name.toLowerCase(),
+        name: data.name,
         description: data.description,
         icon: data.icon,
         color: data.color,
       },
       create: {
         userId: session.user.id,
-        name: data.name.toLowerCase(),
+        name: data.name,
         description: data.description,
         icon: data.icon,
         color: data.color,
