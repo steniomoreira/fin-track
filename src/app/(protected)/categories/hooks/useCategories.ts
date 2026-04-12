@@ -7,6 +7,16 @@ import { UpsertCategoryParams } from '@/actions/categories/upsett-categories/sch
 import { Category } from '@/types/categories/category';
 import { toastMessage, toastTypes } from '@/utils/toast-utils';
 
+interface HandleUpsertCategoryParams {
+  category: UpsertCategoryParams;
+  action: () => void;
+}
+
+interface DeleteCategoryByIdParams {
+  id: string;
+  action: () => void;
+}
+
 export function useCategories() {
   const [selectedCategory, setSelectedCategory] = useState<Category>();
   const [isPending, startTransition] = useTransition();
@@ -17,10 +27,10 @@ export function useCategories() {
     setSelectedCategory(category);
   }
 
-  async function handleUpsertCategory(
-    category: UpsertCategoryParams,
-    action: () => void
-  ) {
+  async function handleUpsertCategory({
+    category,
+    action,
+  }: HandleUpsertCategoryParams) {
     try {
       const response = await upsertCategory(category);
 
@@ -35,12 +45,16 @@ export function useCategories() {
     }
   }
 
-  function deleteCategoryById(id: string) {
+  function deleteCategoryById({ id, action }: DeleteCategoryByIdParams) {
     startTransition(async () => {
       try {
         const response = await deleteCategory({ id });
 
         toastMessage({ type: response.type, message: response.message });
+
+        if (response.type === toastTypes.SUCCESS) {
+          action();
+        }
       } catch (error) {
         console.error(error);
         toastMessage({

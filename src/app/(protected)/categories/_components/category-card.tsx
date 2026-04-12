@@ -1,13 +1,13 @@
 'use client';
 
-import { Loader, Pencil, Trash2, X } from 'lucide-react';
+import { Pencil, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
 import { ICON_MAP } from '@/constants/icons-constants';
 import { Category } from '@/types/categories/category';
 
-import { useCategories } from '../hooks/useCategories';
+import { DeleteCategoryButton } from './delete-category-button';
 
 interface CategoryCardProps {
   category: Category;
@@ -20,13 +20,11 @@ export function CategoryCard({
   categoryToEdit,
   onEdit,
 }: CategoryCardProps) {
-  const { isLoading, deleteCategoryById } = useCategories();
-
   const Icon = ICON_MAP[category.icon];
   const { contentColor } = COLOR_MAP[category.color as ColorName];
 
   const isActiveCard = categoryToEdit?.id === category.id;
-  const isDisabled = isLoading || isActiveCard;
+  const isDisabled = isActiveCard;
 
   return (
     <div
@@ -62,18 +60,7 @@ export function CategoryCard({
           <Pencil className="h-4 w-4" />
         </Button>
 
-        <Button
-          size="icon"
-          variant="ghost"
-          disabled={isDisabled}
-          onClick={() => deleteCategoryById(category.id)}
-        >
-          {isLoading ? (
-            <Loader className="text-destructive animate-spin" />
-          ) : (
-            <Trash2 className="text-destructive" />
-          )}
-        </Button>
+        <DeleteCategoryButton category={category} disabled={isDisabled} />
       </div>
     </div>
   );

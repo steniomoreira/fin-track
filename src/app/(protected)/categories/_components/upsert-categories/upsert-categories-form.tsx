@@ -38,8 +38,8 @@ export function UpsertCategoriesForm({
     defaultValues: {
       name: category?.name ?? '',
       description: category?.description ?? '',
-      icon: category?.icon ?? 'Home',
-      color: category?.color ?? 'blue',
+      icon: category?.icon ?? 'Tag',
+      color: category?.color ?? 'black',
     },
   });
 
@@ -53,7 +53,7 @@ export function UpsertCategoriesForm({
       id: category?.id,
     };
 
-    await handleUpsertCategory(categoryData, action);
+    await handleUpsertCategory({ category: categoryData, action });
   }
 
   return (
@@ -68,7 +68,7 @@ export function UpsertCategoriesForm({
       </Button>
 
       <CardHeader>
-        <CardTitle>Adicionar nova categoria</CardTitle>
+        <CardTitle>{`${category ? 'Editar ' + category.name : 'Adicionar nova categoria'} `}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -83,7 +83,7 @@ export function UpsertCategoriesForm({
                     {...field}
                     id="name"
                     autoFocus
-                    placeholder="Ex: Eletrônicos"
+                    placeholder="Ex: Entretenimento"
                     disabled={isLoading}
                   />
                   {fieldState.invalid && (
@@ -104,7 +104,7 @@ export function UpsertCategoriesForm({
                   <Textarea
                     {...field}
                     id="description"
-                    placeholder="Ex: Smartphones, notebooks, acessórios..."
+                    placeholder="Ex: Streaming, cinema, shows, eventos, hobbies..."
                     className="min-h-[100px] resize-none"
                     disabled={isLoading}
                   />
