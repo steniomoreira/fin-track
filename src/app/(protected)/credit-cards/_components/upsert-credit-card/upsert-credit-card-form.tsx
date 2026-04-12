@@ -51,7 +51,9 @@ export function UpsertCreditCardForm({
       }
     } catch (error) {
       console.error(error);
-      toast.error('Ocorreu um erro no processo de criação!');
+      toast.error(
+        `Ocorreu um erro no processo de ${creditCard ? 'atualização' : 'criação'} do cartão!`
+      );
     }
   }
 
@@ -73,6 +75,7 @@ export function UpsertCreditCardForm({
                 autoFocus
                 placeholder="Ex: Nubank"
                 disabled={isLoading}
+                className="capitalize"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

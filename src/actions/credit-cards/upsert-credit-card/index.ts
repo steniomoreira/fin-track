@@ -17,17 +17,33 @@ export async function upsertCreditCard(data: UpsertCreditCardParams) {
     throw new Error('Erro de validação');
   }
 
+  const isEditing = !!data.id;
+
   try {
+    const existCreditCard = await db.creditCard.findFirst({
+      where: {
+        name: data.name.toLowerCase(),
+        ...(isEditing && { id: { not: data.id } }),
+      },
+    });
+
+    if (existCreditCard) {
+      return {
+        type: toastTypes.WARNING,
+        message: 'Este cartão já foi cadastrado!',
+      };
+    }
+
     await db.creditCard.upsert({
       where: { id: data.id ?? '' },
       update: {
-        name: data.name,
+        name: data.name.toLowerCase(),
         cardNumber: data.cardNumber,
         color: data.color,
       },
       create: {
         userId: session.user.id,
-        name: data.name,
+        name: data.name.toLowerCase(),
         cardNumber: data.cardNumber,
         color: data.color,
       },
@@ -37,13 +53,13 @@ export async function upsertCreditCard(data: UpsertCreditCardParams) {
 
     return {
       type: toastTypes.SUCCESS,
-      message: 'Cartão criado com sucesso!',
+      message: `Cartão ${isEditing ? 'atualizado' : 'criado'} com sucesso!`,
     };
   } catch (error) {
     console.error(error);
     return {
       type: toastTypes.ERROR,
-      message: 'Ocorreu um erro no processo da criação do cartão!',
+      message: `Ocorreu um erro no processo da ${isEditing ? 'atualização' : 'criação'} do cartão!`,
     };
   }
 }

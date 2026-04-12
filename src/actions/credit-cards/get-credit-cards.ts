@@ -11,6 +11,7 @@ export async function getCreditCards() {
     const creditCards = await db.creditCard.findMany({
       where: { userId: session.user.id },
       select: creditCardSelect,
+      orderBy: { createdAt: 'asc' },
     });
 
     return { creditCards };
