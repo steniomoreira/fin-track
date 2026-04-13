@@ -15,7 +15,11 @@ export const schemaUpdateTransactionForm = z.object({
     .number()
     .min(0.01, { message: 'Informe um valor' })
     .transform((value) => currencyToCents(value)),
-  creditCardId: z.cuid('Selecione um cartão de crédito').nullable().optional(),
+  creditCardId: z
+    .cuid('Selecione um cartão de crédito')
+    .nullable()
+    .optional()
+    .or(z.literal('')),
 });
 
 export type UpdateTransactionFormData = z.infer<

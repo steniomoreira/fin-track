@@ -25,7 +25,8 @@ export const schemaCreateTransactionForm = z
     creditCardId: z
       .cuid('Selecione um cartão de crédito')
       .nullable()
-      .optional(),
+      .optional()
+      .or(z.literal('')),
   })
   .refine((data) => data.numberInstallments > 1 || !data.installmentGroup, {
     message: 'Deve ter no mímino 2 parcelas de lançamento',
