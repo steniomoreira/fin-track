@@ -90,8 +90,6 @@ export function PaymentTransactionForm({
 
   const isIncome = installment.transaction.type === INCOME;
 
-  console.log(installment.dueDate);
-
   return (
     <>
       <DialogHeader>
