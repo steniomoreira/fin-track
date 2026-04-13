@@ -22,6 +22,7 @@ export async function upsertCategory(data: UpsertCategoryParams) {
   try {
     const existCategory = await db.category.findFirst({
       where: {
+        userId: session.user.id,
         name: { equals: data.name, mode: 'insensitive' },
         ...(isEditing && { id: { not: data.id } }),
       },

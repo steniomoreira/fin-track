@@ -22,6 +22,7 @@ export async function upsertCreditCard(data: UpsertCreditCardParams) {
   try {
     const existCreditCard = await db.creditCard.findFirst({
       where: {
+        userId: session.user.id,
         name: { equals: data.name, mode: 'insensitive' },
         ...(isEditing && { id: { not: data.id } }),
       },
