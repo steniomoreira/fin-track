@@ -15,7 +15,7 @@ export const schemaCreateTransaction = z.object({
     .positive({ message: 'Deve ter 1 parcela ou mais' }),
   installmentGroup: z.boolean(),
   categoryId: z.cuid('Categoria inválida'),
-  creditCardId: z.cuid('ID inválido').nullable().optional(),
+  creditCardId: z.cuid('ID inválido').nullable().optional().or(z.literal('')),
 });
 
 export type CreateTransactionParams = z.infer<typeof schemaCreateTransaction>;

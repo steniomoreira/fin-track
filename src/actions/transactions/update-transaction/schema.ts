@@ -13,7 +13,7 @@ export const schemaUpdateTransaction = z.object({
   type: z.enum([INCOME, EXPENSE], { message: 'Tipo de transação inválido' }),
   dueDate: z.date(),
   amount: z.number().min(1, { message: 'Informe um valor' }),
-  creditCardId: z.cuid('ID inválido').nullable().optional(),
+  creditCardId: z.cuid('ID inválido').nullable().optional().or(z.literal('')),
 });
 
 export type UpdateTransactionParams = z.infer<typeof schemaUpdateTransaction>;
