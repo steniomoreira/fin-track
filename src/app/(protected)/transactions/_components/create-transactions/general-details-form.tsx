@@ -147,6 +147,7 @@ export function GeneralDetailsForm({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
+                    defaultMonth={field.value}
                     locale={ptBR}
                     showOutsideDays={false}
                     required

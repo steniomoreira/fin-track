@@ -90,6 +90,8 @@ export function PaymentTransactionForm({
 
   const isIncome = installment.transaction.type === INCOME;
 
+  console.log(installment.dueDate);
+
   return (
     <>
       <DialogHeader>
@@ -126,8 +128,8 @@ export function PaymentTransactionForm({
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
+                      defaultMonth={field.value}
                       locale={ptBR}
-                      defaultMonth={installment.dueDate}
                       showOutsideDays={false}
                       required
                     />
