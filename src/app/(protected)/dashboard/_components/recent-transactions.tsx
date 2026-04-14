@@ -112,7 +112,7 @@ export function RecentTransactions({
                               getTotalPaid(installment.payments)
                           )}
 
-                          <span className="text-muted-foreground text-[10px]">
+                          <span className="text-muted-foreground block text-[10px]">
                             Pago{' '}
                             <span className="font-semibold">
                               {formatCurrency(
