@@ -1,4 +1,4 @@
-import { PiggyBank, TrendingDown, TrendingUp } from 'lucide-react';
+import { TrendingDown, TrendingUp } from 'lucide-react';
 
 import { getInstallmentsTransactions } from '@/actions/transactions/get-installments-transactions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 
 import { Header } from './_components/header';
 import { RecentTransactions } from './_components/recent-transactions';
+import { Summary } from './_components/summary';
 
 type Params = {
   month: Date;
@@ -25,34 +26,7 @@ export default async function DashboardPage({
     <PageContainer>
       <Header />
 
-      <Card className="bg-primary">
-        <CardContent className="flex items-center justify-between gap-4">
-          <div className="space-y-2">
-            <h2 className="text-sm">Saldo atual</h2>
-            <p className="text-4xl font-bold text-white">R$ 50.999,00</p>
-            <div className="flex items-center gap-2">
-              <span className="bg-muted/20 flex items-center gap-2 rounded-md p-1 text-green-500">
-                <TrendingUp className="h-5 w-5" />
-                +10%
-              </span>
-              <p className="text-sm">em relação ao mês passado</p>
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <Card className="flex h-32 w-32 flex-col items-center justify-center gap-1 bg-white/10">
-              <PiggyBank className="h-8 w-8" />
-              <p className="text-xs">Economias</p>
-              <p className="text-base font-bold">R$ 10.9K</p>
-            </Card>
-            <Card className="flex h-32 w-32 flex-col items-center justify-center gap-1 bg-white/10">
-              <TrendingUp className="h-8 w-8" />
-              <p className="text-xs">Investimentos</p>
-              <p className="text-base font-bold">R$ 50K</p>
-            </Card>
-          </div>
-        </CardContent>
-      </Card>
+      <Summary installments={installments} />
 
       <div className="grid grid-cols-[300px_1fr] gap-6">
         <div className="flex flex-col gap-6">
