@@ -1,12 +1,35 @@
-import { PiggyBank, TrendingDown, TrendingUp } from 'lucide-react';
+import { CreditCard, PiggyBank, TrendingDown, TrendingUp } from 'lucide-react';
+import Link from 'next/link';
 
+import { getInstallmentsTransactions } from '@/actions/transactions/get-installments-transactions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PageContainer } from '@/components/ui/page-container';
 import { Progress } from '@/components/ui/progress';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
+import { ICON_MAP } from '@/constants/icons-constants';
+import { EXPENSE, status } from '@/constants/transactions-contants';
+import { formatCurrency } from '@/utils/currency-utils';
+import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
+import { BadgeStatusTransactions } from '../_components/badge-status-transactions';
+import { getTotalPaid } from '../transactions/utils/payments-utils';
 import { Header } from './_components/header';
+import { RecentTransactions } from './_components/recent-transactions';
 
-function DashboardPage() {
+type Params = {
+  month: Date;
+};
+
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Params;
+}) {
+  const { month } = await searchParams;
+
+  const { installments } = await getInstallmentsTransactions(month);
+
   return (
     <PageContainer>
       <Header />
@@ -137,10 +160,10 @@ function DashboardPage() {
           </Card>
         </div>
 
-        <div>table here</div>
+        <div>
+          <RecentTransactions installments={installments} month={month} />
+        </div>
       </div>
     </PageContainer>
   );
 }
-
-export default DashboardPage;
