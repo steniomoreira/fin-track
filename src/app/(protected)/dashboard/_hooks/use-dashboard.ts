@@ -20,9 +20,15 @@ export function useDashboard(installments: Installment[]) {
     );
   }, [installments]);
 
+  const total = totalIncome + totalExpense;
+  const incomePercentage = total > 0 ? Math.round((totalIncome / total) * 100) : 0;
+  const expensePercentage = total > 0 ? Math.round((totalExpense / total) * 100) : 0;
+
   return {
     totalBalance,
     totalIncome,
     totalExpense,
+    incomePercentage,
+    expensePercentage,
   };
 }

@@ -1,13 +1,13 @@
-import { TrendingDown, TrendingUp } from 'lucide-react';
-
 import { getInstallmentsTransactions } from '@/actions/transactions/get-installments-transactions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PageContainer } from '@/components/ui/page-container';
 import { Progress } from '@/components/ui/progress';
+import { EXPENSE, INCOME } from '@/constants/transactions-contants';
 
 import { Header } from './_components/header';
 import { RecentTransactions } from './_components/recent-transactions';
 import { Summary } from './_components/summary';
+import { SummaryCard } from './_components/summary-card';
 
 type Params = {
   month: Date;
@@ -30,53 +30,8 @@ export default async function DashboardPage({
 
       <div className="grid grid-cols-[300px_1fr] gap-6">
         <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-muted-foreground flex items-center gap-4 text-sm">
-                <span
-                  className={`inline-block rounded-md bg-green-600/20 p-1 text-green-600`}
-                >
-                  <TrendingUp className="h-6 w-6" />
-                </span>
-                Total de Receitas
-                <span className="flex-1 text-right text-sm text-green-600">
-                  +45%
-                </span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-2xl font-bold">R$ 50.999,00</p>
-              <Progress
-                value={45}
-                id="income"
-                indicatorClassName="bg-green-800"
-              />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-muted-foreground flex items-center gap-4 text-sm">
-                <span
-                  className={`bg-destructive/20 text-destructive inline-block rounded-md p-1`}
-                >
-                  <TrendingDown className="h-6 w-6" />
-                </span>
-                Total de Despesas
-                <span className="text-destructive flex-1 text-right text-sm">
-                  +55%
-                </span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-2xl font-bold">R$ 50.999,00</p>
-              <Progress
-                value={45}
-                id="expense"
-                indicatorClassName="bg-destructive"
-              />
-            </CardContent>
-          </Card>
+          <SummaryCard installments={installments} type={INCOME} />
+          <SummaryCard installments={installments} type={EXPENSE} />
 
           <Card>
             <CardHeader>

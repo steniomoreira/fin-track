@@ -13,8 +13,6 @@ interface SummaryProps {
 export function Summary({ installments }: SummaryProps) {
   const { totalBalance } = useDashboard(installments);
 
-  console.log(totalBalance);
-
   return (
     <Card className="bg-primary">
       <CardContent className="flex items-center justify-between gap-4">

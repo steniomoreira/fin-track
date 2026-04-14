@@ -33,7 +33,12 @@ export function RecentTransactions({
   month,
 }: RecentTransactionsProps) {
   const [showAll, setShowAll] = useState(false);
-  const visibleInstallments = showAll ? installments : installments.slice(0, 2);
+
+  const MAX_INSTALLMENTS_TO_SHOW = 10;
+
+  const visibleInstallments = showAll
+    ? installments
+    : installments.slice(0, MAX_INSTALLMENTS_TO_SHOW);
 
   return (
     <Card className="gap-0">
@@ -127,7 +132,7 @@ export function RecentTransactions({
           </TableBody>
         </Table>
       </CardContent>
-      {installments.length > 2 && (
+      {installments.length > MAX_INSTALLMENTS_TO_SHOW && (
         <CardFooter className="flex justify-center border-t pt-0">
           <Button
             variant="secondary"
