@@ -25,7 +25,7 @@ export default async function DashboardPage({
 
   return (
     <PageContainer>
-      <Header />
+      <Header month={month} />
 
       {isEmptyArray(installments) ? (
         <NoResultTransactions />

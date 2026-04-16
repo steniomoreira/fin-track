@@ -7,9 +7,16 @@ import {
   HeadlineTitle,
 } from '@/components/ui/headline';
 import { useAppSession } from '@/contexts/session-context';
+import { getMonthByDate } from '@/utils/date-utils';
 
-export function Header() {
+interface HeaderProps {
+  month: Date;
+}
+
+export function Header({ month }: HeaderProps) {
   const { user } = useAppSession();
+
+  const { firstDay: date } = getMonthByDate(month);
 
   return (
     <header className="flex items-end justify-between">
@@ -20,7 +27,7 @@ export function Header() {
         </HeadlineDescription>
       </Headline>
 
-      <SelectMonthByDate date={new Date()} />
+      <SelectMonthByDate date={date} />
     </header>
   );
 }
