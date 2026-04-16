@@ -9,6 +9,7 @@ import { RecentTransactions } from './_components/recent-transactions';
 import { Summary } from './_components/summary';
 import { SummaryCard } from './_components/summary-card';
 import { SummaryCategories } from './_components/summary-categories';
+import { SummaryCreditCards } from './_components/summary-credit-cards';
 
 type Params = {
   month: Date;
@@ -37,6 +38,7 @@ export default async function DashboardPage({
             <div className="flex flex-col gap-6">
               <SummaryCard installments={installments} type={INCOME} />
               <SummaryCard installments={installments} type={EXPENSE} />
+              <SummaryCreditCards installments={installments} />
               <SummaryCategories installments={installments} />
             </div>
             <div>
