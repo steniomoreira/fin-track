@@ -1,4 +1,4 @@
-import { PiggyBank, TrendingUp } from 'lucide-react';
+import { PiggyBank, TrendingDown, TrendingUp } from 'lucide-react';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Installment } from '@/types/transactions/installment';
@@ -11,22 +11,32 @@ interface SummaryProps {
 }
 
 export function Summary({ installments }: SummaryProps) {
-  const { totalBalance } = useDashboard(installments);
+  const { totalBalance, totalRealized, realizedPercentage } =
+    useDashboard(installments);
 
   return (
     <Card className="bg-primary">
       <CardContent className="flex items-center justify-between gap-4">
         <div className="space-y-2">
-          <h2 className="text-sm">Saldo atual</h2>
+          <h2 className="text-sm">Saldo atual previsto</h2>
           <p className="text-4xl font-bold text-white">
             {formatCurrency(totalBalance)}
           </p>
           <div className="flex items-center gap-2">
-            <span className="bg-muted/20 flex items-center gap-2 rounded-md p-1 text-green-500">
-              <TrendingUp className="h-5 w-5" />
-              +10%
-            </span>
-            <p className="text-sm">em relação ao mês anterior</p>
+            {totalBalance > 0 ? (
+              <span className="bg-muted/50 flex items-center gap-2 rounded-md p-1 text-green-500">
+                <TrendingUp className="h-5 w-5" />
+                {realizedPercentage}%
+              </span>
+            ) : (
+              <span className="bg-muted/50 text-destructive flex items-center gap-2 rounded-md p-1">
+                <TrendingDown className="h-5 w-5" />
+                {realizedPercentage}%
+              </span>
+            )}
+            <p className="text-sm">
+              já realizado {formatCurrency(totalRealized)}
+            </p>
           </div>
         </div>
 
