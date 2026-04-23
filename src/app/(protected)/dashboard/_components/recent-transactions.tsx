@@ -73,7 +73,7 @@ export function RecentTransactions({
                       <div className="text-foreground flex flex-col gap-1">
                         <span>
                           {installment.transaction.description}{' '}
-                          {installment.transaction.numberInstallments &&
+                          {installment.transaction.numberInstallments > 1 &&
                             `(${installment.number}/${installment.transaction.numberInstallments})`}
                         </span>
                         <div className="text-muted-foreground flex items-center gap-2 text-xs">
@@ -93,9 +93,7 @@ export function RecentTransactions({
                       <div className="flex items-center gap-1">
                         <CreditCard className="h-4 w-4" />
                         {installment.transaction.creditCard.name} *****{' '}
-                        {installment.transaction.creditCard.cardNumber.slice(
-                          -4
-                        )}
+                        {installment.transaction.creditCard.lastFourDigits}
                       </div>
                     )}
                   </TableCell>
