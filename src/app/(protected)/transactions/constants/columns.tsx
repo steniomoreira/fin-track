@@ -40,7 +40,7 @@ export const columns: ColumnDef<Installment>[] = [
             <Icon className="h-4 w-4" />
           </span>
           {installment.transaction.description}{' '}
-          {installment.transaction.numberInstallments &&
+          {installment.transaction.numberInstallments > 1 &&
             `(${installment.number}/${installment.transaction.numberInstallments})`}
         </div>
       );
@@ -66,7 +66,7 @@ export const columns: ColumnDef<Installment>[] = [
       if (creditCard) {
         return (
           <>
-            {creditCard.name} ***** {creditCard.cardNumber.slice(-4)}
+            {creditCard.name} ***** {creditCard.lastFourDigits}
           </>
         );
       }

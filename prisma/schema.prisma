@@ -146,7 +146,6 @@ model Transaction {
   creditCardId String? @map("credit_card_id")
 
   description        String
-  amount             Int
   type               TransactionType @default(EXPENSE)
   numberInstallments Int             @default(1) @map("number_installments")
   isRecurring        Boolean         @default(false) @map("is_recurring")

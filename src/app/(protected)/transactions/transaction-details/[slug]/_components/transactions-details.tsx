@@ -65,7 +65,7 @@ export function TransactionsDetails({ installment }: TransactionsDetailsProps) {
           <span className="text-3xl font-bold">
             {formatCurrency(installment.amount || 0)}
             <span className="text-muted-foreground ml-2 text-sm font-semibold">
-              {installment.transaction.numberInstallments &&
+              {installment.transaction.numberInstallments > 1 &&
                 `(${installment.number}/${installment.transaction.numberInstallments})`}
             </span>
           </span>
@@ -94,7 +94,7 @@ export function TransactionsDetails({ installment }: TransactionsDetailsProps) {
                 <>
                   <CreditCard className="text-muted-foreground/80" />
                   {installment.transaction.creditCard.name} *****{' '}
-                  {installment.transaction.creditCard?.cardNumber.slice(-4)}
+                  {installment.transaction.creditCard?.lastFourDigits}
                 </>
               ) : (
                 <>
