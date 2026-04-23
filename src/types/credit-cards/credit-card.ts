@@ -3,7 +3,7 @@ import { Prisma } from '@/generated/prisma/client';
 export const creditCardSelect = {
   id: true,
   name: true,
-  cardNumber: true,
+  lastFourDigits: true,
   color: true,
 } satisfies Prisma.CreditCardSelect;
 
