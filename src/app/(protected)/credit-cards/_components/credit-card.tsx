@@ -18,7 +18,7 @@ export function CreditCard({ creditCard }: CreditCardProps) {
     >
       <h2 className="text-lg font-semibold">{creditCard.name}</h2>
       <p className="mb-4 text-xs font-semibold tracking-widest text-white/70">
-        {formatCreditCardNumber(creditCard.cardNumber)}
+        **** **** **** {formatCreditCardNumber(creditCard.lastFourDigits)}
       </p>
 
       <div className="absolute right-2.5 bottom-2.5 flex items-center">
