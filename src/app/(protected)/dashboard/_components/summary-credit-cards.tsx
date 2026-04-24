@@ -36,11 +36,11 @@ export function SummaryCreditCards({ installments }: SummaryCreditCardsProps) {
                 <div className="flex flex-col">
                   <p className="text-sm font-medium">{card.name}</p>
                   <p className="text-muted-foreground text-xs">
-                    **** {card.cardNumber.slice(-4)}
+                    **** {card.lastFourDigits}
                   </p>
                 </div>
               </div>
-              <p className="text-sm font-semibold text-destructive">
+              <p className="text-destructive text-sm font-semibold">
                 - {formatCurrency(card.amount)}
               </p>
             </div>
