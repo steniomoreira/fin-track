@@ -10,13 +10,13 @@ export function useSummaryCreditCards(installments: Installment[]) {
       .reduce(
         (acc, installment) => {
           const creditCardId = installment.transaction.creditCard!.id;
-          const { name, cardNumber } = installment.transaction.creditCard!;
+          const { name, lastFourDigits } = installment.transaction.creditCard!;
 
           if (!acc[creditCardId]) {
             acc[creditCardId] = {
               id: creditCardId,
               name,
-              cardNumber,
+              lastFourDigits,
               amount: 0,
             };
           }
@@ -24,7 +24,10 @@ export function useSummaryCreditCards(installments: Installment[]) {
           acc[creditCardId].amount += installment.amount;
           return acc;
         },
-        {} as Record<string, { id: string; name: string; cardNumber: string; amount: number }>
+        {} as Record<
+          string,
+          { id: string; name: string; lastFourDigits: string; amount: number }
+        >
       );
 
     return Object.values(summary).sort((a, b) => b.amount - a.amount);
