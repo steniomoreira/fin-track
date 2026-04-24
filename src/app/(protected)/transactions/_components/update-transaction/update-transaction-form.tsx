@@ -282,7 +282,7 @@ export function UpdateTransactionForm({
                     <SelectContent>
                       {creditCards.map((card) => (
                         <SelectItem key={card.id} value={card.id}>
-                          {card.name} ***** {card.cardNumber.slice(-4)}
+                          {card.name} ***** {card.lastFourDigits}
                         </SelectItem>
                       ))}
                     </SelectContent>

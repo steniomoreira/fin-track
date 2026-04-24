@@ -5,6 +5,9 @@ export const creditCardSelect = {
   name: true,
   lastFourDigits: true,
   color: true,
+  closingDay: true,
+  dueDay: true,
+  limit: true,
 } satisfies Prisma.CreditCardSelect;
 
 export type CreditCard = Prisma.CreditCardGetPayload<{
