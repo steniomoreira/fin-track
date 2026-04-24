@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader, Plus } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
-import { PatternFormat } from 'react-number-format';
+import { NumericFormat, PatternFormat } from 'react-number-format';
 import { toast } from 'sonner';
 
 import { upsertCreditCard } from '@/actions/credit-cards/upsert-credit-card';
@@ -18,6 +18,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { CreditCard } from '@/types/credit-cards/credit-card';
+import { centsToCurrency } from '@/utils/currency-utils';
 import { toastMessage, toastTypes } from '@/utils/toast-utils';
 
 import { schemaUpsertCreditCardForm, UpsertCreditCardFormData } from './schema';
@@ -35,8 +36,13 @@ export function UpsertCreditCardForm({
     resolver: zodResolver(schemaUpsertCreditCardForm),
     defaultValues: {
       name: creditCard?.name ?? '',
-      cardNumber: creditCard?.cardNumber ?? '',
+      lastFourDigits: creditCard?.lastFourDigits
+        ? '**** **** **** ' + creditCard.lastFourDigits
+        : '',
       color: creditCard?.color ?? 'black',
+      closingDay: creditCard?.closingDay ?? 31,
+      dueDay: creditCard?.dueDay ?? 8,
+      limit: creditCard?.limit ? centsToCurrency(creditCard.limit) : undefined,
     },
   });
 
@@ -81,23 +87,120 @@ export function UpsertCreditCardForm({
         />
 
         <Controller
-          name="cardNumber"
+          name="lastFourDigits"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field>
-              <FieldLabel htmlFor="cardNumber">Número do cartão</FieldLabel>
-              <PatternFormat
-                id="cardNumber"
-                format="#### #### #### ####"
-                customInput={Input}
-                placeholder="Ex: 1234 5678 9012 3456"
-                disabled={isLoading}
+              <FieldLabel htmlFor="lastFourDigits">
+                Número do cartão (4 últimos dígitos)
+              </FieldLabel>
+
+              <div className="relative flex items-center">
+                <span className="text-muted-foreground absolute pl-2.5">
+                  **** **** ****
+                </span>
+                <PatternFormat
+                  className="pl-[108px]"
+                  id="lastFourDigits"
+                  format="####"
+                  customInput={Input}
+                  placeholder="Ex: 1234"
+                  disabled={isLoading}
+                  value={field.value}
+                  onValueChange={(values) => {
+                    field.onChange(values.value);
+                  }}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                />
+              </div>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <div className="grid grid-cols-2 gap-6">
+          <Controller
+            name="dueDay"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel htmlFor="dueDay">Dia de vencimento</FieldLabel>
+                <Input
+                  id="dueDay"
+                  type="number"
+                  min={1}
+                  max={31}
+                  {...field}
+                  onChange={(e) => {
+                    const raw = e.target.valueAsNumber;
+
+                    if (raw) {
+                      field.onChange(raw);
+                    }
+                  }}
+                  disabled={isLoading}
+                  className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="closingDay"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel htmlFor="closingDay">Dia de fechamento</FieldLabel>
+                <Input
+                  id="closingDay"
+                  type="number"
+                  min={1}
+                  max={31}
+                  {...field}
+                  onChange={(e) => {
+                    const raw = e.target.valueAsNumber;
+
+                    if (raw) {
+                      field.onChange(raw);
+                    }
+                  }}
+                  disabled={isLoading}
+                  className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </div>
+
+        <Controller
+          name="limit"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor="limit">
+                R$ Limite do cartão (opcional)
+              </FieldLabel>
+              <NumericFormat
+                id="limit"
                 value={field.value}
-                onValueChange={(values) => {
-                  field.onChange(values.value);
-                }}
-                onBlur={field.onBlur}
-                name={field.name}
+                onValueChange={(value) => field.onChange(value.floatValue)}
+                thousandSeparator="."
+                decimalSeparator=","
+                decimalScale={2}
+                fixedDecimalScale
+                prefix="R$ "
+                allowNegative={false}
+                allowLeadingZeros={false}
+                customInput={Input}
+                disabled={isLoading}
+                placeholder="Ex: 5.000,00"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

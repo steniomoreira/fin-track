@@ -39,14 +39,20 @@ export async function upsertCreditCard(data: UpsertCreditCardParams) {
       where: { id: data.id ?? '' },
       update: {
         name: data.name,
-        cardNumber: data.cardNumber,
+        lastFourDigits: data.lastFourDigits,
         color: data.color,
+        closingDay: data.closingDay,
+        dueDay: data.dueDay,
+        limit: data.limit,
       },
       create: {
         userId: session.user.id,
         name: data.name,
-        cardNumber: data.cardNumber,
+        lastFourDigits: data.lastFourDigits,
         color: data.color,
+        closingDay: data.closingDay,
+        dueDay: data.dueDay,
+        limit: data.limit,
       },
     });
 
