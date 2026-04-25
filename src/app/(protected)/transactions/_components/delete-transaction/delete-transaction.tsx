@@ -28,11 +28,14 @@ export function DeleteTransaction({
   const [isPending, startTransition] = useTransition();
 
   function onSubmit() {
+    '';
     startTransition(async () => {
       try {
         const response = await deleteTransaction({
           installmentId: installment.id,
           transactionId: installment.transaction.id,
+          invoiceId: installment.invoiceId ?? undefined,
+          amount: installment.amount,
         });
 
         toastMessage({ type: response.type, message: response.message });

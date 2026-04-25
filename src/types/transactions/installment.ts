@@ -8,6 +8,7 @@ export const installmentSelect = {
   amount: true,
   status: true,
   number: true,
+  invoiceId: true,
   transaction: {
     select: {
       id: true,
