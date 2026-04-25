@@ -17,11 +17,20 @@ export async function deleteTransaction(data: DeleteTransactionParams) {
     throw new Error('Erro de validação');
   }
 
-  const { installmentId, transactionId } = result.data;
+  const { installmentId, transactionId, invoiceId, amount } = result.data;
 
   const userId = session.user.id;
 
   try {
+    if (invoiceId) {
+      await db.invoice.update({
+        where: { id: invoiceId },
+        data: {
+          totalAmount: { decrement: amount },
+        },
+      });
+    }
+
     const transaction = await db.transaction.findUnique({
       where: {
         id: transactionId,
