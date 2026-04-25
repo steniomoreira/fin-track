@@ -1,6 +1,6 @@
 'use server';
 
-import { addMonths, endOfDay } from 'date-fns';
+import { addMonths, endOfDay, getDate, setDate, startOfMonth } from 'date-fns';
 import { revalidatePath } from 'next/cache';
 
 import { db } from '@/lib/prisma';
@@ -23,52 +23,79 @@ export async function createTransaction(data: CreateTransactionParams) {
 
   const userId = session.user.id;
 
-  const transactionsMapped = await Promise.all(
-    Array(data.numberInstallments)
-      .fill(null)
-      .map(async (_, index) => {
-        const dueDate = addMonths(new Date(endOfDay(data.dueDate)), index);
-
-        return {
-          userId,
-          description: data.description,
-          type: data.type,
-          categoryId: data.categoryId,
-          numberInstallments: data.numberInstallments,
-          creditCardId: data.creditCardId,
-          installments: {
-            userId,
-            dueDate,
-            amount: data.amount,
-            number: 1,
-            hashCode: generateHash(),
-            slug: await createInstallmentSlug(
-              `${data.description}-${date_MMMM_yyyy(dueDate)}`
-            ),
-          },
-        };
+  const creditCard = data.creditCardId
+    ? await db.creditCard.findUnique({
+        where: { id: data.creditCardId },
       })
-  );
+    : null;
 
-  const installments = await Promise.all(
-    Array(data.numberInstallments)
-      .fill(null)
-      .map(async (_, index) => {
-        const dueDate = addMonths(new Date(endOfDay(data.dueDate)), index);
-        const slug = await createInstallmentSlug(
-          `${data.description}-${date_MMMM_yyyy(dueDate)}`
-        );
+  const transactionsMapped = !data.installmentGroup
+    ? await Promise.all(
+        Array(data.numberInstallments)
+          .fill(null)
+          .map(async (_, index) => {
+            const baseDate = addMonths(new Date(endOfDay(data.dueDate)), index);
+            const { installmentDueDate, invoiceId } =
+              await handleInvoiceAndDueDate(
+                baseDate,
+                creditCard,
+                userId,
+                data.amount
+              );
 
-        return {
-          userId,
-          dueDate,
-          slug,
-          hashCode: generateHash(),
-          amount: data.amount,
-          number: index + 1,
-        };
-      })
-  );
+            return {
+              userId,
+              description: data.description,
+              type: data.type,
+              categoryId: data.categoryId,
+              numberInstallments: data.numberInstallments,
+              creditCardId: data.creditCardId,
+              installments: {
+                userId,
+                dueDate: installmentDueDate,
+                amount: data.amount,
+                number: 1,
+                invoiceId,
+                hashCode: generateHash(),
+                slug: await createInstallmentSlug(
+                  `${data.description}-${date_MMMM_yyyy(installmentDueDate)}`
+                ),
+              },
+            };
+          })
+      )
+    : [];
+
+  const installments = data.installmentGroup
+    ? await Promise.all(
+        Array(data.numberInstallments)
+          .fill(null)
+          .map(async (_, index) => {
+            const baseDate = addMonths(new Date(endOfDay(data.dueDate)), index);
+            const { installmentDueDate, invoiceId } =
+              await handleInvoiceAndDueDate(
+                baseDate,
+                creditCard,
+                userId,
+                data.amount
+              );
+
+            const slug = await createInstallmentSlug(
+              `${data.description}-${date_MMMM_yyyy(installmentDueDate)}`
+            );
+
+            return {
+              userId,
+              dueDate: installmentDueDate,
+              slug,
+              invoiceId,
+              hashCode: generateHash(),
+              amount: data.amount,
+              number: index + 1,
+            };
+          })
+      )
+    : [];
 
   try {
     const {
@@ -115,6 +142,7 @@ export async function createTransaction(data: CreateTransactionParams) {
                     dueDate: installments.dueDate,
                     amount: installments.amount,
                     number: installments.number,
+                    invoiceId: installments.invoiceId,
                   },
                 },
               },
@@ -136,4 +164,56 @@ export async function createTransaction(data: CreateTransactionParams) {
       message: 'Ocorreu um erro no processo da criação da transação!',
     };
   }
+}
+
+async function handleInvoiceAndDueDate(
+  baseDate: Date,
+  creditCard: { id: string; closingDay: number; dueDay: number } | null,
+  userId: string,
+  amount: number
+) {
+  let installmentDueDate = baseDate;
+  let invoiceId: string | undefined = undefined;
+
+  if (creditCard) {
+    const { closingDay, dueDay } = creditCard;
+    let referenceMonth = startOfMonth(baseDate);
+    let closingDate = setDate(baseDate, closingDay);
+
+    if (getDate(baseDate) > closingDay) {
+      referenceMonth = addMonths(referenceMonth, 1);
+      closingDate = addMonths(closingDate, 1);
+    }
+
+    let invoiceDueDate = setDate(referenceMonth, dueDay);
+    if (dueDay < closingDay) {
+      invoiceDueDate = addMonths(invoiceDueDate, 1);
+    }
+
+    installmentDueDate = invoiceDueDate;
+
+    const invoice = await db.invoice.upsert({
+      where: {
+        creditCardId_referenceMonth: {
+          creditCardId: creditCard.id,
+          referenceMonth,
+        },
+      },
+      update: {
+        totalAmount: { increment: amount },
+      },
+      create: {
+        userId,
+        creditCardId: creditCard.id,
+        referenceMonth,
+        closingDate,
+        dueDate: invoiceDueDate,
+        totalAmount: amount,
+      },
+    });
+
+    invoiceId = invoice.id;
+  }
+
+  return { installmentDueDate, invoiceId };
 }
