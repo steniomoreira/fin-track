@@ -36,6 +36,7 @@ export function DeleteTransaction({
           transactionId: installment.transaction.id,
           invoiceId: installment.invoiceId ?? undefined,
           amount: installment.amount,
+          type: installment.transaction.type,
         });
 
         toastMessage({ type: response.type, message: response.message });
