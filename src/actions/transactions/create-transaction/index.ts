@@ -220,9 +220,10 @@ async function handleInvoiceAndDueDate(
         },
       },
       update: {
-        totalAmount: {
-          increment: type === TransactionType.EXPENSE ? amount : -amount,
-        },
+        totalAmount:
+          type === TransactionType.INCOME
+            ? { decrement: amount }
+            : { increment: amount },
       },
       create: {
         userId,

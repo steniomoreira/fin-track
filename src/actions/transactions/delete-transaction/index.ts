@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
+import { INCOME } from '@/constants/transactions-contants';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { toastTypes } from '@/utils/toast-utils';
@@ -17,7 +18,7 @@ export async function deleteTransaction(data: DeleteTransactionParams) {
     throw new Error('Erro de validação');
   }
 
-  const { installmentId, transactionId, invoiceId, amount } = result.data;
+  const { installmentId, transactionId, invoiceId, amount, type } = result.data;
 
   const userId = session.user.id;
 
@@ -26,7 +27,8 @@ export async function deleteTransaction(data: DeleteTransactionParams) {
       await db.invoice.update({
         where: { id: invoiceId },
         data: {
-          totalAmount: { decrement: amount },
+          totalAmount:
+            type === INCOME ? { increment: amount } : { decrement: amount },
         },
       });
     }
