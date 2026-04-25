@@ -1,6 +1,13 @@
 'use server';
 
-import { addMonths, endOfDay, getDate, setDate, startOfMonth } from 'date-fns';
+import {
+  addMonths,
+  endOfDay,
+  getDate,
+  getDaysInMonth,
+  setDate,
+  startOfMonth,
+} from 'date-fns';
 import { revalidatePath } from 'next/cache';
 
 import { db } from '@/lib/prisma';
@@ -178,16 +185,22 @@ async function handleInvoiceAndDueDate(
   if (creditCard) {
     const { closingDay, dueDay } = creditCard;
     let referenceMonth = startOfMonth(baseDate);
-    let closingDate = setDate(baseDate, closingDay);
+    
+    let currentClosingDay = Math.min(closingDay, getDaysInMonth(referenceMonth));
+    let closingDate = setDate(referenceMonth, currentClosingDay);
 
-    if (getDate(baseDate) > closingDay) {
+    if (getDate(baseDate) > currentClosingDay) {
       referenceMonth = addMonths(referenceMonth, 1);
-      closingDate = addMonths(closingDate, 1);
+      currentClosingDay = Math.min(closingDay, getDaysInMonth(referenceMonth));
+      closingDate = setDate(referenceMonth, currentClosingDay);
     }
 
-    let invoiceDueDate = setDate(referenceMonth, dueDay);
+    let currentDueDay = Math.min(dueDay, getDaysInMonth(referenceMonth));
+    let invoiceDueDate = setDate(referenceMonth, currentDueDay);
     if (dueDay < closingDay) {
       invoiceDueDate = addMonths(invoiceDueDate, 1);
+      currentDueDay = Math.min(dueDay, getDaysInMonth(invoiceDueDate));
+      invoiceDueDate = setDate(invoiceDueDate, currentDueDay);
     }
 
     installmentDueDate = invoiceDueDate;
