@@ -10,6 +10,7 @@ import {
 } from 'date-fns';
 import { revalidatePath } from 'next/cache';
 
+import { upsertInvoice } from '@/actions/invoices/upsert-invoice';
 import { TransactionType } from '@/generated/prisma/enums';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
@@ -31,26 +32,24 @@ export async function createTransaction(data: CreateTransactionParams) {
 
   const userId = session.user.id;
 
-  const creditCard = data.creditCardId
-    ? await db.creditCard.findUnique({
-        where: { id: data.creditCardId },
-      })
-    : null;
-
   const transactionsMapped = !data.installmentGroup
     ? await Promise.all(
         Array(data.numberInstallments)
           .fill(null)
           .map(async (_, index) => {
             const baseDate = addMonths(new Date(endOfDay(data.dueDate)), index);
-            const { installmentDueDate, invoiceId } =
-              await handleInvoiceAndDueDate(
-                baseDate,
-                creditCard,
-                userId,
-                data.amount,
-                data.type
-              );
+
+            const { installmentDueDate, invoiceId } = data.creditCardId
+              ? await upsertInvoice({
+                  baseDate,
+                  type: data.type,
+                  amount: data.amount,
+                  creditCardId: data.creditCardId,
+                })
+              : {
+                  installmentDueDate: baseDate,
+                  invoiceId: null,
+                };
 
             return {
               userId,
@@ -61,7 +60,7 @@ export async function createTransaction(data: CreateTransactionParams) {
               creditCardId: data.creditCardId,
               installments: {
                 userId,
-                dueDate: installmentDueDate,
+                dueDate: baseDate,
                 amount: data.amount,
                 number: 1,
                 invoiceId,
@@ -81,14 +80,17 @@ export async function createTransaction(data: CreateTransactionParams) {
           .fill(null)
           .map(async (_, index) => {
             const baseDate = addMonths(new Date(endOfDay(data.dueDate)), index);
-            const { installmentDueDate, invoiceId } =
-              await handleInvoiceAndDueDate(
-                baseDate,
-                creditCard,
-                userId,
-                data.amount,
-                data.type
-              );
+            const { installmentDueDate, invoiceId } = data.creditCardId
+              ? await upsertInvoice({
+                  baseDate,
+                  type: data.type,
+                  amount: data.amount,
+                  creditCardId: data.creditCardId,
+                })
+              : {
+                  installmentDueDate: baseDate,
+                  invoiceId: null,
+                };
 
             const slug = await createInstallmentSlug(
               `${data.description}-${date_MMMM_yyyy(installmentDueDate)}`
@@ -96,7 +98,7 @@ export async function createTransaction(data: CreateTransactionParams) {
 
             return {
               userId,
-              dueDate: installmentDueDate,
+              dueDate: baseDate,
               slug,
               invoiceId,
               hashCode: generateHash(),
@@ -174,69 +176,4 @@ export async function createTransaction(data: CreateTransactionParams) {
       message: 'Ocorreu um erro no processo da criação da transação!',
     };
   }
-}
-
-async function handleInvoiceAndDueDate(
-  baseDate: Date,
-  creditCard: { id: string; closingDay: number; dueDay: number } | null,
-  userId: string,
-  amount: number,
-  type: TransactionType
-) {
-  let installmentDueDate = baseDate;
-  let invoiceId: string | undefined = undefined;
-
-  if (creditCard) {
-    const { closingDay, dueDay } = creditCard;
-    let referenceMonth = startOfMonth(baseDate);
-
-    let currentClosingDay = Math.min(
-      closingDay,
-      getDaysInMonth(referenceMonth)
-    );
-    let closingDate = setDate(referenceMonth, currentClosingDay);
-
-    if (getDate(baseDate) > currentClosingDay) {
-      referenceMonth = addMonths(referenceMonth, 1);
-      currentClosingDay = Math.min(closingDay, getDaysInMonth(referenceMonth));
-      closingDate = setDate(referenceMonth, currentClosingDay);
-    }
-
-    let currentDueDay = Math.min(dueDay, getDaysInMonth(referenceMonth));
-    let invoiceDueDate = setDate(referenceMonth, currentDueDay);
-    if (dueDay < closingDay) {
-      invoiceDueDate = addMonths(invoiceDueDate, 1);
-      currentDueDay = Math.min(dueDay, getDaysInMonth(invoiceDueDate));
-      invoiceDueDate = setDate(invoiceDueDate, currentDueDay);
-    }
-
-    installmentDueDate = invoiceDueDate;
-
-    const invoice = await db.invoice.upsert({
-      where: {
-        creditCardId_referenceMonth: {
-          creditCardId: creditCard.id,
-          referenceMonth,
-        },
-      },
-      update: {
-        totalAmount:
-          type === TransactionType.INCOME
-            ? { decrement: amount }
-            : { increment: amount },
-      },
-      create: {
-        userId,
-        creditCardId: creditCard.id,
-        referenceMonth,
-        closingDate,
-        dueDate: invoiceDueDate,
-        totalAmount: type === TransactionType.EXPENSE ? amount : -amount,
-      },
-    });
-
-    invoiceId = invoice.id;
-  }
-
-  return { installmentDueDate, invoiceId };
 }
