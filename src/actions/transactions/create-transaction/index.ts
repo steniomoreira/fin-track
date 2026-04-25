@@ -1,17 +1,9 @@
 'use server';
 
-import {
-  addMonths,
-  endOfDay,
-  getDate,
-  getDaysInMonth,
-  setDate,
-  startOfMonth,
-} from 'date-fns';
+import { addMonths } from 'date-fns';
 import { revalidatePath } from 'next/cache';
 
 import { upsertInvoice } from '@/actions/invoices/upsert-invoice';
-import { TransactionType } from '@/generated/prisma/enums';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { date_MMMM_yyyy } from '@/utils/date-utils';
@@ -37,7 +29,16 @@ export async function createTransaction(data: CreateTransactionParams) {
         Array(data.numberInstallments)
           .fill(null)
           .map(async (_, index) => {
-            const baseDate = addMonths(new Date(endOfDay(data.dueDate)), index);
+            const baseDate = addMonths(
+              new Date(
+                Date.UTC(
+                  data.dueDate.getFullYear(),
+                  data.dueDate.getMonth(),
+                  data.dueDate.getDate()
+                )
+              ),
+              index
+            );
 
             const { installmentDueDate, invoiceId } = data.creditCardId
               ? await upsertInvoice({
@@ -79,7 +80,17 @@ export async function createTransaction(data: CreateTransactionParams) {
         Array(data.numberInstallments)
           .fill(null)
           .map(async (_, index) => {
-            const baseDate = addMonths(new Date(endOfDay(data.dueDate)), index);
+            const baseDate = addMonths(
+              new Date(
+                Date.UTC(
+                  data.dueDate.getFullYear(),
+                  data.dueDate.getMonth(),
+                  data.dueDate.getDate()
+                )
+              ),
+              index
+            );
+
             const { installmentDueDate, invoiceId } = data.creditCardId
               ? await upsertInvoice({
                   baseDate,
