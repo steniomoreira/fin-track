@@ -121,13 +121,13 @@ export function UpsertCreditCardForm({
 
         <div className="grid grid-cols-2 gap-6">
           <Controller
-            name="dueDay"
+            name="closingDay"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field>
-                <FieldLabel htmlFor="dueDay">Dia de vencimento</FieldLabel>
+                <FieldLabel htmlFor="closingDay">Dia de fechamento</FieldLabel>
                 <Input
-                  id="dueDay"
+                  id="closingDay"
                   type="number"
                   min={1}
                   max={31}
@@ -150,13 +150,13 @@ export function UpsertCreditCardForm({
           />
 
           <Controller
-            name="closingDay"
+            name="dueDay"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field>
-                <FieldLabel htmlFor="closingDay">Dia de fechamento</FieldLabel>
+                <FieldLabel htmlFor="dueDay">Dia de vencimento</FieldLabel>
                 <Input
-                  id="closingDay"
+                  id="dueDay"
                   type="number"
                   min={1}
                   max={31}
