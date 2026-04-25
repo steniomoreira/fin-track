@@ -28,7 +28,6 @@ export function DeleteTransaction({
   const [isPending, startTransition] = useTransition();
 
   function onSubmit() {
-    '';
     startTransition(async () => {
       try {
         const response = await deleteTransaction({
