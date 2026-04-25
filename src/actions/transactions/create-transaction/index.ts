@@ -10,6 +10,7 @@ import {
 } from 'date-fns';
 import { revalidatePath } from 'next/cache';
 
+import { TransactionType } from '@/generated/prisma/enums';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { date_MMMM_yyyy } from '@/utils/date-utils';
@@ -47,7 +48,8 @@ export async function createTransaction(data: CreateTransactionParams) {
                 baseDate,
                 creditCard,
                 userId,
-                data.amount
+                data.amount,
+                data.type
               );
 
             return {
@@ -84,7 +86,8 @@ export async function createTransaction(data: CreateTransactionParams) {
                 baseDate,
                 creditCard,
                 userId,
-                data.amount
+                data.amount,
+                data.type
               );
 
             const slug = await createInstallmentSlug(
@@ -177,7 +180,8 @@ async function handleInvoiceAndDueDate(
   baseDate: Date,
   creditCard: { id: string; closingDay: number; dueDay: number } | null,
   userId: string,
-  amount: number
+  amount: number,
+  type: TransactionType
 ) {
   let installmentDueDate = baseDate;
   let invoiceId: string | undefined = undefined;
@@ -185,8 +189,11 @@ async function handleInvoiceAndDueDate(
   if (creditCard) {
     const { closingDay, dueDay } = creditCard;
     let referenceMonth = startOfMonth(baseDate);
-    
-    let currentClosingDay = Math.min(closingDay, getDaysInMonth(referenceMonth));
+
+    let currentClosingDay = Math.min(
+      closingDay,
+      getDaysInMonth(referenceMonth)
+    );
     let closingDate = setDate(referenceMonth, currentClosingDay);
 
     if (getDate(baseDate) > currentClosingDay) {
@@ -213,7 +220,9 @@ async function handleInvoiceAndDueDate(
         },
       },
       update: {
-        totalAmount: { increment: amount },
+        totalAmount: {
+          increment: type === TransactionType.EXPENSE ? amount : -amount,
+        },
       },
       create: {
         userId,
@@ -221,7 +230,7 @@ async function handleInvoiceAndDueDate(
         referenceMonth,
         closingDate,
         dueDate: invoiceDueDate,
-        totalAmount: amount,
+        totalAmount: type === TransactionType.EXPENSE ? amount : -amount,
       },
     });
 
