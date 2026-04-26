@@ -1,16 +1,9 @@
 'use server';
 
-import {
-  addMonths,
-  getDate,
-  getDaysInMonth,
-  setDate,
-  startOfMonth,
-} from 'date-fns';
-
 import { TransactionType } from '@/generated/prisma/enums';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
+import { calculateInvoiceDates } from '@/utils/invoice-utils';
 
 import { CreateInvoiceParams, schemaCreateInvoice } from './schema';
 
@@ -37,31 +30,13 @@ export async function upsertInvoice(data: CreateInvoiceParams) {
 
   try {
     const { closingDay, dueDay } = creditCard;
-    let referenceMonth = startOfMonth(baseDate);
 
-    let installmentDueDate = baseDate;
-
-    let currentClosingDay = Math.min(
-      closingDay,
-      getDaysInMonth(referenceMonth)
-    );
-    let closingDate = setDate(referenceMonth, currentClosingDay);
-
-    if (getDate(baseDate) > currentClosingDay) {
-      referenceMonth = addMonths(referenceMonth, 1);
-      currentClosingDay = Math.min(closingDay, getDaysInMonth(referenceMonth));
-      closingDate = setDate(referenceMonth, currentClosingDay);
-    }
-
-    let currentDueDay = Math.min(dueDay, getDaysInMonth(referenceMonth));
-    let invoiceDueDate = setDate(referenceMonth, currentDueDay);
-    if (dueDay < closingDay) {
-      invoiceDueDate = addMonths(invoiceDueDate, 1);
-      currentDueDay = Math.min(dueDay, getDaysInMonth(invoiceDueDate));
-      invoiceDueDate = setDate(invoiceDueDate, currentDueDay);
-    }
-
-    installmentDueDate = invoiceDueDate;
+    const { closingDate, invoiceDueDate, referenceMonth } =
+      calculateInvoiceDates({
+        baseDate,
+        closingDay,
+        dueDay,
+      });
 
     const invoice = await db.invoice.upsert({
       where: {
@@ -86,7 +61,7 @@ export async function upsertInvoice(data: CreateInvoiceParams) {
       },
     });
 
-    return { installmentDueDate, invoiceId: invoice.id };
+    return { invoiceDueDate, invoiceId: invoice.id };
   } catch (error) {
     console.error(error);
     throw new Error('Ocorreu um erro no processo de criar a fatura!');

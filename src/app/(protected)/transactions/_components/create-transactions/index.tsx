@@ -40,7 +40,7 @@ export function CreateTransaction({
     resolver: zodResolver(schemaCreateTransactionForm),
     defaultValues: {
       description: '',
-      dueDate: new Date(),
+      dueDate: new Date(new Date().setHours(0, 0, 0, 0)),
       type: EXPENSE,
       amount: 0,
       numberInstallments: 1,
