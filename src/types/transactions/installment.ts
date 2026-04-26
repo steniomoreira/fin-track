@@ -27,6 +27,7 @@ export const installmentSelect = {
         select: {
           id: true,
           name: true,
+          closingDay: true,
           lastFourDigits: true,
         },
       },
