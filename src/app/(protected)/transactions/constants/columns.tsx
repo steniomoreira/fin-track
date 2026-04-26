@@ -13,7 +13,7 @@ import { Installment } from '@/types/transactions/installment';
 import { formatCurrency } from '@/utils/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
-import { BadgeStatusTransactions } from '../../_components/badge-status-transactions';
+import { BadgeStatus } from '../../_components/badge-status';
 import { DeleteTransactionButton } from '../_components/delete-transaction/delete-transaction-button';
 import { PaymentTransactionButton } from '../_components/payment-transaction/payment-transaction-button';
 import { getTotalPaid } from '../utils/payments-utils';
@@ -76,9 +76,10 @@ export const columns: ColumnDef<Installment>[] = [
     accessorKey: 'status',
     header: 'Status',
     cell: ({ row }) => (
-      <BadgeStatusTransactions
+      <BadgeStatus
         status={row.getValue('status')}
         dueDate={row.original.dueDate}
+        closingDay={row.original.transaction?.creditCard?.closingDay}
       />
     ),
   },

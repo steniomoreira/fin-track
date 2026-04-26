@@ -8,7 +8,7 @@ import {
   Wallet,
 } from 'lucide-react';
 
-import { BadgeStatusTransactions } from '@/app/(protected)/_components/badge-status-transactions';
+import { BadgeStatus } from '@/app/(protected)/_components/badge-status';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
@@ -47,7 +47,7 @@ export function TransactionsDetails({ installment }: TransactionsDetailsProps) {
           )}
 
           <div className="flex flex-col items-end gap-3">
-            <BadgeStatusTransactions
+            <BadgeStatus
               status={installment.status}
               fullDescription
               dueDate={installment.dueDate}
