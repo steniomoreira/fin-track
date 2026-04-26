@@ -40,7 +40,7 @@ export async function createTransaction(data: CreateTransactionParams) {
               index
             );
 
-            const { installmentDueDate, invoiceId } = data.creditCardId
+            const { invoiceDueDate, invoiceId } = data.creditCardId
               ? await upsertInvoice({
                   baseDate,
                   type: data.type,
@@ -48,7 +48,7 @@ export async function createTransaction(data: CreateTransactionParams) {
                   creditCardId: data.creditCardId,
                 })
               : {
-                  installmentDueDate: baseDate,
+                  invoiceDueDate: baseDate,
                   invoiceId: null,
                 };
 
@@ -67,7 +67,7 @@ export async function createTransaction(data: CreateTransactionParams) {
                 invoiceId,
                 hashCode: generateHash(),
                 slug: await createInstallmentSlug(
-                  `${data.description}-${date_MMMM_yyyy(installmentDueDate)}`
+                  `${data.description}-${date_MMMM_yyyy(invoiceDueDate)}`
                 ),
               },
             };
@@ -91,7 +91,7 @@ export async function createTransaction(data: CreateTransactionParams) {
               index
             );
 
-            const { installmentDueDate, invoiceId } = data.creditCardId
+            const { invoiceDueDate, invoiceId } = data.creditCardId
               ? await upsertInvoice({
                   baseDate,
                   type: data.type,
@@ -99,12 +99,12 @@ export async function createTransaction(data: CreateTransactionParams) {
                   creditCardId: data.creditCardId,
                 })
               : {
-                  installmentDueDate: baseDate,
+                  invoiceDueDate: baseDate,
                   invoiceId: null,
                 };
 
             const slug = await createInstallmentSlug(
-              `${data.description}-${date_MMMM_yyyy(installmentDueDate)}`
+              `${data.description}-${date_MMMM_yyyy(invoiceDueDate)}`
             );
 
             return {
