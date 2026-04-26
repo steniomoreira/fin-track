@@ -105,9 +105,9 @@ model Invoice {
   userId       String @map("user_id")
   creditCardId String @map("credit_card_id")
 
-  referenceMonth DateTime      @map("reference_month")
-  closingDate    DateTime      @map("closing_date")
-  dueDate        DateTime      @map("due_date")
+  referenceMonth DateTime      @map("reference_month") @db.Date
+  closingDate    DateTime      @map("closing_date") @db.Date
+  dueDate        DateTime      @map("due_date") @db.Date
   status         InvoiceStatus @default(OPEN)
   totalAmount    Int           @default(0) @map("total_amount")
   paidAmount     Int           @default(0) @map("paid_amount")
@@ -131,7 +131,7 @@ model InvoicePayment {
   id        String   @id @default(cuid())
   invoiceId String   @map("invoice_id")
   amount    Int
-  date      DateTime @default(now())
+  date      DateTime @default(now()) @db.Date
 
   invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 
@@ -173,7 +173,7 @@ model Installment {
   hashCode String @map("hash_code")
   slug     String @unique
 
-  dueDate DateTime
+  dueDate DateTime      @db.Date
   amount  Int
   number  Int           @default(1)
   status  PaymentStatus @default(PENDING)
@@ -194,7 +194,7 @@ model Payment {
   id            String   @id @default(cuid())
   userId        String   @map("user_id")
   installmentId String?  @map("installment_id")
-  date          DateTime @default(now())
+  date          DateTime @default(now()) @db.Date
   amount        Int
 
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
