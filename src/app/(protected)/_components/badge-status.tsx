@@ -1,10 +1,14 @@
 import { Badge } from '@/components/ui/badge';
+import { invoiceStatus } from '@/constants/invoices-constants';
 import { status as statusTransaction } from '@/constants/transactions-contants';
+import { checkIsLate } from '@/utils/date-utils';
+import { checkIsInvoiceClosed } from '@/utils/invoice-utils';
 
-interface BadgeStatusTransactionsProps {
-  status: 'LATE' | 'PAID' | 'PARTIAL' | 'PENDING';
+interface BadgeStatusProps {
+  status: keyof typeof statusConfig;
   fullDescription?: boolean;
-  dueDate?: Date;
+  dueDate: Date;
+  closingDay?: number;
 }
 
 const statusConfig = {
@@ -28,21 +32,39 @@ const statusConfig = {
     label: 'Pendente',
     fullLabel: 'Pagamento pendente',
   },
+  OPEN: {
+    color: 'bg-yellow-600/10 text-yellow-600',
+    label: 'Aberta',
+    fullLabel: 'Fatura aberta',
+  },
+  CLOSED: {
+    color: 'bg-black/50 text-gray-300',
+    label: 'Fechada',
+    fullLabel: 'Fatura fechada',
+  },
 };
 
-export function BadgeStatusTransactions({
+export function BadgeStatus({
   status,
   fullDescription = false,
   dueDate,
-}: BadgeStatusTransactionsProps) {
-  const isLate = !!dueDate && dueDate < new Date();
+  closingDay,
+}: BadgeStatusProps) {
+  const isLate = checkIsLate(dueDate);
+
+  const isInvoiceClosed = closingDay
+    ? checkIsInvoiceClosed(dueDate, closingDay)
+    : false;
 
   const isPartialLate = isLate && status === statusTransaction.PARTIAL;
 
   const resolvedStatus =
-    isLate && status === statusTransaction.PENDING
+    isLate &&
+    (status === statusTransaction.PENDING || status === invoiceStatus.OPEN)
       ? statusTransaction.LATE
-      : status;
+      : isInvoiceClosed
+        ? invoiceStatus.CLOSED
+        : status;
 
   const { color, label, fullLabel } = statusConfig[resolvedStatus];
 

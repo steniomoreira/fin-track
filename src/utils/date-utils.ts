@@ -3,7 +3,7 @@ import { ptBR } from 'date-fns/locale';
 
 import { MonthRange } from '@/types/month-range';
 
-function utcDate(date: Date): Date {
+export function utcDate(date: Date): Date {
   return new Date(date.getTime() + date.getTimezoneOffset() * 60_000);
 }
 
@@ -36,4 +36,16 @@ export function getMonthByDate(date?: Date | string | MonthRange): MonthRange {
   }
 
   return date;
+}
+
+export function checkIsLate(dueDate: Date | null | undefined): boolean {
+  if (!dueDate) return false;
+
+  const todayUTC = utcDate(new Date());
+  const due = new Date(dueDate);
+
+  todayUTC.setUTCHours(0, 0, 0, 0);
+  due.setUTCHours(0, 0, 0, 0);
+
+  return todayUTC > due;
 }

@@ -20,7 +20,7 @@ import { Installment } from '@/types/transactions/installment';
 import { formatCurrency } from '@/utils/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
-import { BadgeStatusTransactions } from '../../_components/badge-status-transactions';
+import { BadgeStatus } from '../../_components/badge-status';
 import { getTotalPaid } from '../../transactions/utils/payments-utils';
 
 interface RecentTransactionsProps {
@@ -85,7 +85,7 @@ export function RecentTransactions({
                     </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground min-w-[200px] space-y-2 text-xs">
-                    <BadgeStatusTransactions
+                    <BadgeStatus
                       status={installment.status}
                       dueDate={installment.dueDate}
                     />
