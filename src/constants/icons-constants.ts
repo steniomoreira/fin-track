@@ -1,9 +1,12 @@
 import {
   Briefcase,
+  Building2,
   Car,
   Clapperboard,
+  CreditCard,
   Gift,
   GraduationCap,
+  Handshake,
   HeartPulse,
   Home,
   Lightbulb,
@@ -12,9 +15,11 @@ import {
   PiggyBank,
   Plane,
   Shirt,
+  ShoppingCart,
   SoapDispenserDroplet,
   Tag,
   Utensils,
+  Wrench,
 } from 'lucide-react';
 
 export const ICON_MAP: Record<string, LucideIcon> = {
@@ -33,6 +38,11 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   Gift,
   SoapDispenserDroplet,
   Tag,
+  CreditCard,
+  ShoppingCart,
+  Wrench,
+  Building2,
+  Handshake,
 };
 
 export type IconName = keyof typeof ICON_MAP;
