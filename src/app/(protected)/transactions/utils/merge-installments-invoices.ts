@@ -1,6 +1,7 @@
 import { EXPENSE } from '@/constants/transactions-contants';
 import { Invoice } from '@/types/invoices/invoice';
 import { Installment } from '@/types/transactions/installment';
+import { generateHash } from '@/utils/hash-utils';
 
 export function mergeInstallmentsAndInvoices(
   installments: Installment[],
@@ -11,23 +12,25 @@ export function mergeInstallmentsAndInvoices(
   );
 
   const invoiceInstallments: Installment[] = invoices.map((invoice) => {
+    const hashCode = generateHash();
+
     return {
       id: invoice.id,
       dueDate: invoice.dueDate,
-      hashCode: `invoice-${invoice.id}`,
-      slug: `invoice-${invoice.id}`,
+      hashCode,
+      slug: `invoice-${hashCode}`,
       amount: invoice.totalAmount,
       status: invoice.status,
       number: 1,
       invoiceId: invoice.id,
       transaction: {
-        id: `tx-invoice-${invoice.id}`,
+        id: `tx-invoice-${hashCode}`,
         description: invoice.creditCard.name,
         type: EXPENSE,
         numberInstallments: 1,
         category: {
-          id: `cat-invoice-${invoice.id}`,
-          name: 'Fatura',
+          id: `cat-invoice-${hashCode}`,
+          name: 'Cartão de crédito',
           icon: 'CreditCard',
           color: invoice.creditCard.color,
         },

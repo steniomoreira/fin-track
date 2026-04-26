@@ -1,3 +1,5 @@
+import { utcDate } from './date-utils';
+
 interface CalculateInvoiceDatesParams {
   baseDate: Date;
   closingDay: number;
@@ -55,7 +57,7 @@ export function calculateInvoiceDates({
     dueDay,
     getDaysInMonthUTC(referenceYearUTC, referenceMonthUTC)
   );
-  
+
   let invoiceDueDate = new Date(
     Date.UTC(referenceYearUTC, referenceMonthUTC, currentDueDay)
   );
@@ -72,10 +74,34 @@ export function calculateInvoiceDates({
       dueDay,
       getDaysInMonthUTC(dueYearUTC, dueMonthUTC)
     );
-    invoiceDueDate = new Date(
-      Date.UTC(dueYearUTC, dueMonthUTC, currentDueDay)
-    );
+    invoiceDueDate = new Date(Date.UTC(dueYearUTC, dueMonthUTC, currentDueDay));
   }
 
   return { closingDate, referenceMonth, invoiceDueDate };
+}
+
+export function checkIsInvoiceClosed(
+  dueDate: Date,
+  closingDay: number
+): boolean {
+  const today = new Date();
+  const todayUTC = utcDate(today);
+  todayUTC.setUTCHours(0, 0, 0, 0);
+
+  const due = new Date(dueDate);
+
+  let closingMonth = due.getUTCMonth();
+  let closingYear = due.getUTCFullYear();
+
+  if (closingDay > due.getUTCDate()) {
+    closingMonth -= 1;
+    if (closingMonth < 0) {
+      closingMonth = 11;
+      closingYear -= 1;
+    }
+  }
+
+  const closingDate = new Date(Date.UTC(closingYear, closingMonth, closingDay));
+
+  return todayUTC >= closingDate && todayUTC < due;
 }
