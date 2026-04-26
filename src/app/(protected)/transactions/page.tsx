@@ -1,3 +1,4 @@
+import { getInvoices } from '@/actions/invoices/get-invoices';
 import { getInstallmentsTransactions } from '@/actions/transactions/get-installments-transactions';
 import { SelectMonthByDate } from '@/components/select-month-by-date';
 import { DataTable } from '@/components/table/data-table';
@@ -11,6 +12,7 @@ import { getMonthByDate } from '@/utils/date-utils';
 
 import { AddTransactionButton } from './_components/add-transaction-button';
 import { columns } from './constants/columns';
+import { mergeInstallmentsAndInvoices } from './utils/merge-installments-invoices';
 
 type Params = {
   month: Date;
@@ -24,6 +26,9 @@ export default async function TransactionsPage({
   const { month } = await searchParams;
 
   const { installments } = await getInstallmentsTransactions(month);
+  const { invoices } = await getInvoices(month);
+
+  const tableData = mergeInstallmentsAndInvoices(installments, invoices);
 
   const { firstDay: date } = getMonthByDate(month);
 
@@ -43,7 +48,7 @@ export default async function TransactionsPage({
 
       <SelectMonthByDate date={date} variant="outline" />
 
-      <DataTable columns={columns} data={installments} />
+      <DataTable columns={columns} data={tableData} />
     </PageContainer>
   );
 }
