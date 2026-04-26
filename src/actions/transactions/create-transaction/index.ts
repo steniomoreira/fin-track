@@ -1,17 +1,13 @@
 'use server';
 
-import { addMonths } from 'date-fns';
 import { revalidatePath } from 'next/cache';
 
-import { upsertInvoice } from '@/actions/invoices/upsert-invoice';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
-import { date_MMMM_yyyy } from '@/utils/date-utils';
-import { generateHash } from '@/utils/hash-utils';
 import { toastTypes } from '@/utils/toast-utils';
 
 import { CreateTransactionParams, schemaCreateTransaction } from './schema';
-import { createInstallmentSlug } from './slug';
+import { generateBaseInstallments } from './utils';
 
 export async function createTransaction(data: CreateTransactionParams) {
   const session = await requireSession();
@@ -24,100 +20,38 @@ export async function createTransaction(data: CreateTransactionParams) {
 
   const userId = session.user.id;
 
+  const baseInstallments = await generateBaseInstallments(data);
+
   const transactionsMapped = !data.installmentGroup
-    ? await Promise.all(
-        Array(data.numberInstallments)
-          .fill(null)
-          .map(async (_, index) => {
-            const baseDate = addMonths(
-              new Date(
-                Date.UTC(
-                  data.dueDate.getFullYear(),
-                  data.dueDate.getMonth(),
-                  data.dueDate.getDate()
-                )
-              ),
-              index
-            );
-
-            const { invoiceDueDate, invoiceId } = data.creditCardId
-              ? await upsertInvoice({
-                  baseDate,
-                  type: data.type,
-                  amount: data.amount,
-                  creditCardId: data.creditCardId,
-                })
-              : {
-                  invoiceDueDate: baseDate,
-                  invoiceId: null,
-                };
-
-            return {
-              userId,
-              description: data.description,
-              type: data.type,
-              categoryId: data.categoryId,
-              numberInstallments: data.numberInstallments,
-              creditCardId: data.creditCardId,
-              installments: {
-                userId,
-                dueDate: baseDate,
-                amount: data.amount,
-                number: 1,
-                invoiceId,
-                hashCode: generateHash(),
-                slug: await createInstallmentSlug(
-                  `${data.description}-${date_MMMM_yyyy(invoiceDueDate)}`
-                ),
-              },
-            };
-          })
-      )
+    ? baseInstallments.map((installment) => ({
+        userId,
+        description: data.description,
+        type: data.type,
+        categoryId: data.categoryId,
+        numberInstallments: data.numberInstallments,
+        creditCardId: data.creditCardId,
+        installments: {
+          userId,
+          dueDate: installment.dueDate,
+          amount: installment.amount,
+          number: 1,
+          invoiceId: installment.invoiceId,
+          hashCode: installment.hashCode,
+          slug: installment.slug,
+        },
+      }))
     : [];
 
   const installments = data.installmentGroup
-    ? await Promise.all(
-        Array(data.numberInstallments)
-          .fill(null)
-          .map(async (_, index) => {
-            const baseDate = addMonths(
-              new Date(
-                Date.UTC(
-                  data.dueDate.getFullYear(),
-                  data.dueDate.getMonth(),
-                  data.dueDate.getDate()
-                )
-              ),
-              index
-            );
-
-            const { invoiceDueDate, invoiceId } = data.creditCardId
-              ? await upsertInvoice({
-                  baseDate,
-                  type: data.type,
-                  amount: data.amount,
-                  creditCardId: data.creditCardId,
-                })
-              : {
-                  invoiceDueDate: baseDate,
-                  invoiceId: null,
-                };
-
-            const slug = await createInstallmentSlug(
-              `${data.description}-${date_MMMM_yyyy(invoiceDueDate)}`
-            );
-
-            return {
-              userId,
-              dueDate: baseDate,
-              slug,
-              invoiceId,
-              hashCode: generateHash(),
-              amount: data.amount,
-              number: index + 1,
-            };
-          })
-      )
+    ? baseInstallments.map((installment) => ({
+        userId,
+        dueDate: installment.dueDate,
+        slug: installment.slug,
+        invoiceId: installment.invoiceId,
+        hashCode: installment.hashCode,
+        amount: installment.amount,
+        number: installment.number,
+      }))
     : [];
 
   try {
