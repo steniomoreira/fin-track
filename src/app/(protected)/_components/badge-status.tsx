@@ -58,13 +58,25 @@ export function BadgeStatus({
 
   const isPartialLate = isLate && status === statusTransaction.PARTIAL;
 
-  const resolvedStatus =
-    isLate &&
-    (status === statusTransaction.PENDING || status === invoiceStatus.OPEN)
-      ? statusTransaction.LATE
-      : isInvoiceClosed
-        ? invoiceStatus.CLOSED
-        : status;
+  const getResolvedStatus = () => {
+    const isPendingOrOpen =
+      status === statusTransaction.PENDING || status === invoiceStatus.OPEN;
+
+    if (isLate && isPendingOrOpen) {
+      return statusTransaction.LATE as keyof typeof statusConfig;
+    }
+
+    const isPaidOrPartial =
+      status === invoiceStatus.PARTIAL || status === invoiceStatus.PAID;
+
+    if (isInvoiceClosed && !isPaidOrPartial) {
+      return invoiceStatus.CLOSED as keyof typeof statusConfig;
+    }
+
+    return status;
+  };
+
+  const resolvedStatus = getResolvedStatus();
 
   const { color, label, fullLabel } = statusConfig[resolvedStatus];
 
