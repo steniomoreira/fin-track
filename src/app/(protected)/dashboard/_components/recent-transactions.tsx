@@ -61,6 +61,8 @@ export function RecentTransactions({
 
               const isExpense = installment.transaction.type === EXPENSE;
 
+              const hasInvoice = !!installment.invoice;
+
               return (
                 <TableRow key={installment.id} className="hover:bg-transparent">
                   <TableCell className="w-full font-medium">
@@ -86,9 +88,22 @@ export function RecentTransactions({
                   </TableCell>
                   <TableCell className="text-muted-foreground min-w-[200px] space-y-2 text-xs">
                     <BadgeStatus
-                      status={installment.status}
-                      dueDate={installment.dueDate}
+                      status={
+                        installment.invoice
+                          ? installment.invoice.status
+                          : installment.status
+                      }
+                      dueDate={
+                        installment.invoice
+                          ? installment.invoice.dueDate
+                          : installment.dueDate
+                      }
+                      closingDay={
+                        installment.transaction.creditCard?.closingDay
+                      }
+                      fullDescription={hasInvoice}
                     />
+
                     {installment.transaction.creditCard && (
                       <div className="flex items-center gap-1">
                         <CreditCard className="h-4 w-4" />

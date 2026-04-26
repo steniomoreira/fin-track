@@ -9,6 +9,12 @@ export const installmentSelect = {
   status: true,
   number: true,
   invoiceId: true,
+  invoice: {
+    select: {
+      status: true,
+      dueDate: true,
+    },
+  },
   transaction: {
     select: {
       id: true,
