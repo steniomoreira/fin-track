@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
 import { toast } from 'sonner';
 
+import { paymentInvoice } from '@/actions/invoices/payment-invoice';
 import { paymentTransaction } from '@/actions/transactions/payment-transaction';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -27,6 +28,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { invoiceStatus } from '@/constants/invoices-constants';
 import { INCOME, status } from '@/constants/transactions-contants';
 import { cn } from '@/lib/utils';
 import { Installment } from '@/types/transactions/installment';
@@ -63,22 +65,41 @@ export function PaymentTransactionForm({
 
   async function onSubmit(data: PaymentTransactionFormData) {
     try {
-      const response = await paymentTransaction({
-        installmentId: installment.id,
+      const totalPaid = getTotalPaid(installment.payments);
+      const isFullyPaid = data.paymentAmount + totalPaid === installment.amount;
+
+      const resolveStatus = (paid: boolean) =>
+        installment.invoiceId
+          ? paid
+            ? invoiceStatus.PAID
+            : invoiceStatus.PARTIAL
+          : paid
+            ? status.PAID
+            : status.PARTIAL;
+
+      const paymentStatus = resolveStatus(isFullyPaid);
+
+      const paymentPayload = {
         date: data.date,
         amount: data.paymentAmount,
-        status:
-          data.paymentAmount + getTotalPaid(installment.payments) ===
-          installment.amount
-            ? status.PAID
-            : status.PARTIAL,
-      });
+        status: paymentStatus,
+      };
 
-      toastMessage({ type: response.type, message: response.message });
+      const response = installment.invoiceId
+        ? await paymentInvoice({
+            invoiceId: installment.invoiceId,
+            ...paymentPayload,
+          })
+        : await paymentTransaction({
+            installmentId: installment.id,
+            ...paymentPayload,
+          });
 
       if (response.type === toastTypes.SUCCESS) {
         onClose();
       }
+
+      toastMessage({ type: response.type, message: response.message });
     } catch (error) {
       console.error(error);
       toast.error('Ocorreu um erro no processo de pagamento!');
