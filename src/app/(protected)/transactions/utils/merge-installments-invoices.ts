@@ -37,7 +37,11 @@ export function mergeInstallmentsAndInvoices(
         creditCard: invoice.creditCard,
       },
       payments: invoice.payments,
-    } as Installment;
+      invoice: {
+        status: invoice.status,
+        dueDate: invoice.dueDate,
+      },
+    } as unknown as Installment;
   });
 
   return [...filteredInstallments, ...invoiceInstallments].sort(
