@@ -15,6 +15,7 @@ import {
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
 import { ICON_MAP } from '@/constants/icons-constants';
+import { invoiceStatus } from '@/constants/invoices-constants';
 import { EXPENSE, status } from '@/constants/transactions-contants';
 import { Installment } from '@/types/transactions/installment';
 import { formatCurrency } from '@/utils/currency-utils';
@@ -61,7 +62,10 @@ export function RecentTransactions({
 
               const isExpense = installment.transaction.type === EXPENSE;
 
-              const hasInvoice = !!installment.invoice;
+              const hasInvoice =
+                !!installment.invoice &&
+                (installment.invoice.status === invoiceStatus.OPEN ||
+                  installment.invoice.status === invoiceStatus.CLOSED);
 
               return (
                 <TableRow key={installment.id} className="hover:bg-transparent">
