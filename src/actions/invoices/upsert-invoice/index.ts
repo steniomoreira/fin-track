@@ -41,7 +41,7 @@ export async function upsertInvoice(data: CreateInvoiceParams) {
       });
 
     const slug = createSlug(
-      `${creditCard.name}-${date_MMMM_yyyy(referenceMonth)}`
+      `${creditCard.name}-${date_MMMM_yyyy(invoiceDueDate)}`
     );
 
     const invoice = await db.invoice.upsert({
