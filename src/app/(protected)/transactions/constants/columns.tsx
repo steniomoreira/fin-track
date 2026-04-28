@@ -120,15 +120,16 @@ export const columns: ColumnDef<Installment>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const installment = row.original;
+      const url = installment.invoice
+        ? `/credit-cards/${installment.invoice.slug}`
+        : `/transactions/transaction-details/${installment.slug}`;
 
       return (
         <div className="text-center">
           <PaymentTransactionButton installment={installment} />
 
           <Button variant="ghost" size="icon" asChild>
-            <Link
-              href={`/transactions/transaction-details/${installment.slug}`}
-            >
+            <Link href={url}>
               <Eye />
             </Link>
           </Button>

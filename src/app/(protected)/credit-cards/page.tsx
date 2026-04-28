@@ -14,7 +14,7 @@ export default async function CreditCardsPage() {
 
   return (
     <PageContainer>
-      <header className="flex items-end justify-between">
+      <header>
         <Headline>
           <HeadlineTitle>Gerenciamento de cartão de crédito</HeadlineTitle>
           <HeadlineDescription>
