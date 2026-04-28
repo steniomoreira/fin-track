@@ -11,6 +11,7 @@ export const installmentSelect = {
   invoiceId: true,
   invoice: {
     select: {
+      slug: true,
       status: true,
       dueDate: true,
     },

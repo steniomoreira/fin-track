@@ -38,6 +38,7 @@ export function mergeInstallmentsAndInvoices(
       },
       payments: invoice.payments,
       invoice: {
+        slug: invoice.slug,
         status: invoice.status,
         dueDate: invoice.dueDate,
       },
