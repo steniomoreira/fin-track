@@ -3,7 +3,9 @@
 import { TransactionType } from '@/generated/prisma/enums';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
+import { date_MMMM_yyyy } from '@/utils/date-utils';
 import { calculateInvoiceDates } from '@/utils/invoice-utils';
+import { createSlug } from '@/utils/slug-utils';
 
 import { CreateInvoiceParams, schemaCreateInvoice } from './schema';
 
@@ -38,6 +40,10 @@ export async function upsertInvoice(data: CreateInvoiceParams) {
         dueDay,
       });
 
+    const slug = createSlug(
+      `${creditCard.name}-${date_MMMM_yyyy(referenceMonth)}`
+    );
+
     const invoice = await db.invoice.upsert({
       where: {
         creditCardId_referenceMonth: {
@@ -54,6 +60,7 @@ export async function upsertInvoice(data: CreateInvoiceParams) {
       create: {
         userId,
         creditCardId: creditCard.id,
+        slug,
         referenceMonth,
         closingDate,
         dueDate: invoiceDueDate,
