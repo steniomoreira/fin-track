@@ -2,6 +2,7 @@ import { Prisma } from '@/generated/prisma/client';
 
 export const invoiceSelect = {
   id: true,
+  slug: true,
   dueDate: true,
   status: true,
   totalAmount: true,
