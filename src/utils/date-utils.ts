@@ -1,4 +1,4 @@
-import { endOfMonth, format, isValid, parse, startOfMonth } from 'date-fns';
+import { format, isValid, parse } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import { MonthRange } from '@/types/month-range';
@@ -20,7 +20,13 @@ export function date_MMMM_yyyy(date: Date) {
 }
 
 function toMonthRange(date: Date): MonthRange {
-  return { firstDay: startOfMonth(date), lastDay: endOfMonth(date) };
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  return {
+    firstDay: new Date(Date.UTC(year, month, 1, 0, 0, 0, 0)),
+    lastDay: new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999)),
+  };
 }
 
 export function getMonthByDate(date?: Date | string | MonthRange): MonthRange {

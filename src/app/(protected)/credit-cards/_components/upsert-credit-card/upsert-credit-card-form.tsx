@@ -36,9 +36,7 @@ export function UpsertCreditCardForm({
     resolver: zodResolver(schemaUpsertCreditCardForm),
     defaultValues: {
       name: creditCard?.name ?? '',
-      lastFourDigits: creditCard?.lastFourDigits
-        ? '**** **** **** ' + creditCard.lastFourDigits
-        : '',
+      lastFourDigits: creditCard?.lastFourDigits ?? '',
       color: creditCard?.color ?? 'black',
       closingDay: creditCard?.closingDay ?? 31,
       dueDay: creditCard?.dueDay ?? 8,
