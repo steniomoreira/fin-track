@@ -18,11 +18,13 @@ type Params = {
   month: Date;
 };
 
+interface TransactionsPageProps {
+  searchParams: Promise<Params>;
+}
+
 export default async function TransactionsPage({
   searchParams,
-}: {
-  searchParams: Params;
-}) {
+}: TransactionsPageProps) {
   const { month } = await searchParams;
 
   const { installments } = await getInstallmentsTransactions(month);

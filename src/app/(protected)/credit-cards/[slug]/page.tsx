@@ -6,11 +6,11 @@ import {
 import { PageContainer } from '@/components/ui/page-container';
 
 interface InvoicePageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default async function InvoicePage({ params }: InvoicePageProps) {
-  const { slug } = params;
+  const { slug } = await params;
 
   console.log(slug);
 
