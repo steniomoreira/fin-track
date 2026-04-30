@@ -44,7 +44,7 @@ export function RecentTransactions({
   return (
     <Card className="gap-0">
       <CardHeader className="flex items-center justify-between border-b">
-        <CardTitle>Transações Recentes</CardTitle>
+        <CardTitle>Transações do mês</CardTitle>
         <Link
           href={`/transactions${month ? `?month=${month}` : ''}`}
           className="text-primary"
