@@ -24,7 +24,7 @@ export function SummaryCreditCards({ installments }: SummaryCreditCardsProps) {
       <CardContent className="space-y-4">
         {isEmptyArray(creditCardsSummary) ? (
           <p className="text-muted-foreground text-sm">
-            Nenhuma despesa no cartão registrada.
+            Nenhuma despesa de cartão registrada.
           </p>
         ) : (
           creditCardsSummary.map((card) => (

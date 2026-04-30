@@ -1,8 +1,10 @@
+import { getInvoices } from '@/actions/invoices/get-invoices';
 import { getInstallmentsTransactions } from '@/actions/transactions/get-installments-transactions';
 import { PageContainer } from '@/components/ui/page-container';
 import { EXPENSE, INCOME } from '@/constants/transactions-contants';
 import { isEmptyArray } from '@/utils/array-utils';
 
+import { mergeInstallmentsAndInvoices } from '../transactions/utils/merge-installments-invoices';
 import { Header } from './_components/header';
 import { NoResultTransactions } from './_components/no-result-transactions';
 import { RecentTransactions } from './_components/recent-transactions';
@@ -23,6 +25,9 @@ export default async function DashboardPage({
   const { month } = await searchParams;
 
   const { installments } = await getInstallmentsTransactions(month);
+  const { invoices } = await getInvoices(month);
+
+  const data = mergeInstallmentsAndInvoices(installments, invoices);
 
   return (
     <PageContainer>
@@ -32,17 +37,17 @@ export default async function DashboardPage({
         <NoResultTransactions />
       ) : (
         <>
-          <Summary installments={installments} />
+          <Summary installments={data} />
 
           <div className="grid grid-cols-[300px_1fr] gap-6">
             <div className="flex flex-col gap-6">
-              <SummaryCard installments={installments} type={INCOME} />
-              <SummaryCard installments={installments} type={EXPENSE} />
-              <SummaryCreditCards installments={installments} />
-              <SummaryCategories installments={installments} />
+              <SummaryCard installments={data} type={INCOME} />
+              <SummaryCard installments={data} type={EXPENSE} />
+              <SummaryCreditCards installments={data} />
+              <SummaryCategories installments={data} />
             </div>
             <div>
-              <RecentTransactions installments={installments} month={month} />
+              <RecentTransactions installments={data} month={month} />
             </div>
           </div>
         </>
