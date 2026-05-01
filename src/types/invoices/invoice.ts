@@ -21,6 +21,7 @@ export const invoiceSelect = {
       closingDay: true,
       color: true,
       lastFourDigits: true,
+      limit: true,
     },
   },
 } satisfies Prisma.InvoiceSelect;

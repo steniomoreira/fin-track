@@ -20,7 +20,7 @@ export function NoResultTransactions() {
       </p>
 
       <Button asChild className="text-center">
-        <Link href="/transactions">Nova transação</Link>
+        <Link href="/transactions/installments">Nova transação</Link>
       </Button>
     </div>
   );

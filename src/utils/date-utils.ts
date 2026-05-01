@@ -19,6 +19,10 @@ export function date_MMMM_yyyy(date: Date) {
   return format(utcDate(date), 'MMMM, yyyy', { locale: ptBR });
 }
 
+export function formatDateToMonthYear(date: Date): string {
+  return format(date, 'MM-yyyy');
+}
+
 function toMonthRange(date: Date): MonthRange {
   const year = date.getFullYear();
   const month = date.getMonth();
