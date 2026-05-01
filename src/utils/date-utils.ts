@@ -51,11 +51,15 @@ export function getMonthByDate(date?: Date | string | MonthRange): MonthRange {
 export function checkIsLate(dueDate: Date | null | undefined): boolean {
   if (!dueDate) return false;
 
-  const todayUTC = utcDate(new Date());
+  const now = new Date();
+  const todayUTC = new Date(
+    Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+  );
   const due = new Date(dueDate);
 
-  todayUTC.setUTCHours(0, 0, 0, 0);
   due.setUTCHours(0, 0, 0, 0);
+
+  console.log({ todayUTC, due });
 
   return todayUTC > due;
 }
