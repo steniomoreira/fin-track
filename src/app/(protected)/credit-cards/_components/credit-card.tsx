@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
 import { CreditCard as CreditCardType } from '@/types/credit-cards/credit-card';
-import { date_MMMM_yyyy } from '@/utils/date-utils';
+import { formatDateToMonthYear } from '@/utils/date-utils';
 import { createSlug } from '@/utils/slug-utils';
 
 import { formatCreditCardNumber } from '../utils/credit-card-utils';
@@ -14,7 +14,9 @@ interface CreditCardProps {
 }
 
 export function CreditCard({ creditCard }: CreditCardProps) {
-  const slug = createSlug(`${creditCard.name}-${date_MMMM_yyyy(new Date())}`);
+  const slug = createSlug(
+    `${creditCard.name}-${formatDateToMonthYear(new Date())}`
+  );
 
   return (
     <div
