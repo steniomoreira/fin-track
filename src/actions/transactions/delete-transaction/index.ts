@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { INCOME } from '@/constants/transactions-contants';
+import { recalculateInvoiceTotal } from '@/actions/invoices/utils/recalculate-invoice-total';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { toastTypes } from '@/utils/toast-utils';
@@ -18,48 +18,40 @@ export async function deleteTransaction(data: DeleteTransactionParams) {
     throw new Error('Erro de validação');
   }
 
-  const { installmentId, transactionId, invoiceId, amount, type } = result.data;
+  const { installmentId, transactionId } = result.data;
 
   const userId = session.user.id;
 
   try {
-    if (invoiceId) {
-      await db.invoice.update({
-        where: { id: invoiceId },
-        data: {
-          totalAmount:
-            type === INCOME ? { increment: amount } : { decrement: amount },
+    await db.$transaction(async (tx) => {
+      const installment = await tx.installment.findUnique({
+        where: { id: installmentId, userId },
+        select: { invoiceId: true },
+      });
+
+      const invoiceId = installment?.invoiceId ?? null;
+
+      const transaction = await tx.transaction.findUnique({
+        where: { id: transactionId, userId },
+        select: {
+          _count: { select: { installments: true } },
         },
       });
-    }
 
-    const transaction = await db.transaction.findUnique({
-      where: {
-        id: transactionId,
-        userId,
-      },
-      select: {
-        _count: {
-          select: { installments: true },
-        },
-      },
+      if (transaction && transaction._count.installments === 1) {
+        await tx.transaction.delete({
+          where: { id: transactionId, userId },
+        });
+      } else {
+        await tx.installment.delete({
+          where: { id: installmentId, userId },
+        });
+      }
+
+      if (invoiceId) {
+        await recalculateInvoiceTotal(tx, invoiceId);
+      }
     });
-
-    if (transaction && transaction?._count.installments === 1) {
-      await db.transaction.delete({
-        where: {
-          id: transactionId,
-          userId,
-        },
-      });
-    } else {
-      await db.installment.delete({
-        where: {
-          id: installmentId,
-          userId,
-        },
-      });
-    }
 
     revalidatePath('/transactions');
 

@@ -2,8 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { PrismaClient } from '@/generated/prisma/client';
-import { TransactionType } from '@/generated/prisma/enums';
+import { recalculateInvoiceTotal } from '@/actions/invoices/utils/recalculate-invoice-total';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { formatDateToMonthYear } from '@/utils/date-utils';
@@ -12,33 +11,6 @@ import { createSlug } from '@/utils/slug-utils';
 import { toastTypes } from '@/utils/toast-utils';
 
 import { schemaUpdateTransaction, UpdateTransactionParams } from './schema';
-
-type TransactionClient = Parameters<
-  Parameters<PrismaClient['$transaction']>[0]
->[0];
-
-async function recalculateInvoiceTotal(
-  tx: TransactionClient,
-  invoiceId: string
-) {
-  const [expenses, incomes] = await Promise.all([
-    tx.installment.aggregate({
-      where: { invoiceId, transaction: { type: TransactionType.EXPENSE } },
-      _sum: { amount: true },
-    }),
-    tx.installment.aggregate({
-      where: { invoiceId, transaction: { type: TransactionType.INCOME } },
-      _sum: { amount: true },
-    }),
-  ]);
-
-  const totalAmount = (expenses._sum.amount ?? 0) - (incomes._sum.amount ?? 0);
-
-  await tx.invoice.update({
-    where: { id: invoiceId },
-    data: { totalAmount },
-  });
-}
 
 export async function updateInstallments(data: UpdateTransactionParams) {
   const session = await requireSession();
