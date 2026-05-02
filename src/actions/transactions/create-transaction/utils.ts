@@ -26,8 +26,6 @@ export const resolveInstallmentInvoice = async (
 
   return upsertInvoice({
     baseDate,
-    type: data.type,
-    amount: data.amount,
     creditCardId: data.creditCardId,
   });
 };

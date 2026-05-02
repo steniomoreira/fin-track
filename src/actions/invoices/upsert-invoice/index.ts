@@ -1,12 +1,12 @@
 'use server';
 
-import { TransactionType } from '@/generated/prisma/enums';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { formatDateToMonthYear } from '@/utils/date-utils';
 import { calculateInvoiceDates } from '@/utils/invoice-utils';
 import { createSlug } from '@/utils/slug-utils';
 
+import { recalculateInvoiceTotal } from '../utils/recalculate-invoice-total';
 import { CreateInvoiceParams, schemaCreateInvoice } from './schema';
 
 export async function upsertInvoice(data: CreateInvoiceParams) {
@@ -18,7 +18,7 @@ export async function upsertInvoice(data: CreateInvoiceParams) {
     throw new Error('Erro de validação');
   }
 
-  const { baseDate, amount, type, creditCardId } = result.data;
+  const { baseDate, creditCardId } = result.data;
 
   const userId = session.user.id;
 
@@ -51,12 +51,7 @@ export async function upsertInvoice(data: CreateInvoiceParams) {
           referenceMonth,
         },
       },
-      update: {
-        totalAmount:
-          type === TransactionType.INCOME
-            ? { decrement: amount }
-            : { increment: amount },
-      },
+      update: {},
       create: {
         userId,
         creditCardId: creditCard.id,
@@ -64,9 +59,11 @@ export async function upsertInvoice(data: CreateInvoiceParams) {
         referenceMonth,
         closingDate,
         dueDate: invoiceDueDate,
-        totalAmount: type === TransactionType.EXPENSE ? amount : -amount,
+        totalAmount: 0,
       },
     });
+
+    await recalculateInvoiceTotal(db, invoice.id);
 
     return { invoiceId: invoice.id };
   } catch (error) {
