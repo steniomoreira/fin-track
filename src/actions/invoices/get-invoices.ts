@@ -5,10 +5,20 @@ import { requireSession } from '@/lib/session';
 import { invoiceSelect } from '@/types/invoices/invoice';
 import { getMonthByDate } from '@/utils/date-utils';
 
-export async function getInvoices(date?: Date) {
+export interface GetInvoicesParams {
+  date?: Date | string;
+  creditCardName?: string;
+}
+
+export async function getInvoices({
+  date,
+  creditCardName,
+}: GetInvoicesParams = {}) {
   const session = await requireSession();
 
   const { firstDay, lastDay } = getMonthByDate(date);
+
+  const normalizedCardName = creditCardName?.replace(/-/g, ' ');
 
   try {
     const invoices = await db.invoice.findMany({
@@ -18,6 +28,14 @@ export async function getInvoices(date?: Date) {
           gte: firstDay,
           lte: lastDay,
         },
+        ...(creditCardName && {
+          creditCard: {
+            name: {
+              equals: normalizedCardName,
+              mode: 'insensitive',
+            },
+          },
+        }),
       },
       orderBy: [{ dueDate: 'asc' }, { id: 'asc' }],
       select: invoiceSelect,
