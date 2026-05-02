@@ -18,7 +18,7 @@ export function SummaryCreditCards({ installments }: SummaryCreditCardsProps) {
     <Card>
       <CardHeader>
         <CardTitle className="text-muted-foreground flex items-center gap-4 text-sm">
-          Resumo por Cartão
+          Resumo das Despesas por Cartão
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
