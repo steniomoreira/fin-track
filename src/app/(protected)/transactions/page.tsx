@@ -28,7 +28,7 @@ export default async function TransactionsPage({
   const { month } = await searchParams;
 
   const { installments } = await getInstallmentsTransactions(month);
-  const { invoices } = await getInvoices(month);
+  const { invoices } = await getInvoices({ date: month });
 
   const tableData = mergeInstallmentsAndInvoices(installments, invoices);
 
