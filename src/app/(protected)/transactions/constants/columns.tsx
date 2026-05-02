@@ -76,13 +76,17 @@ export const columns: ColumnDef<Installment>[] = [
   {
     accessorKey: 'status',
     header: 'Status',
-    cell: ({ row }) => (
-      <BadgeStatus
-        status={row.getValue('status')}
-        dueDate={row.original.dueDate}
-        closingDay={row.original.transaction?.creditCard?.closingDay}
-      />
-    ),
+    cell: ({ row }) => {
+      const invoice = row.original.invoice;
+
+      return (
+        <BadgeStatus
+          status={invoice?.status ?? row.getValue('status')}
+          dueDate={invoice?.dueDate ?? row.original.dueDate}
+          closingDay={row.original.transaction?.creditCard?.closingDay}
+        />
+      );
+    },
   },
   {
     accessorKey: 'amount',
