@@ -14,17 +14,14 @@ interface CreditCardProps {
 }
 
 export function CreditCard({ creditCard }: CreditCardProps) {
-  const slug = createSlug(
-    `${creditCard.name}-${formatDateToMonthYear(new Date())}`
-  );
-
+  const url = `/credit-cards/invoices?card=${createSlug(creditCard.name)}&month=${formatDateToMonthYear(new Date())}`;
   return (
     <div
       className={`${
         COLOR_MAP[creditCard.color as ColorName].bgColor
       } relative flex h-[180px] w-[300px] flex-col justify-between rounded-sm p-6`}
     >
-      <Link href={`/credit-cards/${slug}`} className="absolute inset-0" />
+      <Link href={url} className="absolute inset-0" />
 
       <h2 className="text-lg font-semibold">{creditCard.name}</h2>
 

@@ -39,7 +39,7 @@ export function getMonthByDate(date?: Date | string | MonthRange): MonthRange {
   if (date instanceof Date) return toMonthRange(date);
 
   if (typeof date === 'string') {
-    const fmt = /^\d{4}-\d{2}$/.test(date) ? 'yyyy-MM' : 'yyyy-MM-dd';
+    const fmt = /^\d{2}-\d{4}$/.test(date) ? 'MM-yyyy' : 'yyyy-MM-dd';
     const parsed = parse(date, fmt, new Date());
 
     return isValid(parsed) ? toMonthRange(parsed) : toMonthRange(new Date());
@@ -58,8 +58,6 @@ export function checkIsLate(dueDate: Date | null | undefined): boolean {
   const due = new Date(dueDate);
 
   due.setUTCHours(0, 0, 0, 0);
-
-  console.log({ todayUTC, due });
 
   return todayUTC > due;
 }

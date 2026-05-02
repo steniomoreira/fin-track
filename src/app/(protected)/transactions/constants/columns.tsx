@@ -11,7 +11,8 @@ import { ICON_MAP } from '@/constants/icons-constants';
 import { EXPENSE, status } from '@/constants/transactions-contants';
 import { Installment } from '@/types/transactions/installment';
 import { formatCurrency } from '@/utils/currency-utils';
-import { date_dd_MMM_yyyy } from '@/utils/date-utils';
+import { date_dd_MMM_yyyy, formatDateToMonthYear } from '@/utils/date-utils';
+import { createSlug } from '@/utils/slug-utils';
 
 import { BadgeStatus } from '../../_components/badge-status';
 import { DeleteTransactionButton } from '../_components/delete-transaction/delete-transaction-button';
@@ -120,9 +121,10 @@ export const columns: ColumnDef<Installment>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const installment = row.original;
-      const url = installment.invoice
-        ? `/credit-cards/${installment.invoice.slug}`
-        : `/transactions/transaction-details/${installment.slug}`;
+      const url =
+        installment.transaction.creditCard && installment.invoice
+          ? `/credit-cards/invoices?card=${createSlug(installment.transaction.creditCard.name)}&month=${formatDateToMonthYear(installment.invoice.dueDate)}`
+          : `/transactions/transaction-details/${installment.slug}`;
 
       return (
         <div className="text-center">

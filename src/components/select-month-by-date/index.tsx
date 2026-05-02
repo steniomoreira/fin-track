@@ -41,7 +41,7 @@ export function SelectMonthByDate({
   const addQueryParams = (date: Date) => {
     const params = new URLSearchParams();
 
-    params.set('month', format(date, 'yyyy-MM'));
+    params.set('month', format(date, 'MM-yyyy'));
 
     replace(`${pathname}?${params}`);
   };
