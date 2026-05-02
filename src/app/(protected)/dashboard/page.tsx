@@ -20,12 +20,12 @@ type Params = {
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Params;
+  searchParams: Promise<Params>;
 }) {
   const { month } = await searchParams;
 
   const { installments } = await getInstallmentsTransactions(month);
-  const { invoices } = await getInvoices(month);
+  const { invoices } = await getInvoices({ date: month });
 
   const data = mergeInstallmentsAndInvoices(installments, invoices);
 
@@ -33,7 +33,7 @@ export default async function DashboardPage({
     <PageContainer>
       <Header month={month} />
 
-      {isEmptyArray(installments) ? (
+      {isEmptyArray(data) ? (
         <NoResultTransactions />
       ) : (
         <>

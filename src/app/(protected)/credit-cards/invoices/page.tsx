@@ -1,4 +1,4 @@
-import { getInvoicesBySlug } from '@/actions/invoices/get-invoices-by-slug';
+import { getInvoices } from '@/actions/invoices/get-invoices';
 import {
   Headline,
   HeadlineDescription,
@@ -6,20 +6,30 @@ import {
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 
-interface InvoicePageProps {
-  params: Promise<{ invoiceSlug: string }>;
+interface InvoicesPageProps {
+  searchParams: Promise<{
+    card?: string;
+    month?: string;
+  }>;
 }
 
-export default async function InvoicePage({ params }: InvoicePageProps) {
-  const { invoiceSlug } = await params;
+export default async function InvoicesPage({
+  searchParams,
+}: InvoicesPageProps) {
+  const { card, month } = await searchParams;
 
-  const { invoice } = await getInvoicesBySlug(invoiceSlug);
+  console.log(card, month);
+
+  const { invoices } = await getInvoices({
+    creditCardName: card,
+    date: month,
+  });
 
   return (
     <PageContainer>
       <header>
         <Headline>
-          <HeadlineTitle>{`Fatura ${invoice?.creditCard.name}`}</HeadlineTitle>
+          <HeadlineTitle>{`Fatura ${invoices?.[0]?.creditCard?.name ?? 'do cartão não encontrada'}`}</HeadlineTitle>
           <HeadlineDescription>
             Detalhes da fatura do cartão de crédito.
           </HeadlineDescription>
