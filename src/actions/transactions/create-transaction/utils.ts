@@ -21,10 +21,7 @@ export const resolveInstallmentInvoice = async (
   baseDate: Date
 ) => {
   if (!data.creditCardId) {
-    return {
-      invoiceDueDate: baseDate,
-      invoiceId: null,
-    };
+    return { invoiceId: null };
   }
 
   return upsertInvoice({
@@ -44,13 +41,10 @@ export const generateBaseInstallments = async (
       .map(async (_, index) => {
         const baseDate = getInstallmentBaseDate(data.dueDate, index);
 
-        const { invoiceDueDate, invoiceId } = await resolveInstallmentInvoice(
-          data,
-          baseDate
-        );
+        const { invoiceId } = await resolveInstallmentInvoice(data, baseDate);
 
         const slug = await createInstallmentSlug(
-          `${data.description}-${date_MMMM_yyyy(invoiceDueDate)}`
+          `${data.description}-${date_MMMM_yyyy(baseDate)}`
         );
 
         return {

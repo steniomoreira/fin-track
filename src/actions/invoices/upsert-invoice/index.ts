@@ -68,7 +68,7 @@ export async function upsertInvoice(data: CreateInvoiceParams) {
       },
     });
 
-    return { invoiceDueDate, invoiceId: invoice.id };
+    return { invoiceId: invoice.id };
   } catch (error) {
     console.error(error);
     throw new Error('Ocorreu um erro no processo de criar a fatura!');
