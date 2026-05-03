@@ -7,6 +7,7 @@ export const invoiceSelect = {
   status: true,
   totalAmount: true,
   paidAmount: true,
+  referenceMonth: true,
   payments: {
     select: {
       id: true,
@@ -18,6 +19,7 @@ export const invoiceSelect = {
     select: {
       id: true,
       name: true,
+      dueDay: true,
       closingDay: true,
       color: true,
       lastFourDigits: true,
