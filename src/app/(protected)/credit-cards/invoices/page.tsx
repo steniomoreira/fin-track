@@ -9,20 +9,20 @@ import { PageContainer } from '@/components/ui/page-container';
 interface InvoicesPageProps {
   searchParams: Promise<{
     card?: string;
-    month?: string;
+    ref?: string;
   }>;
 }
 
 export default async function InvoicesPage({
   searchParams,
 }: InvoicesPageProps) {
-  const { card, month } = await searchParams;
+  const { card, ref } = await searchParams;
 
-  console.log(card, month);
+  console.log(card, ref);
 
   const { invoices } = await getInvoices({
     creditCardName: card,
-    date: month,
+    date: ref,
   });
 
   return (
