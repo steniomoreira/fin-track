@@ -14,7 +14,7 @@ interface CreditCardProps {
 }
 
 export function CreditCard({ creditCard }: CreditCardProps) {
-  const url = `/credit-cards/invoices?card=${createSlug(creditCard.name)}&month=${formatDateToMonthYear(new Date())}`;
+  const url = `/credit-cards/invoices?card=${createSlug(creditCard.name)}&ref=${formatDateToMonthYear(new Date())}`;
   return (
     <div
       className={`${

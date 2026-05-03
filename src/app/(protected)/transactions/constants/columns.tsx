@@ -125,9 +125,10 @@ export const columns: ColumnDef<Installment>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const installment = row.original;
+
       const url =
         installment.transaction.creditCard && installment.invoice
-          ? `/credit-cards/invoices?card=${createSlug(installment.transaction.creditCard.name)}&month=${formatDateToMonthYear(installment.invoice.dueDate)}`
+          ? `/credit-cards/invoices?card=${createSlug(installment.transaction.creditCard.name)}&ref=${formatDateToMonthYear(installment.invoice?.dueDate)}`
           : `/transactions/transaction-details/${installment.slug}`;
 
       return (
