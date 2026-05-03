@@ -24,6 +24,29 @@ export const invoiceSelect = {
       limit: true,
     },
   },
+  installments: {
+    select: {
+      id: true,
+      slug: true,
+      dueDate: true,
+      amount: true,
+      number: true,
+      transaction: {
+        select: {
+          description: true,
+          type: true,
+          numberInstallments: true,
+          category: {
+            select: {
+              name: true,
+              color: true,
+              icon: true,
+            },
+          },
+        },
+      },
+    },
+  },
 } satisfies Prisma.InvoiceSelect;
 
 export type Invoice = Prisma.InvoiceGetPayload<{

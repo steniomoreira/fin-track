@@ -5,6 +5,7 @@ import {
   HeadlineTitle,
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
+import { INVOICE_MONTHS_BEFORE } from '@/constants/invoices-constants';
 
 interface InvoicesPageProps {
   searchParams: Promise<{
@@ -18,11 +19,11 @@ export default async function InvoicesPage({
 }: InvoicesPageProps) {
   const { card, ref } = await searchParams;
 
-  console.log(card, ref);
-
   const { invoices } = await getInvoices({
     creditCardName: card,
     date: ref,
+    monthsBefore: INVOICE_MONTHS_BEFORE,
+    includeFuture: true,
   });
 
   return (
