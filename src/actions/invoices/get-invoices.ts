@@ -8,15 +8,25 @@ import { getMonthByDate } from '@/utils/date-utils';
 export interface GetInvoicesParams {
   date?: Date | string;
   creditCardName?: string;
+  monthsBefore?: number;
+  includeFuture?: boolean;
 }
 
 export async function getInvoices({
   date,
   creditCardName,
+  monthsBefore,
+  includeFuture,
 }: GetInvoicesParams = {}) {
   const session = await requireSession();
 
   const { firstDay, lastDay } = getMonthByDate(date);
+
+  let gteDate = firstDay;
+  if (monthsBefore) {
+    gteDate = new Date(firstDay);
+    gteDate.setUTCMonth(gteDate.getUTCMonth() - monthsBefore);
+  }
 
   const normalizedCardName = creditCardName?.replace(/-/g, ' ');
 
@@ -25,8 +35,8 @@ export async function getInvoices({
       where: {
         userId: session.user.id,
         dueDate: {
-          gte: firstDay,
-          lte: lastDay,
+          gte: gteDate,
+          ...(includeFuture ? {} : { lte: lastDay }),
         },
         ...(creditCardName && {
           creditCard: {
