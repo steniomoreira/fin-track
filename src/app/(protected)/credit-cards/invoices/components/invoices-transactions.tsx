@@ -4,6 +4,7 @@ import { Eye } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
+import { BadgeStatus } from '@/app/(protected)/_components/badge-status';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -38,7 +39,13 @@ export function InvoiceTransactions({ invoice }: InvoiceTransactionsProps) {
   return (
     <Card className="gap-0">
       <CardHeader className="flex items-center justify-between border-b">
-        <CardTitle>Transações do mês</CardTitle>
+        <CardTitle>
+          <BadgeStatus
+            dueDate={invoice.dueDate}
+            status={invoice.status}
+            fullDescription
+          />
+        </CardTitle>
       </CardHeader>
       <CardContent className="px-0">
         <Table>
