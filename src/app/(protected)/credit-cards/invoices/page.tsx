@@ -6,12 +6,13 @@ import {
 } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 import { INVOICE_MONTHS_BEFORE } from '@/constants/invoices-constants';
-import { isEmptyArray } from '@/utils/array-utils';
+import { invoiceStatus } from '@/constants/invoices-constants';
 import { formatDateToMonthYear } from '@/utils/date-utils';
 
 import { CreditCard } from '../_components/credit-card';
 import { EmptyContainer } from './components/empty-container';
 import { InvoiceNavigation } from './components/envoice-navigation';
+import { InvoiceTransactions } from './components/invoices-transactions';
 
 interface InvoicesPageProps {
   searchParams: Promise<{
@@ -32,13 +33,16 @@ export default async function InvoicesPage({
     includeFuture: true,
   });
 
-  if (isEmptyArray(invoices)) return <EmptyContainer />;
+  const invoiceOpenOrLatest =
+    invoices.find((invoice) => invoice.status === invoiceStatus.OPEN) ||
+    invoices.at(-1);
 
-  const invoice = invoices[0];
+  const invoice =
+    invoices.find(
+      (invoice) => formatDateToMonthYear(invoice.dueDate) === invoiceRef
+    ) || invoiceOpenOrLatest;
 
-  const invoiceItems = invoices.filter(
-    (invoice) => formatDateToMonthYear(invoice.dueDate) === invoiceRef
-  );
+  if (!invoice) return <EmptyContainer />;
 
   return (
     <PageContainer>
@@ -62,15 +66,7 @@ export default async function InvoicesPage({
           <InvoiceNavigation invoices={invoices} invoiceRef={invoiceRef} />
 
           <div>
-            {invoiceItems.map((invoice) => (
-              <div key={invoice.id}>
-                {invoice.installments.map((installment) => (
-                  <div key={installment.id}>
-                    {installment.transaction.description} - {installment.amount}
-                  </div>
-                ))}
-              </div>
-            ))}
+            <InvoiceTransactions invoice={invoice} />
           </div>
         </div>
       </div>
