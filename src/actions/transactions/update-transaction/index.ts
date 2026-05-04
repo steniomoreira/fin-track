@@ -36,56 +36,30 @@ export async function updateInstallments(data: UpdateTransactionParams) {
     } = result.data;
 
     await db.$transaction(async (tx) => {
-      const currentInstallment = await tx.installment.findUnique({
-        where: { id, userId, transactionId },
-        select: { invoiceId: true },
+      const currentTransaction = await tx.transaction.findUnique({
+        where: { id: transactionId, userId },
+        include: { installments: true },
       });
 
-      const oldInvoiceId = currentInstallment?.invoiceId ?? null;
+      if (!currentTransaction) {
+        throw new Error('Transação não encontrada');
+      }
 
-      let newInvoiceId: string | null = null;
+      const isCreditCardChanged =
+        currentTransaction.creditCardId !== (creditCardId || null);
 
+      let creditCard = null;
       if (creditCardId) {
-        const creditCard = await tx.creditCard.findUnique({
+        creditCard = await tx.creditCard.findUnique({
           where: { id: creditCardId },
         });
 
         if (!creditCard) {
           throw new Error('Cartão de crédito não encontrado');
         }
-
-        const { closingDate, invoiceDueDate, referenceMonth } =
-          calculateInvoiceDates({
-            baseDate: dueDate,
-            closingDay: creditCard.closingDay,
-            dueDay: creditCard.dueDay,
-          });
-
-        const slug = createSlug(
-          `${creditCard.name}-${formatDateToMonthYear(invoiceDueDate)}`
-        );
-
-        const invoice = await tx.invoice.upsert({
-          where: {
-            creditCardId_referenceMonth: {
-              creditCardId: creditCard.id,
-              referenceMonth,
-            },
-          },
-          update: {},
-          create: {
-            userId,
-            creditCardId: creditCard.id,
-            slug,
-            referenceMonth,
-            closingDate,
-            dueDate: invoiceDueDate,
-            totalAmount: 0,
-          },
-        });
-
-        newInvoiceId = invoice.id;
       }
+
+      const invoicesToRecalculate = new Set<string>();
 
       await tx.transaction.update({
         where: { userId, id: transactionId },
@@ -97,18 +71,113 @@ export async function updateInstallments(data: UpdateTransactionParams) {
         },
       });
 
-      await tx.installment.update({
-        where: { userId, id, transactionId },
-        data: {
-          invoiceId: newInvoiceId,
-          dueDate,
-          amount,
-        },
-      });
+      if (isCreditCardChanged) {
+        for (const inst of currentTransaction.installments) {
+          if (inst.invoiceId) {
+            invoicesToRecalculate.add(inst.invoiceId);
+          }
 
-      const invoicesToRecalculate = new Set(
-        [oldInvoiceId, newInvoiceId].filter(Boolean) as string[]
-      );
+          let newInvoiceId: string | null = null;
+
+          if (creditCard) {
+            const instDueDate = inst.id === id ? dueDate : inst.dueDate;
+            const { closingDate, invoiceDueDate, referenceMonth } =
+              calculateInvoiceDates({
+                baseDate: instDueDate,
+                closingDay: creditCard.closingDay,
+                dueDay: creditCard.dueDay,
+              });
+
+            const slug = createSlug(
+              `${creditCard.name}-${formatDateToMonthYear(invoiceDueDate)}`
+            );
+
+            const invoice = await tx.invoice.upsert({
+              where: {
+                creditCardId_referenceMonth: {
+                  creditCardId: creditCard.id,
+                  referenceMonth,
+                },
+              },
+              update: {},
+              create: {
+                userId,
+                creditCardId: creditCard.id,
+                slug,
+                referenceMonth,
+                closingDate,
+                dueDate: invoiceDueDate,
+                totalAmount: 0,
+              },
+            });
+
+            newInvoiceId = invoice.id;
+            invoicesToRecalculate.add(newInvoiceId);
+          }
+
+          await tx.installment.update({
+            where: { id: inst.id },
+            data: {
+              invoiceId: newInvoiceId,
+              ...(inst.id === id ? { dueDate, amount } : {}),
+            },
+          });
+        }
+      } else {
+        const currentInstallment = currentTransaction.installments.find(
+          (i) => i.id === id
+        );
+
+        if (currentInstallment?.invoiceId) {
+          invoicesToRecalculate.add(currentInstallment.invoiceId);
+        }
+
+        let newInvoiceId: string | null = null;
+
+        if (creditCard) {
+          const { closingDate, invoiceDueDate, referenceMonth } =
+            calculateInvoiceDates({
+              baseDate: dueDate,
+              closingDay: creditCard.closingDay,
+              dueDay: creditCard.dueDay,
+            });
+
+          const slug = createSlug(
+            `${creditCard.name}-${formatDateToMonthYear(invoiceDueDate)}`
+          );
+
+          const invoice = await tx.invoice.upsert({
+            where: {
+              creditCardId_referenceMonth: {
+                creditCardId: creditCard.id,
+                referenceMonth,
+              },
+            },
+            update: {},
+            create: {
+              userId,
+              creditCardId: creditCard.id,
+              slug,
+              referenceMonth,
+              closingDate,
+              dueDate: invoiceDueDate,
+              totalAmount: 0,
+            },
+          });
+
+          newInvoiceId = invoice.id;
+          invoicesToRecalculate.add(newInvoiceId);
+        }
+
+        await tx.installment.update({
+          where: { userId, id, transactionId },
+          data: {
+            invoiceId: newInvoiceId,
+            dueDate,
+            amount,
+          },
+        });
+      }
 
       await Promise.all(
         [...invoicesToRecalculate].map((invoiceId) =>
