@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
+import { recalculateInvoiceTotal } from '@/actions/invoices/utils/recalculate-invoice-total';
 import { db } from '@/lib/prisma';
 import { requireSession } from '@/lib/session';
 import { toastTypes } from '@/utils/toast-utils';
@@ -104,6 +105,20 @@ export async function createTransaction(data: CreateTransactionParams) {
                 },
               },
             })
+        )
+      );
+    }
+
+    const invoicesToRecalculate = new Set(
+      baseInstallments
+        .map((inst) => inst.invoiceId)
+        .filter(Boolean) as string[]
+    );
+
+    if (invoicesToRecalculate.size > 0) {
+      await Promise.all(
+        [...invoicesToRecalculate].map((invoiceId) =>
+          recalculateInvoiceTotal(db, invoiceId)
         )
       );
     }
