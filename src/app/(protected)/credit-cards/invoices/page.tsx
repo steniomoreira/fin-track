@@ -42,7 +42,7 @@ export default async function InvoicesPage({
       (invoice) => formatDateToMonthYear(invoice.dueDate) === invoiceRef
     ) || invoiceOpenOrLatest;
 
-  if (!invoice) return <EmptyContainer />;
+  if (!invoice || !invoiceOpenOrLatest) return <EmptyContainer />;
 
   return (
     <PageContainer>
@@ -63,7 +63,12 @@ export default async function InvoicesPage({
           />
         </div>
         <div className="flex flex-col gap-4">
-          <InvoiceNavigation invoices={invoices} invoiceRef={invoiceRef} />
+          <InvoiceNavigation
+            invoices={invoices}
+            invoiceRef={
+              invoiceRef || formatDateToMonthYear(invoiceOpenOrLatest.dueDate)
+            }
+          />
 
           <div>
             <InvoiceTransactions invoice={invoice} />
