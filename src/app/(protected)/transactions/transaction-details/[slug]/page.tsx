@@ -40,7 +40,7 @@ export default async function TransactionDetailsPage({
           <BackButton />
 
           <Headline>
-            <HeadlineTitle className="capitalize">
+            <HeadlineTitle>
               {installment.transaction?.description}
             </HeadlineTitle>
           </Headline>
