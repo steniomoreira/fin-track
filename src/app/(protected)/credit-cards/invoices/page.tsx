@@ -60,6 +60,7 @@ export default async function InvoicesPage({
           <CreditCard
             key={invoice.creditCard.id}
             creditCard={invoice.creditCard}
+            totalInvoiceValue={invoice.totalAmount}
           />
         </div>
         <div className="flex flex-col gap-4">
