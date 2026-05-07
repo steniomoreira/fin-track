@@ -3,11 +3,7 @@ import { notFound } from 'next/navigation';
 import { getCategories } from '@/actions/categories/get-categories';
 import { getCreditCards } from '@/actions/credit-cards/get-credit-cards';
 import { getInstallmentTransactionBySlug } from '@/actions/transactions/get-installmet-transaction-by-slug';
-import {
-  Headline,
-  HeadlineDescription,
-  HeadlineTitle,
-} from '@/components/ui/headline';
+import { Headline, HeadlineTitle } from '@/components/ui/headline';
 import { PageContainer } from '@/components/ui/page-container';
 
 import { PaymentReversalTransactionButton } from '../../_components/payment-reversal-transaction/payment-reversal-transaction-button';
@@ -47,9 +43,6 @@ export default async function TransactionDetailsPage({
             <HeadlineTitle className="capitalize">
               {installment.transaction?.description}
             </HeadlineTitle>
-            <HeadlineDescription>
-              ID: {installment.hashCode}
-            </HeadlineDescription>
           </Headline>
         </div>
 
