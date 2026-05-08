@@ -30,6 +30,8 @@ export function TransactionsDetails({ installment }: TransactionsDetailsProps) {
   const { contentColor } =
     COLOR_MAP[installment.transaction.category.color as ColorName];
 
+  const invoice = installment.invoice;
+
   return (
     <Card>
       <CardContent className="space-y-4">
@@ -48,9 +50,10 @@ export function TransactionsDetails({ installment }: TransactionsDetailsProps) {
 
           <div className="flex flex-col items-end gap-3">
             <BadgeStatus
-              status={installment.status}
+              status={invoice?.status ?? installment.status}
+              dueDate={invoice?.dueDate ?? installment.dueDate}
+              closingDay={installment.transaction.creditCard?.closingDay}
               fullDescription
-              dueDate={installment.dueDate}
             />
             <span className="text-muted-foreground text-xs">
               {installment.payments.length > 0 &&
