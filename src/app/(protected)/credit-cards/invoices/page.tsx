@@ -1,4 +1,7 @@
+import { RefreshCcwDot } from 'lucide-react';
+
 import { getInvoices } from '@/actions/invoices/get-invoices';
+import { Button } from '@/components/ui/button';
 import {
   Headline,
   HeadlineDescription,
@@ -13,6 +16,7 @@ import { CreditCard } from '../_components/credit-card';
 import { EmptyContainer } from './components/empty-container';
 import { InvoiceNavigation } from './components/envoice-navigation';
 import { InvoiceTransactions } from './components/invoices-transactions';
+import { PaymentInvoiceButton } from './components/payment-invoices/payment-invoice-button';
 
 interface InvoicesPageProps {
   searchParams: Promise<{
@@ -44,21 +48,33 @@ export default async function InvoicesPage({
 
   if (!invoice || !invoiceOpenOrLatest) return <EmptyContainer />;
 
+  const isPaid =
+    invoice.status === invoiceStatus.PAID ||
+    invoice.status === invoiceStatus.PARTIAL;
+
   return (
     <PageContainer>
-      <header>
+      <header className="flex items-end justify-between">
         <Headline>
           <HeadlineTitle>{`Fatura ${invoice.creditCard.name}`}</HeadlineTitle>
           <HeadlineDescription>
             Detalhes da fatura do cartão de crédito.
           </HeadlineDescription>
         </Headline>
+
+        <div className="flex items-center gap-4">
+          <PaymentInvoiceButton invoice={invoice} />
+
+          <Button variant="destructive" disabled={!isPaid}>
+            <RefreshCcwDot />
+            Estornar
+          </Button>
+        </div>
       </header>
 
       <div className="m-auto grid w-full max-w-[1600px] grid-cols-[320px_1fr] gap-6">
         <div>
           <CreditCard
-            key={invoice.creditCard.id}
             creditCard={invoice.creditCard}
             totalInvoiceValue={invoice.totalAmount}
           />
