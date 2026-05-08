@@ -16,6 +16,7 @@ import {
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
 import { ICON_MAP } from '@/constants/icons-constants';
+import { invoiceStatus } from '@/constants/invoices-constants';
 import { EXPENSE } from '@/constants/transactions-contants';
 import { Invoice } from '@/types/invoices/invoice';
 import { formatCurrency } from '@/utils/currency-utils';
@@ -39,12 +40,21 @@ export function InvoiceTransactions({ invoice }: InvoiceTransactionsProps) {
   return (
     <Card className="gap-0">
       <CardHeader className="flex items-center justify-between border-b">
-        <CardTitle>
+        <CardTitle className="flex flex-col gap-2">
           <BadgeStatus
             dueDate={invoice.dueDate}
             status={invoice.status}
             fullDescription
           />
+
+          {invoice.status === invoiceStatus.PARTIAL && (
+            <span className="text-muted-foreground ml-2 block text-[12px]">
+              Pago{' '}
+              <span className="font-semibold">
+                {formatCurrency(invoice.paidAmount)}
+              </span>
+            </span>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent className="px-0">
