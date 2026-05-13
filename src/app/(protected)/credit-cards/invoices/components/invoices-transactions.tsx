@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { BadgeStatus } from '@/app/(protected)/_components/badge-status';
+import { DeleteTransactionButton } from '@/app/(protected)/transactions/_components/delete-transaction/delete-transaction-button';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -113,6 +114,8 @@ export function InvoiceTransactions({
                       creditCards={creditCards}
                       categories={categories}
                     />
+
+                    <DeleteTransactionButton installment={installment} />
                   </TableCell>
                 </TableRow>
               );

@@ -24,7 +24,6 @@ export function DeleteTransactionButton({
   }
 
   const isPaid = installment.status === status.PAID;
-  const isInvoice = !!installment.invoice;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -32,7 +31,7 @@ export function DeleteTransactionButton({
         <Button
           variant="ghost"
           size="icon"
-          disabled={isPaid || isInvoice}
+          disabled={isPaid}
           className="hover:text-destructive"
         >
           <Trash2 />
