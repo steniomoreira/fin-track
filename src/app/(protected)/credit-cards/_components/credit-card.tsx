@@ -20,7 +20,7 @@ export function CreditCard({ creditCard, totalInvoiceValue }: CreditCardProps) {
     <div
       className={`${
         COLOR_MAP[creditCard.color as ColorName].bgColor
-      } relative flex h-[180px] w-[300px] flex-col justify-between rounded-sm p-6`}
+      } relative flex h-45 w-75 flex-col justify-between rounded-sm p-6`}
     >
       <Link href={url} className="absolute inset-0" />
 
