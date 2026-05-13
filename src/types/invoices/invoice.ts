@@ -1,5 +1,7 @@
 import { Prisma } from '@/generated/prisma/client';
 
+import { installmentSelect } from '../transactions/installment';
+
 export const invoiceSelect = {
   id: true,
   slug: true,
@@ -27,27 +29,7 @@ export const invoiceSelect = {
     },
   },
   installments: {
-    select: {
-      id: true,
-      slug: true,
-      dueDate: true,
-      amount: true,
-      number: true,
-      transaction: {
-        select: {
-          description: true,
-          type: true,
-          numberInstallments: true,
-          category: {
-            select: {
-              name: true,
-              color: true,
-              icon: true,
-            },
-          },
-        },
-      },
-    },
+    select: installmentSelect,
   },
 } satisfies Prisma.InvoiceSelect;
 

@@ -1,5 +1,7 @@
 import { RefreshCcwDot } from 'lucide-react';
 
+import { getCategories } from '@/actions/categories/get-categories';
+import { getCreditCards } from '@/actions/credit-cards/get-credit-cards';
 import { getInvoices } from '@/actions/invoices/get-invoices';
 import { Button } from '@/components/ui/button';
 import {
@@ -37,6 +39,9 @@ export default async function InvoicesPage({
     includeFuture: true,
   });
 
+  const { creditCards } = await getCreditCards();
+  const { categories } = await getCategories();
+
   const invoiceOpenOrLatest =
     invoices.find((invoice) => invoice.status === invoiceStatus.OPEN) ||
     invoices.at(-1);
@@ -72,7 +77,7 @@ export default async function InvoicesPage({
         </div>
       </header>
 
-      <div className="m-auto grid w-full max-w-[1600px] grid-cols-[320px_1fr] gap-6">
+      <div className="m-auto grid w-full max-w-400 grid-cols-[320px_1fr] gap-6">
         <div>
           <CreditCard
             creditCard={invoice.creditCard}
@@ -88,7 +93,11 @@ export default async function InvoicesPage({
           />
 
           <div>
-            <InvoiceTransactions invoice={invoice} />
+            <InvoiceTransactions
+              invoice={invoice}
+              creditCards={creditCards}
+              categories={categories}
+            />
           </div>
         </div>
       </div>

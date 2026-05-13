@@ -1,7 +1,5 @@
 'use client';
 
-import { Eye } from 'lucide-react';
-import Link from 'next/link';
 import { useState } from 'react';
 
 import { BadgeStatus } from '@/app/(protected)/_components/badge-status';
@@ -18,15 +16,25 @@ import { COLOR_MAP, ColorName } from '@/constants/colors-constants';
 import { ICON_MAP } from '@/constants/icons-constants';
 import { invoiceStatus } from '@/constants/invoices-constants';
 import { EXPENSE } from '@/constants/transactions-contants';
+import { Category } from '@/types/categories/category';
+import { CreditCard } from '@/types/credit-cards/credit-card';
 import { Invoice } from '@/types/invoices/invoice';
 import { formatCurrency } from '@/utils/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
+import { UpdateTransactionButton } from './update-transaction-invoices/update-transaction-button';
+
 interface InvoiceTransactionsProps {
   invoice: Invoice;
+  creditCards: CreditCard[];
+  categories: Category[];
 }
 
-export function InvoiceTransactions({ invoice }: InvoiceTransactionsProps) {
+export function InvoiceTransactions({
+  invoice,
+  creditCards,
+  categories,
+}: InvoiceTransactionsProps) {
   const [showAll, setShowAll] = useState(false);
 
   const MAX_INSTALLMENTS_TO_SHOW = 10;
@@ -90,7 +98,7 @@ export function InvoiceTransactions({ invoice }: InvoiceTransactionsProps) {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="min-w-[200px] text-right">
+                  <TableCell className="min-w-50 text-right">
                     <div
                       className={`${isExpense ? 'text-destructive' : 'text-foreground'} text-right font-medium`}
                     >
@@ -100,13 +108,11 @@ export function InvoiceTransactions({ invoice }: InvoiceTransactionsProps) {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Button variant="ghost" size="icon" asChild>
-                      <Link
-                        href={`/transactions/transaction-details/${installment.slug}`}
-                      >
-                        <Eye />
-                      </Link>
-                    </Button>
+                    <UpdateTransactionButton
+                      installment={installment}
+                      creditCards={creditCards}
+                      categories={categories}
+                    />
                   </TableCell>
                 </TableRow>
               );
