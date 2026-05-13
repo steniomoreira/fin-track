@@ -19,6 +19,7 @@ import { EmptyContainer } from './components/empty-container';
 import { InvoiceNavigation } from './components/envoice-navigation';
 import { InvoiceTransactions } from './components/invoices-transactions';
 import { PaymentInvoiceButton } from './components/payment-invoices/payment-invoice-button';
+import { PaymentHistoryInvoice } from './components/payments-history-transactions';
 
 interface InvoicesPageProps {
   searchParams: Promise<{
@@ -92,12 +93,14 @@ export default async function InvoicesPage({
             }
           />
 
-          <div>
+          <div className="flex flex-col gap-4">
             <InvoiceTransactions
               invoice={invoice}
               creditCards={creditCards}
               categories={categories}
             />
+
+            <PaymentHistoryInvoice invoice={invoice} />
           </div>
         </div>
       </div>
