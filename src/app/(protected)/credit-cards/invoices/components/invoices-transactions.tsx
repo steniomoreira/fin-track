@@ -23,6 +23,7 @@ import { Invoice } from '@/types/invoices/invoice';
 import { formatCurrency } from '@/utils/currency-utils';
 import { date_dd_MMM_yyyy } from '@/utils/date-utils';
 
+import { AddTransactionButton } from './add-transaction-invoices/add-transaction-button';
 import { UpdateTransactionButton } from './update-transaction-invoices/update-transaction-button';
 
 interface InvoiceTransactionsProps {
@@ -49,21 +50,25 @@ export function InvoiceTransactions({
   return (
     <Card className="gap-0">
       <CardHeader className="flex items-center justify-between border-b">
-        <CardTitle className="flex flex-col gap-2">
-          <BadgeStatus
-            dueDate={invoice.dueDate}
-            status={invoice.status}
-            fullDescription
-          />
+        <CardTitle className="flex w-full justify-between">
+          <div className="flex flex-col gap-2">
+            <BadgeStatus
+              dueDate={invoice.dueDate}
+              status={invoice.status}
+              fullDescription
+            />
 
-          {invoice.status === invoiceStatus.PARTIAL && (
-            <span className="text-muted-foreground ml-2 block text-[12px]">
-              Pago{' '}
-              <span className="font-semibold">
-                {formatCurrency(invoice.paidAmount)}
+            {invoice.status === invoiceStatus.PARTIAL && (
+              <span className="text-muted-foreground ml-2 block text-[12px]">
+                Pago{' '}
+                <span className="font-semibold">
+                  {formatCurrency(invoice.paidAmount)}
+                </span>
               </span>
-            </span>
-          )}
+            )}
+          </div>
+
+          <AddTransactionButton invoice={invoice} categories={categories} />
         </CardTitle>
       </CardHeader>
       <CardContent className="px-0">
